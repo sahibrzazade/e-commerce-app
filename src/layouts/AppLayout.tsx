@@ -1,21 +1,13 @@
-import { Layout } from 'antd';
 import { WithChildren } from '../types';
 import { Header } from './Header';
 import { Footer } from './Footer';
-
-const { Content } = Layout;
-
 const AppLayout: React.FC<WithChildren> = ({ children }) => {
   return (
-    <Layout className="min-h-screen">
+    <div className="flex flex-col min-h-screen bg-black text-white">
       <Header />
-      <Layout>
-        <Layout>
-          <Content className="h-full px-4 bg-black shadow">{children}</Content>
-          <Footer />
-        </Layout>
-      </Layout>
-    </Layout>
+      <main className="h-full px-4 bg-black shadow">{children}</main>
+      <Footer />
+    </div>
   );
 };
 
