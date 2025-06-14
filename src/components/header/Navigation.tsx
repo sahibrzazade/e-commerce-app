@@ -8,7 +8,7 @@ const Navigation: React.FC = () => {
         <Link
           key={item.path}
           to={item.path}
-          className="relative pb-1 uppercase font-bold !text-white group"
+          className="relative pb-1 uppercase font-bold text-white text-sm group"
         >
           {item.label}
           <span className="absolute left-0 -bottom-0.5 h-[3px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>

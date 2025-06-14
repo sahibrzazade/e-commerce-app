@@ -1,5 +1,5 @@
-import Carousel from '../components/Carousel';
-import { HeroSection } from '../components/HeroSection';
+import Carousel from '../components/landing/Carousel';
+import { HeroSection } from '../components/landing/HeroSection';
 import { InfiniteSlider } from '../components/InfiniteSlider/InfiniteSlider';
 import AppLayout from '../layouts/AppLayout';
 
