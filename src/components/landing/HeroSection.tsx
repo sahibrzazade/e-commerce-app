@@ -1,5 +1,5 @@
-import { HeroSectionInterface } from '../types';
-import { OutlinedButton } from './OutlinedButton';
+import { HeroSectionInterface } from '../../types';
+import { OutlinedButton } from '../OutlinedButton';
 
 export const HeroSection = ({
   image,
@@ -25,7 +25,7 @@ export const HeroSection = ({
           <span className="text-white-50 text-base mb-2 block font-bold">
             {subtitleText}
           </span>
-          <OutlinedButton text={'Shop Now!'} />
+          <OutlinedButton content={'Shop Now!'} height={60} width={200} fontWeight='bold' />
         </div>
       </div>
     </div>
