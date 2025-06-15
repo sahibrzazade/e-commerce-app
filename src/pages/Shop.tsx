@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Product } from "../types";
-import { fetchProducts } from "../services/productService";
+import { productService } from "../services/productService";
 import { SearchFilterInput } from "../components/shop/SearchFilterInput";
 import AppLayout from "../layouts/AppLayout";
 import { SortOptions } from "../components/shop/SortOptions";
@@ -12,7 +12,7 @@ export const Shop = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        fetchProducts()
+        productService.getProducts()
             .then((data) => {
                 setProducts(data);
                 setLoading(false);
@@ -37,7 +37,7 @@ export const Shop = () => {
                         <SearchFilterInput />
                         <SortOptions />
                     </div>
-                    <div className="flex flex-row">
+                    <div className="flex flex-wrap justify-center items-center gap-12">
                         {products.map((product) => (
                             <ProductCard key={product.id} product={product} />
                         ))}
