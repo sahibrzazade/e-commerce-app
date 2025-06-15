@@ -10,8 +10,8 @@ export const ProductCard = ({
     <div>
 
       {/* Product Image */}
-      <div className='relative group'>
-        <img className='w-[290px] h-[300px] border border-white'
+      <div className='w-[290px] relative group'>
+        <img className='w-full h-[340px] p-4 bg-white border border-white'
           src={product.image}
           alt="product image"
         />
@@ -32,6 +32,14 @@ export const ProductCard = ({
           <div className='flex flex-row my-1'>
             <span className='me-2'>{product.stars}</span>
             <Rating
+              sx={{
+                '& .MuiRating-icon': {
+                  color: 'white',
+                },
+                '& .MuiRating-iconEmpty': {
+                  color: 'white',
+                },
+              }}
               name="read-only"
               value={product.stars}
               precision={0.1}
