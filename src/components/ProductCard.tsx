@@ -8,10 +8,8 @@ export const ProductCard = ({
 }: ProductCardProps) => {
   return (
     <div>
-
-      {/* Product Image */}
       <div className='w-[290px] relative group'>
-        <img className='w-full h-[340px] p-4 bg-white border border-white'
+        <img className='w-full h-[340px] border border-white'
           src={product.image}
           alt="product image"
         />
@@ -25,7 +23,6 @@ export const ProductCard = ({
         </div>
       </div>
 
-      {/* Product Text */}
       <div className='flex flex-row items-center justify-between'>
         <div className='flex flex-col'>
           <span className='inline-block my-1'>{product.name}</span>
