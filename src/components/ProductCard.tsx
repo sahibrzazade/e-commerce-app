@@ -2,10 +2,14 @@ import { HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import Rating from '@mui/material/Rating';
 import { ProductCardProps } from '../types';
 import { OutlinedButton } from './OutlinedButton';
+import { useNavigate } from 'react-router-dom';
 
 export const ProductCard = ({
   product
 }: ProductCardProps) => {
+
+  const navigate = useNavigate();
+
   return (
     <div>
       <div className='w-[290px] relative group'>
@@ -18,7 +22,7 @@ export const ProductCard = ({
             <OutlinedButton content={<HeartOutlined />} height={40} width={40} fontWeight="normal" />
           </div>
           <div className="flex justify-center items-center h-full">
-            <OutlinedButton content="DETAILS PAGE" height={40} width={180} fontWeight="normal" />
+            <OutlinedButton content="DETAILS PAGE" onClick={() => navigate(`/product/${product.id}`)} height={40} width={180} fontWeight="normal" />
           </div>
         </div>
       </div>
