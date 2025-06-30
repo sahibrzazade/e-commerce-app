@@ -8,9 +8,7 @@ export const OutlinedButton = ({ content, height, width, fontWeight, onClick }: 
         ${fontWeight === 'bold' ? 'font-bold' : fontWeight === 'normal' ? 'font-normal' : 'font-thin'}`}
       style={{ height: height, width: width }}
     >
-      <span>
-        {content}
-      </span>
+      {content}
     </button>
   );
 };

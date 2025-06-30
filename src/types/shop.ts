@@ -1,7 +1,12 @@
 export interface Product {
   id: string;
-  name: string;
+  brand: string;
+  category: string;
+  careInstructions: string;
+  description: string;
   image: string;
+  material: string;
+  name: string;
   price: number;
   reviewsCount: number;
   stars: number;
