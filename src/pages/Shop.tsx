@@ -1,26 +1,12 @@
-import { useEffect, useState } from "react";
-import { Product } from "../types";
-import { productService } from "../services/productService";
 import { SearchFilterInput } from "../components/shop/SearchFilterInput";
 import AppLayout from "../layouts/AppLayout";
 import { SortOptions } from "../components/shop/SortOptions";
 import { ProductFilter } from "../components/shop/ProductFilter";
 import { ProductCard } from "../components/ProductCard";
+import { useProductsWithWishlist } from "../hooks/useProductsWithWishlist";
 
 export const Shop = () => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        productService.getProducts()
-            .then((data) => {
-                setProducts(data);
-                setLoading(false);
-            })
-            .catch(() => {
-                setLoading(false);
-            });
-    }, []);
+    const { products, loading } = useProductsWithWishlist();
 
     return (
         <AppLayout>

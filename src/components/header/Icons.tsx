@@ -10,16 +10,37 @@ import { OutlinedButton } from '../OutlinedButton';
 import { useState } from 'react';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { authService } from '../../services/authService';
+import { showSuccessMessage } from '../../utils/toastUtils';
+import { useWishlist } from '../../contexts/wishlistContext';
 
 const Icons: React.FC = () => {
+
   const navigate = useNavigate();
+  const user = useAuthUser();
+  const { count: wishlistCount } = useWishlist();
+
   const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
 
-  const user = useAuthUser();
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      showSuccessMessage('Logout successful');
+      navigate('/');
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  };
 
   return (
     <div className="flex items-center space-x-4 text-2xl">
-      <HeartOutlined className="text-gray-600 cursor-pointer" />
+      <div className="relative">
+        <HeartOutlined onClick={() => navigate('/wishlist')} className="text-gray-600 cursor-pointer" />
+        {user && (
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
+            {wishlistCount}
+          </span>
+        )}
+      </div>
       <ShoppingCartOutlined className="text-gray-600 cursor-pointer" />
       <GlobalOutlined className="text-gray-600 cursor-pointer" />
       <div
@@ -45,14 +66,7 @@ const Icons: React.FC = () => {
                   height={40}
                   width={100}
                   fontWeight="bold"
-                  onClick={async () => {
-                    try {
-                      await authService.logout();
-                      navigate('/');
-                    } catch (error) {
-                      console.log('Logout failed', error);
-                    }
-                  }}
+                  onClick={handleLogout}
                 />
               </div>
             </>

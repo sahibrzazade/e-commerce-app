@@ -6,3 +6,4 @@ export * from './shop'
 export * from './OutlinedButton.types'
 export * from './user';
 export * from './cart';
+export * from './context';
