@@ -11,6 +11,6 @@ export const showSuccessMessage = (message?: string) => {
 
 export const showErrorMessage = (message?: string) => {
     toast.error(message || defaultErrorMessage, {
-        autoClose: 5000,
+        autoClose: 3000,
     });
 };

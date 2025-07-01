@@ -11,8 +11,10 @@ export interface Product {
   reviewsCount: number;
   stars: number;
   isAvailable: boolean;
+  isWishlisted: boolean;
 }
 
 export interface ProductCardProps {
   product: Product
+  onWishlistChange?: () => void;
 }

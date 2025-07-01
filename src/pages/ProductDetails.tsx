@@ -1,31 +1,47 @@
 import { useParams } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout"
-import { useEffect, useState } from "react";
-import { productService } from "../services/productService";
-import { Product } from "../types/shop";
-import { showErrorMessage } from "../utils/toastUtils";
+import { showErrorMessage, showSuccessMessage } from "../utils/toastUtils";
 import Rating from "@mui/material/Rating";
 import { OutlinedButton } from "../components/OutlinedButton";
-import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { HeartOutlined, HeartFilled, ShoppingCartOutlined } from "@ant-design/icons";
+import { useProductWithWishlistById } from "../hooks/useProductsWithWishlist";
+import { useAuthUser } from "../hooks/useAuthUser";
+import { wishlistService } from "../services/wishlistService";
+import { useState, useEffect } from "react";
+import { useWishlist } from '../contexts/wishlistContext';
 
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
-    const [product, setProduct] = useState<Product | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { product, loading } = useProductWithWishlistById(id);
+    const user = useAuthUser();
+    const [isWishlisted, setIsWishlisted] = useState(product?.isWishlisted);
+    const [buttonLoading, setButtonLoading] = useState(false);
+    const { refresh: refreshWishlist } = useWishlist();
 
     useEffect(() => {
-        if (!id) return;
-        setLoading(true);
-        productService.getProductById(id)
-            .then((prod) => {
-                setProduct(prod);
-                setLoading(false);
-            })
-            .catch(() => {
-                showErrorMessage("Failed to load product.");
-                setLoading(false);
-            });
-    }, [id]);
+        setIsWishlisted(product?.isWishlisted);
+    }, [product]);
+
+    const toggleWishlist = async () => {
+        if (!user || !product) return;
+        setButtonLoading(true);
+        try {
+            if (isWishlisted) {
+                await wishlistService.removeFromWishlist(user.uid, product.id);
+                setIsWishlisted(false);
+                showErrorMessage('Removed from wishlist!');
+            } else {
+                await wishlistService.addToWishlist(user.uid, product.id);
+                setIsWishlisted(true);
+                showSuccessMessage('Added to wishlist!');
+            }
+            await refreshWishlist();
+        } catch (error) {
+            showErrorMessage('Failed to update wishlist.');
+        } finally {
+            setButtonLoading(false);
+        }
+    };
 
     return (
         <AppLayout>
@@ -34,7 +50,6 @@ export const ProductDetails = () => {
             ) : product && (
                 <div className="max-w-[1280px] py-12 mx-auto flex flex-col h-full">
                     <div className="flex flex-row">
-
                         <div className="flex-shrink-0 w-1/2 p-8 h-full">
                             <img src={product.image} alt={product.name} className="w-full h-full" />
                         </div>
@@ -82,7 +97,7 @@ export const ProductDetails = () => {
                             </div>
                             <div className="py-4 flex flex-row gap-2">
                                 <OutlinedButton content={<span>ADD TO CART <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" />
-                                <OutlinedButton content={<HeartOutlined className="text-2xl" />} height={60} width={60} fontWeight="normal" />
+                                <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled className="text-2xl" /> : <HeartOutlined className="text-2xl" />} height={60} width={60} fontWeight="normal" disabled={buttonLoading} />
                             </div>
                         </div>
                     </div>

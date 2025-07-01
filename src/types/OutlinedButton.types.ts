@@ -8,4 +8,5 @@ export interface OutlinedButtonProps {
     width: number;
     fontWeight: FontWeight;
     onClick?: () => void;
+    disabled?: boolean;
 }
