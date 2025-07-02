@@ -10,7 +10,7 @@ import { OutlinedButton } from '../OutlinedButton';
 import { useState } from 'react';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { authService } from '../../services/authService';
-import { showSuccessMessage } from '../../utils/toastUtils';
+import { showErrorMessage, showSuccessMessage } from '../../utils/toastUtils';
 import { useWishlist } from '../../contexts/wishlistContext';
 
 const Icons: React.FC = () => {
@@ -21,13 +21,13 @@ const Icons: React.FC = () => {
 
   const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
 
-  const handleLogout = async () => {
+  const handleSignOut = async () => {
     try {
-      await authService.logout();
-      showSuccessMessage('Logout successful');
+      await authService.signOut();
+      showSuccessMessage('Sign Out successful');
       navigate('/');
     } catch (error) {
-      console.error('Logout failed', error);
+      showErrorMessage('Sign Out failed. Please try again later.');
     }
   };
 
@@ -62,11 +62,11 @@ const Icons: React.FC = () => {
                   onClick={() => navigate('/profile')}
                 />
                 <OutlinedButton
-                  content="Logout"
+                  content="Sign Out"
                   height={40}
                   width={100}
                   fontWeight="bold"
-                  onClick={handleLogout}
+                  onClick={handleSignOut}
                 />
               </div>
             </>
@@ -75,18 +75,18 @@ const Icons: React.FC = () => {
               <span className="text-white text-sm mb-4">You're not signed in</span>
               <div className="flex flex-row gap-2">
                 <OutlinedButton
-                  content="Login"
+                  content="Sign In"
                   height={40}
                   width={100}
                   fontWeight="bold"
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate('/sign-in')}
                 />
                 <OutlinedButton
-                  content="Register"
+                  content="Sign Up"
                   height={40}
                   width={100}
                   fontWeight="bold"
-                  onClick={() => navigate('/register')}
+                  onClick={() => navigate('/sign-up')}
                 />
               </div>
             </>

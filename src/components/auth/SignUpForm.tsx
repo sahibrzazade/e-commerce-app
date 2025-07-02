@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { registerSchema, RegisterForm as RegisterFormType } from '../../schemas/registerSchema';
+import { signUpSchema, SignUpForm as SignUpFormType } from '../../schemas/signUpSchema';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../configs/firebase';
 import { useNavigate } from 'react-router-dom';
@@ -10,35 +10,35 @@ import { getFirebaseAuthErrorMessage } from '../../utils/firebaseErrorMessages';
 import { authService } from '../../services/authService';
 import { FcGoogle } from 'react-icons/fc';
 
-export const RegisterForm = () => {
-  const [registerError, setRegisterError] = useState<string | null>(null);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterFormType>({
-    resolver: zodResolver(registerSchema),
+export const SignUpForm = () => {
+  const [signUpError, setSignUpError] = useState<string | null>(null);
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignUpFormType>({
+    resolver: zodResolver(signUpSchema),
   });
   const navigate = useNavigate();
 
-  const onSubmit = async (data: RegisterFormType) => {
-    setRegisterError(null);
+  const onSubmit = async (data: SignUpFormType) => {
+    setSignUpError(null);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       await updateProfile(userCredential.user, { displayName: data.name });
-      showSuccessMessage('Registration successful! Please log in.');
-      navigate('/login');
+      showSuccessMessage('Sign Up successful! Please sign in.');
+      navigate('/sign-in');
     } catch (err: any) {
       const message = getFirebaseAuthErrorMessage ? getFirebaseAuthErrorMessage(err) : 'Something went wrong!';
-      setRegisterError(message);
+      setSignUpError(message);
       showErrorMessage(message);
     }
   };
 
   const handleGoogleSignUp = async () => {
     try {
-      const response = await authService.loginWithGoogle();
+      const response = await authService.signInWithGoogle();
       showSuccessMessage(`Welcome, ${response.user.displayName || response.user.email}!`);
       navigate('/');
     } catch (err: any) {
       const message = getFirebaseAuthErrorMessage ? getFirebaseAuthErrorMessage(err) : 'Something went wrong!';
-      setRegisterError(message);
+      setSignUpError(message);
       showErrorMessage(message);
     }
   };
@@ -81,13 +81,13 @@ export const RegisterForm = () => {
         />
         {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>}
       </div>
-      {registerError && <p className="text-red-400 text-sm mt-1">{registerError}</p>}
+      {signUpError && <p className="text-red-400 text-sm mt-1">{signUpError}</p>}
       <button
         type="submit"
         className="w-full bg-white text-black py-2 rounded-lg font-semibold hover:bg-gray-200 transition cursor-pointer disabled:opacity-60"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Registering...' : 'Register'}
+        {isSubmitting ? 'Signing Up...' : 'Sign Up'}
       </button>
       <div className="flex items-center my-4">
         <div className="flex-grow h-px bg-gray-700" />
