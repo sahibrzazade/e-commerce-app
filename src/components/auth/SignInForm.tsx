@@ -1,42 +1,42 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { loginSchema, LoginForm as LoginFormType } from '../../schemas/loginSchema';
+import { signInSchema, SignInForm as SignInFormType } from '../../schemas/signInSchema';
 import { authService } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 import { showErrorMessage, showSuccessMessage } from '../../utils/toastUtils';
 import { getFirebaseAuthErrorMessage } from '../../utils/firebaseErrorMessages';
 import { FcGoogle } from 'react-icons/fc';
 
-export const LoginForm = () => {
-  const [loginError, setLoginError] = useState<string | null>(null);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormType>({
-    resolver: zodResolver(loginSchema),
+export const SignInForm = () => {
+  const [signInError, setSignInError] = useState<string | null>(null);
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignInFormType>({
+    resolver: zodResolver(signInSchema),
   });
   const navigate = useNavigate();
 
-  const onSubmit = async (data: LoginFormType) => {
-    setLoginError(null);
+  const onSubmit = async (data: SignInFormType) => {
+    setSignInError(null);
     try {
-      const response = await authService.login(data.email, data.password);
+      const response = await authService.signIn(data.email, data.password);
       showSuccessMessage(`Welcome back, ${response.user.displayName}!`);
       navigate('/');
     } catch (err: any) {
       const message = getFirebaseAuthErrorMessage(err);
-      setLoginError(message);
+      setSignInError(message);
       showErrorMessage(message);
     }
   };
 
   const handleGoogleSignIn = async () => {
-    setLoginError(null);
+    setSignInError(null);
     try {
-      const response = await authService.loginWithGoogle();
+      const response = await authService.signInWithGoogle();
       showSuccessMessage(`Welcome, ${response.user.displayName}!`);
       navigate('/');
     } catch (err: any) {
       const message = getFirebaseAuthErrorMessage(err);
-      setLoginError(message);
+      setSignInError(message);
       showErrorMessage(message);
     }
   };
@@ -67,7 +67,7 @@ export const LoginForm = () => {
         />
         {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>}
       </div>
-      {loginError && <p className="text-red-400 text-sm mt-1">{loginError}</p>}
+      {signInError && <p className="text-red-400 text-sm mt-1">{signInError}</p>}
       <button
         type="submit"
         className="w-full bg-white text-black py-2 rounded-lg font-semibold hover:bg-gray-200 transition cursor-pointer disabled:opacity-60"
