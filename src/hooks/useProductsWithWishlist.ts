@@ -12,10 +12,11 @@ export function useProductsWithWishlist() {
   const user = useAuthUser();
   const [products, setProducts] = useState<ProductWithWishlist[]>([]);
   const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (showLoading: boolean = true) => {
+    if (showLoading) setLoading(true);
     setError(null);
     try {
       const products = await productService.getProducts();
@@ -31,15 +32,20 @@ export function useProductsWithWishlist() {
     } catch (err) {
       setError('Failed to fetch products or wishlists.');
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    const load = async () => {
+      setInitialLoading(true);
+      await fetchData(true);
+      setInitialLoading(false);
+    };
+    load();
   }, [user]);
 
-  return { products, loading, error, refetch: fetchData };
+  return { products, loading, initialLoading, error, fetchData };
 }
 
 export function useProductWithWishlistById(productId: string | undefined) {
@@ -80,5 +86,5 @@ export function useProductWithWishlistById(productId: string | undefined) {
     fetchData();
   }, [user, productId]);
 
-  return { product, loading, error, refetch: fetchData };
+  return { product, loading, error, fetchData };
 } 

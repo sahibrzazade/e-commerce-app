@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/useAuthUser";
 
 export const Wishlist = () => {
-    const { products, loading, refetch } = useProductsWithWishlist();
+    const { products, initialLoading, fetchData } = useProductsWithWishlist();
 
     const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ export const Wishlist = () => {
 
     return (
         <AppLayout>
-            {loading ? (
+            {initialLoading ? (
                 <div>loading..</div>
             ) : (
                 <>
@@ -42,7 +42,7 @@ export const Wishlist = () => {
                                     </div>
                                     {
                                         wishlistProducts.map(product => (
-                                            <ProductCard key={product.id} product={product} onWishlistChange={refetch} />
+                                            <ProductCard key={product.id} product={product} onWishlistChange={() => fetchData(false)} />
                                         ))
                                     }
                                 </>

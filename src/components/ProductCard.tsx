@@ -1,4 +1,4 @@
-import { HeartOutlined,HeartFilled, ShoppingCartOutlined } from '@ant-design/icons';
+import { HeartOutlined, HeartFilled, ShoppingCartOutlined } from '@ant-design/icons';
 import Rating from '@mui/material/Rating';
 import { ProductCardProps } from '../types';
 import { OutlinedButton } from './OutlinedButton';
@@ -8,6 +8,7 @@ import { wishlistService } from '../services/wishlistService';
 import { showSuccessMessage, showErrorMessage } from '../utils/toastUtils';
 import { useState, useEffect } from 'react';
 import { useWishlist } from '../contexts/wishlistContext';
+import { useCart } from '../contexts/cartContext';
 
 export const ProductCard = ({
   product,
@@ -19,6 +20,8 @@ export const ProductCard = ({
   const [isWishlisted, setIsWishlisted] = useState(product.isWishlisted);
   const [buttonLoading, setButtonLoading] = useState(false);
   const { refresh: refreshWishlist } = useWishlist();
+  const { addToCart } = useCart();
+  const [cartLoading, setCartLoading] = useState(false);
 
   useEffect(() => {
     setIsWishlisted(product.isWishlisted);
@@ -46,6 +49,19 @@ export const ProductCard = ({
     }
   }
 
+  const handleAddToCart = async () => {
+    if (!user) return;
+    setCartLoading(true);
+    try {
+      await addToCart(product.id, 1);
+      showSuccessMessage('Added to cart!');
+    } catch (error) {
+      showErrorMessage('Failed to add to cart.');
+    } finally {
+      setCartLoading(false);
+    }
+  };
+
   return (
     <div>
       <div className='w-[290px] relative group'>
@@ -59,17 +75,16 @@ export const ProductCard = ({
           </div>
         </div>
       </div>
-
       <div className='flex flex-col'>
         <div className='flex flex-row items-center justify-between mt-2'>
           <span className='inline-block my-1'>{product.name}</span>
           {user ?
             <div className='flex flex-row gap-2'>
-              <OutlinedButton content={<ShoppingCartOutlined />} height={40} width={40} fontWeight='normal' />
-              <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled /> : <HeartOutlined />} height={40} width={40} fontWeight="normal" disabled={buttonLoading} />
+              <OutlinedButton content={<ShoppingCartOutlined />} height={40} width={40} fontWeight='normal' onClick={handleAddToCart} isDisabled={cartLoading} />
+              <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled /> : <HeartOutlined />} height={40} width={40} fontWeight="normal" isDisabled={buttonLoading} />
             </div>
             :
-            <span className='text-red-500'>You are not logged in</span>
+            <span className='text-red-500'>You are not signed in</span>
           }
         </div>
         <div className='flex flex-row my-1'>

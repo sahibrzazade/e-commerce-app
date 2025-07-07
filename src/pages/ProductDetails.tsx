@@ -9,14 +9,34 @@ import { useAuthUser } from "../hooks/useAuthUser";
 import { wishlistService } from "../services/wishlistService";
 import { useState, useEffect } from "react";
 import { useWishlist } from '../contexts/wishlistContext';
+import { useCart } from "../contexts/cartContext";
 
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
-    const { product, loading } = useProductWithWishlistById(id);
+
+    const { addToCart } = useCart()
+    const { product } = useProductWithWishlistById(id);
     const user = useAuthUser();
+
+    const [cartLoading, setCartLoading] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(product?.isWishlisted);
     const [buttonLoading, setButtonLoading] = useState(false);
     const { refresh: refreshWishlist } = useWishlist();
+
+    const handleAddToCart = async () => {
+        if (!user) return;
+        setCartLoading(true);
+        try {
+            if (product) {
+                await addToCart(product.id, 1);
+                showSuccessMessage('Added to cart!');
+            }
+        } catch (error) {
+            showErrorMessage('Failed to add to cart.');
+        } finally {
+            setCartLoading(false);
+        }
+    };
 
     useEffect(() => {
         setIsWishlisted(product?.isWishlisted);
@@ -45,9 +65,7 @@ export const ProductDetails = () => {
 
     return (
         <AppLayout>
-            {loading ? (
-                <div>Loading...</div>
-            ) : product && (
+            {product && (
                 <div className="max-w-[1280px] py-12 mx-auto flex flex-col h-full">
                     <div className="flex flex-row">
                         <div className="flex-shrink-0 w-1/2 p-8 h-full">
@@ -96,8 +114,8 @@ export const ProductDetails = () => {
                                 <span>{product.category}</span>
                             </div>
                             <div className="py-4 flex flex-row gap-2">
-                                <OutlinedButton content={<span>ADD TO CART <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" />
-                                <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled className="text-2xl" /> : <HeartOutlined className="text-2xl" />} height={60} width={60} fontWeight="normal" disabled={buttonLoading} />
+                                <OutlinedButton content={<span>ADD TO CART <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" onClick={handleAddToCart} isDisabled={cartLoading} />
+                                <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled className="text-2xl" /> : <HeartOutlined className="text-2xl" />} height={60} width={60} fontWeight="normal" isDisabled={buttonLoading} />
                             </div>
                         </div>
                     </div>

@@ -12,12 +12,14 @@ import { useAuthUser } from '../../hooks/useAuthUser';
 import { authService } from '../../services/authService';
 import { showErrorMessage, showSuccessMessage } from '../../utils/toastUtils';
 import { useWishlist } from '../../contexts/wishlistContext';
+import { useCart } from '../../contexts/cartContext';
 
 const Icons: React.FC = () => {
 
   const navigate = useNavigate();
   const user = useAuthUser();
   const { count: wishlistCount } = useWishlist();
+  const { count: cartCount } = useCart();
 
   const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
 
@@ -41,7 +43,14 @@ const Icons: React.FC = () => {
           </span>
         )}
       </div>
-      <ShoppingCartOutlined className="text-gray-600 cursor-pointer" />
+      <div className="relative">
+        <ShoppingCartOutlined onClick={() => navigate('/cart')} className="text-gray-600 cursor-pointer" />
+        {user && (
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
+            {cartCount}
+          </span>
+        )}
+      </div>
       <GlobalOutlined className="text-gray-600 cursor-pointer" />
       <div
         className="relative"
