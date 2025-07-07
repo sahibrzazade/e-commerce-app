@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { HeroSectionInterface } from '../../types';
 import { OutlinedButton } from '../OutlinedButton';
 
@@ -8,6 +9,9 @@ export const HeroSection = ({
   titleText,
   isReversed,
 }: HeroSectionInterface) => {
+
+  const navigate = useNavigate();
+
   return (
     <div
       className={`flex ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} flex-col w-full`}>
@@ -25,7 +29,7 @@ export const HeroSection = ({
           <span className="text-white-50 text-base mb-2 block font-bold">
             {subtitleText}
           </span>
-          <OutlinedButton content={'Shop Now!'} height={60} width={200} fontWeight='bold' />
+          <OutlinedButton content={'Shop Now!'} height={60} width={200} fontWeight='bold' onClick={() => navigate('/shop')} />
         </div>
       </div>
     </div>
