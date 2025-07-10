@@ -1,13 +1,13 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuthUser } from '../hooks/useAuthUser';
 import { wishlistService } from '../services/wishlistService';
-import { WishlistContextType } from '../types';
+import { WishlistContextType, WithChildren } from '../types';
 
 const WishlistContext = createContext<WishlistContextType>({ count: 0, refresh: async () => { } });
 
 export const useWishlist = () => useContext(WishlistContext);
 
-export const WishlistProvider = ({ children }: { children: ReactNode }) => {
+export const WishlistProvider = ({ children }: WithChildren) => {
   const user = useAuthUser();
   const [count, setCount] = useState(0);
 

@@ -1,6 +1,6 @@
 import { OutlinedButtonProps } from "../types";
 
-export const OutlinedButton = ({ content, height, width, fontWeight, onClick, isDisabled }: OutlinedButtonProps) => {
+export const OutlinedButton = ({ content, height, width, fontWeight, onClick, isDisabled, type }: OutlinedButtonProps) => {
   return (
     <button
       onClick={onClick}
@@ -8,6 +8,7 @@ export const OutlinedButton = ({ content, height, width, fontWeight, onClick, is
         ${fontWeight === 'bold' ? 'font-bold' : fontWeight === 'normal' ? 'font-normal' : 'font-thin'}`}
       style={{ height: height, width: width }}
       disabled={isDisabled}
+      type={type}
     >
       {content}
     </button>

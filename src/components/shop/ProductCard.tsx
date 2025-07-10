@@ -1,14 +1,14 @@
 import { HeartOutlined, HeartFilled, ShoppingCartOutlined } from '@ant-design/icons';
 import Rating from '@mui/material/Rating';
-import { ProductCardProps } from '../types';
-import { OutlinedButton } from './OutlinedButton';
+import { ProductCardProps } from '../../types';
+import { OutlinedButton } from '../OutlinedButton';
 import { useNavigate } from 'react-router-dom';
-import { useAuthUser } from '../hooks/useAuthUser';
-import { wishlistService } from '../services/wishlistService';
-import { showSuccessMessage, showErrorMessage } from '../utils/toastUtils';
+import { useAuthUser } from '../../hooks/useAuthUser';
+import { wishlistService } from '../../services/wishlistService';
+import { showSuccessMessage, showErrorMessage } from '../../utils/toastUtils';
 import { useState, useEffect } from 'react';
-import { useWishlist } from '../contexts/wishlistContext';
-import { useCart } from '../contexts/cartContext';
+import { useWishlist } from '../../contexts/wishlistContext';
+import { useCart } from '../../contexts/cartContext';
 
 export const ProductCard = ({
   product,
@@ -17,10 +17,11 @@ export const ProductCard = ({
 
   const user = useAuthUser()
   const navigate = useNavigate();
+  const { addToCart } = useCart();
+
   const [isWishlisted, setIsWishlisted] = useState(product.isWishlisted);
   const [buttonLoading, setButtonLoading] = useState(false);
   const { refresh: refreshWishlist } = useWishlist();
-  const { addToCart } = useCart();
   const [cartLoading, setCartLoading] = useState(false);
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export const ProductCard = ({
           alt="product image"
         />
         <div className="absolute top-0 left-0 h-full w-full bg-black/40 backdrop-blur-xs opacity-0 cursor-pointer group-hover:opacity-100 transition-opacity duration-300">
-          <div className="flex justify-center items-center h-full">
+          <div className="flex flex-col justify-center items-center h-full">
             <OutlinedButton content="DETAILS PAGE" onClick={() => navigate(`/product/${product.id}`)} height={40} width={180} fontWeight="normal" />
           </div>
         </div>
@@ -80,7 +81,9 @@ export const ProductCard = ({
           <span className='inline-block my-1'>{product.name}</span>
           {user ?
             <div className='flex flex-row gap-2'>
-              <OutlinedButton content={<ShoppingCartOutlined />} height={40} width={40} fontWeight='normal' onClick={handleAddToCart} isDisabled={cartLoading} />
+              {product.isAvailable &&
+                <OutlinedButton content={<ShoppingCartOutlined />} height={40} width={40} fontWeight='normal' onClick={handleAddToCart} isDisabled={cartLoading || !product.isAvailable} />
+              }
               <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled /> : <HeartOutlined />} height={40} width={40} fontWeight="normal" isDisabled={buttonLoading} />
             </div>
             :
@@ -108,6 +111,9 @@ export const ProductCard = ({
       </div>
       <div className='flex flex-row justify-between items-center my-1'>
         <span className='font-bold pe-4'>{product.price}$</span>
+        {!product.isAvailable && (
+          <span className='text-red-600'>Product is not available</span>
+        )}
       </div>
     </div>
   )

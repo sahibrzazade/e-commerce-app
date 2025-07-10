@@ -1,8 +1,13 @@
 export const menuItems = [
   { label: 'Home', path: '/' },
-  { label: 'Blogs', path: '/blogs' },
   { label: 'Shop', path: '/shop' },
-  { label: 'Faq', path: '/faq-page' },
-  { label: 'Contact', path: '/contact' },
-  { label: 'About us', path: '/about-us' },
+  { label: 'Blogs', path: '/blogs' },
+  {
+    label: 'More',
+    children: [
+      { label: 'About Us', path: '/about-us' },
+      { label: 'Contact Us', path: '/contact' },
+      { label: 'FAQ', path: '/faq' },
+    ],
+  },
 ];

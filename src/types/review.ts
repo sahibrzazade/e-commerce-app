@@ -1,12 +1,11 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp } from 'firebase/firestore';
 
 export interface Review {
+  id?: string;
   productId: string;
-  rating: number;
-  comment: string;
-  createdAt: Timestamp;
-}
-
-export interface ProductReview extends Review {
   userId: string;
-}
+  userName: string;
+  text: string;
+  userAvatar?: string;
+  createdAt?: Timestamp;
+} 

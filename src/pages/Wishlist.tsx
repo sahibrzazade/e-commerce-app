@@ -1,6 +1,6 @@
 import AppLayout from "../layouts/AppLayout"
 import { useProductsWithWishlist } from "../hooks/useProductsWithWishlist"
-import { ProductCard } from "../components/ProductCard"
+import { ProductCard } from "../components/shop/ProductCard"
 import { HeartFilled } from "@ant-design/icons";
 import { OutlinedButton } from "../components/OutlinedButton";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,9 @@ export const Wishlist = () => {
     return (
         <AppLayout>
             {initialLoading ? (
-                <div>loading..</div>
+                <div className="flex justify-center items-center h-screen">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
+                </div>
             ) : (
                 <>
                     {user ?

@@ -114,7 +114,7 @@ export const Footer = () => {
               <li>
                 <Link
                   className="hover:text-orange-400 transition duration-300"
-                  to="/faq-page"
+                  to="/faq"
                 >
                   FAQ
                 </Link>
