@@ -1,9 +1,10 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { cartService } from '../services/cartService';
 import { CartItem, CartProduct } from '../types/cart';
 import { useAuthUser } from '../hooks/useAuthUser';
 import { productService } from '../services/productService';
 import { Product } from '../types/shop';
+import { WithChildren } from '../types';
 
 interface CartContextType {
   cart: Record<string, CartItem>;
@@ -26,7 +27,7 @@ export const useCart = () => {
   return context;
 };
 
-export const CartProvider = ({ children }: { children: ReactNode }) => {
+export const CartProvider = ({ children }: WithChildren) => {
   const user = useAuthUser();
   const [cart, setCart] = useState<Record<string, CartItem>>({});
   const [products, setProducts] = useState<Record<string, Product | null>>({});

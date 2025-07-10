@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout"
 import { showErrorMessage, showSuccessMessage } from "../utils/toastUtils";
 import Rating from "@mui/material/Rating";
@@ -10,18 +10,31 @@ import { wishlistService } from "../services/wishlistService";
 import { useState, useEffect } from "react";
 import { useWishlist } from '../contexts/wishlistContext';
 import { useCart } from "../contexts/cartContext";
+import { getReviewsByProductId, addReview, deleteReview } from '../services/reviewService';
+import { Review } from '../types';
+import { useForm } from 'react-hook-form';
+import { ReviewCard } from "../components/shop/ReviewCard";
 
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
 
     const { addToCart } = useCart()
     const { product } = useProductWithWishlistById(id);
+    const { refresh: refreshWishlist } = useWishlist();
     const user = useAuthUser();
 
     const [cartLoading, setCartLoading] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(product?.isWishlisted);
     const [buttonLoading, setButtonLoading] = useState(false);
-    const { refresh: refreshWishlist } = useWishlist();
+    const navigate = useNavigate();
+
+    const [reviews, setReviews] = useState<Review[]>([]);
+    const [reviewLoading, setReviewLoading] = useState(false);
+    const [fetchingReviews, setFetchingReviews] = useState(true);
+
+    const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<{ text: string }>({
+        defaultValues: { text: '' },
+    });
 
     const handleAddToCart = async () => {
         if (!user) return;
@@ -42,6 +55,22 @@ export const ProductDetails = () => {
         setIsWishlisted(product?.isWishlisted);
     }, [product]);
 
+    useEffect(() => {
+        const fetchReviews = async () => {
+            if (!id) return;
+            setFetchingReviews(true);
+            try {
+                const fetched = await getReviewsByProductId(id);
+                setReviews(fetched);
+            } catch (e) {
+                showErrorMessage('Failed to fetch reviews.');
+            } finally {
+                setFetchingReviews(false);
+            }
+        };
+        fetchReviews();
+    }, [id]);
+
     const toggleWishlist = async () => {
         if (!user || !product) return;
         setButtonLoading(true);
@@ -60,6 +89,36 @@ export const ProductDetails = () => {
             showErrorMessage('Failed to update wishlist.');
         } finally {
             setButtonLoading(false);
+        }
+    };
+
+    const handleReviewSubmit = async (data: { text: string }) => {
+        if (!user) {
+            showErrorMessage('You must be signed in to leave a review.');
+            return;
+        }
+        if (!data.text.trim()) {
+            showErrorMessage('Review cannot be empty.');
+            return;
+        }
+        setReviewLoading(true);
+        try {
+            await addReview({
+                productId: id!,
+                userId: user.uid,
+                userName: user.displayName || user.email || 'Anonymous',
+                userAvatar: user.photoURL || undefined,
+                text: data.text.trim(),
+            });
+            reset();
+            showSuccessMessage('Review submitted!');
+            const fetched = await getReviewsByProductId(id!);
+            setReviews(fetched);
+        } catch (e) {
+            console.error(e); // Log the error for debugging
+            showErrorMessage('Failed to submit review.');
+        } finally {
+            setReviewLoading(false);
         }
     };
 
@@ -113,8 +172,16 @@ export const ProductDetails = () => {
                                 <span className="font-bold">Category: </span>
                                 <span>{product.category}</span>
                             </div>
+                            {!product.isAvailable && (
+                                <span className="text-red-600 font-bold uppercase">This product is currently unavailable.</span>)
+                            }
                             <div className="py-4 flex flex-row gap-2">
-                                <OutlinedButton content={<span>ADD TO CART <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" onClick={handleAddToCart} isDisabled={cartLoading} />
+
+                                {product.isAvailable ?
+                                    <OutlinedButton content={<span>ADD TO CART <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" onClick={handleAddToCart} isDisabled={cartLoading} />
+                                    :
+                                    <OutlinedButton content={<span>RETURN TO THE SHOP</span>} height={60} width={200} fontWeight="bold" onClick={() => navigate('/shop')} />
+                                }
                                 <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled className="text-2xl" /> : <HeartOutlined className="text-2xl" />} height={60} width={60} fontWeight="normal" isDisabled={buttonLoading} />
                             </div>
                         </div>
@@ -133,6 +200,55 @@ export const ProductDetails = () => {
                         <div className="flex flex-row text-lg my-2">
                             <span>{product.description}</span>
                         </div>
+                    </div>
+                    <div className="h-px bg-gray-700"></div>
+                    <div className="flex flex-col mx-8 my-4">
+                        <h1 className="self-start text-2xl inline-block bg-gray-300 text-black font-bold px-4 py-2 mb-2">Reviews</h1>
+                        {fetchingReviews ? (
+                            <span className="text-lg">Loading reviews...</span>
+                        ) : reviews.length === 0 ? (
+                            <span className="text-lg">No reviews yet.</span>
+                        ) : (
+                            <div className="flex flex-col gap-4 mb-6">
+                                {reviews.map((review) => (
+                                    <ReviewCard
+                                        key={review.id}
+                                        review={review}
+                                        currentUserId={user?.uid}
+                                        onDelete={async () => {
+                                            if (!product || !review.id) return;
+                                            try {
+                                                await deleteReview(product.id, review.id);
+                                                showErrorMessage('Review deleted!');
+                                                const fetched = await getReviewsByProductId(product.id);
+                                                setReviews(fetched);
+                                            } catch (e) {
+                                                showErrorMessage('Failed to delete review.');
+                                            }
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                        {user && (
+                            <form className="flex flex-col space-y-4 mt-4" onSubmit={handleSubmit(handleReviewSubmit)}>
+                                <textarea
+                                    placeholder="Leave a review..."
+                                    className="w-full h-32 p-4 bg-black text-white border border-white outline-0 resize-none"
+                                    {...register('text', { required: 'Review cannot be empty.' })}
+                                    disabled={reviewLoading || isSubmitting}
+                                ></textarea>
+                                {errors.text && <span className="text-red-400 text-sm">{errors.text.message}</span>}
+                                <OutlinedButton
+                                    content={user ? (reviewLoading || isSubmitting ? 'Submitting...' : 'Submit Review') : 'Sign in to review'}
+                                    height={60}
+                                    width={200}
+                                    fontWeight="bold"
+                                    isDisabled={reviewLoading || isSubmitting}
+                                    type="submit"
+                                />
+                            </form>
+                        )}
                     </div>
                 </div>
             )}
