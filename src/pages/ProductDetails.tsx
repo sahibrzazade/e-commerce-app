@@ -115,7 +115,6 @@ export const ProductDetails = () => {
             const fetched = await getReviewsByProductId(id!);
             setReviews(fetched);
         } catch (e) {
-            console.error(e); // Log the error for debugging
             showErrorMessage('Failed to submit review.');
         } finally {
             setReviewLoading(false);
