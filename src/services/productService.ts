@@ -1,11 +1,12 @@
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../configs/firebase';
 import { Product } from '../types/index';
 
 export const productService = {
   async getProducts(): Promise<Product[]> {
     const productsRef = collection(db, 'products');
-    const productsSnapshot = await getDocs(productsRef);
+    const q = query(productsRef, orderBy('isAvailable', 'desc'));
+    const productsSnapshot = await getDocs(q);
     const productList: Product[] = productsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...(doc.data() as Omit<Product, 'id'>),

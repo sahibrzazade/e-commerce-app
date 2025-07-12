@@ -10,6 +10,7 @@ interface ProductWithWishlist extends Product {
 
 export function useProductsWithWishlist() {
   const user = useAuthUser();
+
   const [products, setProducts] = useState<ProductWithWishlist[]>([]);
   const [loading, setLoading] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -50,6 +51,7 @@ export function useProductsWithWishlist() {
 
 export function useProductWithWishlistById(productId: string | undefined) {
   const user = useAuthUser();
+
   const [product, setProduct] = useState<ProductWithWishlist | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

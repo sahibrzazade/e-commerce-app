@@ -3,11 +3,11 @@ import { SignIn } from '../pages/SignIn';
 import { Shop } from '../pages/Shop';
 import { SignUp } from '../pages/SignUp';
 import { AppRoute } from '../types';
-import PublicRoute from '../components/auth/PublicRoute';
 import { ProductDetails } from '../pages/ProductDetails';
 import { Wishlist } from '../pages/Wishlist';
 import { Cart } from '../pages/Cart';
-
+import { Profile } from '../pages/Profile';
+import PublicRoute from '../components/auth/PublicRoute';
 
 export const appRoutes: AppRoute[] = [
   { path: '/', element: <Home /> },
@@ -16,6 +16,7 @@ export const appRoutes: AppRoute[] = [
   { path: '/wishlist', element: <Wishlist /> },
   { path: '/cart', element: <Cart /> },
   { path: '/product/:id', element: <ProductDetails /> },
+  { path: '/profile', element: <Profile /> },
   { path: '/sign-in', element: <PublicRoute><SignIn /></PublicRoute> },
   { path: '/sign-up', element: <PublicRoute><SignUp /></PublicRoute> },
 ];

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { CarouselProps } from '../../types';
 
-type CarouselProps = {
-  images: string[];
-};
+
 
 const Carousel: React.FC<CarouselProps> = ({ images }) => {
   const [current, setCurrent] = useState(0);

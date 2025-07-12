@@ -17,16 +17,25 @@ export const ProductCard = ({
 
   const user = useAuthUser()
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, addLoading } = useCart();
+  const { refresh: refreshWishlist } = useWishlist();
 
   const [isWishlisted, setIsWishlisted] = useState(product.isWishlisted);
   const [buttonLoading, setButtonLoading] = useState(false);
-  const { refresh: refreshWishlist } = useWishlist();
   const [cartLoading, setCartLoading] = useState(false);
 
-  useEffect(() => {
-    setIsWishlisted(product.isWishlisted);
-  }, [product.isWishlisted]);
+  const handleAddToCart = async () => {
+    if (!user) return;
+    setCartLoading(true);
+    try {
+      await addToCart(product.id, 1);
+      showSuccessMessage('Added to cart!');
+    } catch (error) {
+      showErrorMessage('Failed to add to cart.');
+    } finally {
+      setCartLoading(false);
+    }
+  };
 
   const toggleWishlist = async () => {
     if (!user) return;
@@ -50,18 +59,9 @@ export const ProductCard = ({
     }
   }
 
-  const handleAddToCart = async () => {
-    if (!user) return;
-    setCartLoading(true);
-    try {
-      await addToCart(product.id, 1);
-      showSuccessMessage('Added to cart!');
-    } catch (error) {
-      showErrorMessage('Failed to add to cart.');
-    } finally {
-      setCartLoading(false);
-    }
-  };
+  useEffect(() => {
+    setIsWishlisted(product.isWishlisted);
+  }, [product.isWishlisted]);
 
   return (
     <div>
@@ -82,7 +82,7 @@ export const ProductCard = ({
           {user ?
             <div className='flex flex-row gap-2'>
               {product.isAvailable &&
-                <OutlinedButton content={<ShoppingCartOutlined />} height={40} width={40} fontWeight='normal' onClick={handleAddToCart} isDisabled={cartLoading || !product.isAvailable} />
+                <OutlinedButton content={<ShoppingCartOutlined />} height={40} width={40} fontWeight='normal' onClick={handleAddToCart} isDisabled={cartLoading || !product.isAvailable || addLoading} />
               }
               <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled /> : <HeartOutlined />} height={40} width={40} fontWeight="normal" isDisabled={buttonLoading} />
             </div>

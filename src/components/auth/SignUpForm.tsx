@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { showErrorMessage, showSuccessMessage } from '../../utils/toastUtils';
 import { getFirebaseAuthErrorMessage } from '../../utils/firebaseErrorMessages';
 import { authService } from '../../services/authService';
+import { userService } from '../../services/userService';
 import { FcGoogle } from 'react-icons/fc';
 
 export const SignUpForm = () => {
@@ -22,7 +23,11 @@ export const SignUpForm = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       await updateProfile(userCredential.user, { displayName: data.name });
-      showSuccessMessage('Sign Up successful! Please sign in.');
+      await userService.createUser(userCredential.user.uid, {
+        name: data.name,
+        email: data.email,
+      });
+      showSuccessMessage('Sign Up successful!');
       navigate('/sign-in');
     } catch (err: any) {
       const message = getFirebaseAuthErrorMessage ? getFirebaseAuthErrorMessage(err) : 'Something went wrong!';
@@ -34,6 +39,11 @@ export const SignUpForm = () => {
   const handleGoogleSignUp = async () => {
     try {
       const response = await authService.signInWithGoogle();
+      const user = response.user;
+      await userService.createUser(user.uid, {
+        name: user.displayName || '',
+        email: user.email || '',
+      });
       showSuccessMessage(`Welcome, ${response.user.displayName || response.user.email}!`);
       navigate('/');
     } catch (err: any) {

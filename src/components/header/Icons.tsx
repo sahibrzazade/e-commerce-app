@@ -1,37 +1,74 @@
 import {
   ShoppingCartOutlined,
   HeartOutlined,
-  GlobalOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 
 import { useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
 import { OutlinedButton } from '../OutlinedButton';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { authService } from '../../services/authService';
 import { showErrorMessage, showSuccessMessage } from '../../utils/toastUtils';
 import { useWishlist } from '../../contexts/wishlistContext';
 import { useCart } from '../../contexts/cartContext';
+import { useLanguage } from '../../contexts/languageContext';
+import { LanguageSelect } from '../LanguageSelect';
+import { Language } from '../../types/language';
 
 const Icons: React.FC = () => {
-
   const navigate = useNavigate();
   const user = useAuthUser();
   const { count: wishlistCount } = useWishlist();
   const { count: cartCount } = useCart();
+  const { language, changeLanguage, loading: languageLoading } = useLanguage();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSignOut = async () => {
     try {
       await authService.signOut();
       showSuccessMessage('Sign Out successful');
       navigate('/');
+      setIsUserMenuOpen(false);
     } catch (error) {
       showErrorMessage('Sign Out failed. Please try again later.');
     }
   };
 
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsUserMenuOpen(false);
+  };
+
   return (
     <div className="flex items-center space-x-4 text-2xl">
+      <div className="group">
+        <LanguageSelect
+          value={language}
+          onChange={(value) => changeLanguage(value as Language)}
+          disabled={languageLoading}
+          height="32px"
+          showName={false}
+        />
+      </div>
       <div className="relative group">
         <HeartOutlined onClick={() => navigate('/wishlist')} className="text-gray-600 cursor-pointer" />
         {user && (
@@ -48,12 +85,15 @@ const Icons: React.FC = () => {
           </span>
         )}
       </div>
-      <div className="group">
-        <GlobalOutlined className="text-gray-600 cursor-pointer" />
-      </div>
-      <div className="relative group">
-        <UserOutlined className="text-gray-600 cursor-pointer" />
-        <div className="absolute right-0 top-8 bg-black flex flex-col items-center z-50 p-6 border border-white transition-all duration-200 ease-out translate-y-0 opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto">
+      <div className="relative group" ref={userMenuRef}>
+        <UserOutlined
+          className="text-gray-600 cursor-pointer"
+          onClick={toggleUserMenu}
+        />
+        <div className={`absolute right-0 top-8 bg-black flex flex-col items-center z-50 p-6 border border-white transition-all duration-200 ease-out ${isUserMenuOpen
+          ? 'opacity-100 visible pointer-events-auto'
+          : 'opacity-0 invisible pointer-events-none'
+        } group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto`}>
           {user ? (
             <>
               <span className="text-white text-sm mb-4">Welcome back, {user.displayName}!</span>
@@ -63,7 +103,7 @@ const Icons: React.FC = () => {
                   height={40}
                   width={100}
                   fontWeight="bold"
-                  onClick={() => navigate('/profile')}
+                  onClick={() => handleNavigation('/profile')}
                 />
                 <OutlinedButton
                   content="Sign Out"
@@ -83,14 +123,14 @@ const Icons: React.FC = () => {
                   height={40}
                   width={100}
                   fontWeight="bold"
-                  onClick={() => navigate('/sign-in')}
+                  onClick={() => handleNavigation('/sign-in')}
                 />
                 <OutlinedButton
                   content="Sign Up"
                   height={40}
                   width={100}
                   fontWeight="bold"
-                  onClick={() => navigate('/sign-up')}
+                  onClick={() => handleNavigation('/sign-up')}
                 />
               </div>
             </>

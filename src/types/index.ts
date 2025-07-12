@@ -9,3 +9,5 @@ export * from './cart';
 export * from './context';
 export * from './discount';
 export * from './review'
+export * from './carousel';
+export * from './language'

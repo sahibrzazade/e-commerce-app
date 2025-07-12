@@ -10,10 +10,6 @@ export function useDiscount(): DiscountResult {
   const [discountedTotal, setDiscountedTotal] = useState<number>(total);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    setDiscountedTotal(Math.max(0, total - discount));
-  }, [total, discount]);
-
   const applyCoupon = async (code: string) => {
     setLoading(true);
     setDiscount(0);
@@ -50,6 +46,10 @@ export function useDiscount(): DiscountResult {
     setDiscountedTotal(total);
     showErrorMessage('Coupon removed');
   };
+
+  useEffect(() => {
+    setDiscountedTotal(Math.max(0, total - discount));
+  }, [total, discount]);
 
   return { discount, discountedTotal, loading, applyCoupon, resetDiscount };
 } 
