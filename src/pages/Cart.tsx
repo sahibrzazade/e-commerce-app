@@ -20,12 +20,15 @@ import { showErrorMessage, showSuccessMessage } from '../utils/toastUtils';
 import { useAuthUser } from '../hooks/useAuthUser';
 import { useDiscount } from '../hooks/useDiscount';
 import { useForm } from 'react-hook-form';
+import { orderService } from '../services/orderService';
+import { useState } from 'react';
 
 export const Cart = () => {
   const { removeFromCart, removeLoading, clearCart, clearLoading, updateCartItem, updateLoading, count, total, cartProducts } = useCart();
   const { discount, discountedTotal, loading, applyCoupon, resetDiscount } = useDiscount();
   const user = useAuthUser();
   const navigate = useNavigate();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const dataSource = cartProducts;
 
@@ -53,6 +56,37 @@ export const Cart = () => {
 
   const onSubmitCoupon = (data: { coupon: string }) => {
     applyCoupon(data.coupon);
+  };
+
+  const handleCheckout = async () => {
+    if (!user || count === 0) return;
+    
+    setCheckoutLoading(true);
+    try {
+      const orderItems = cartProducts.map(item => ({
+        productId: item.id,
+        quantity: item.quantity,
+        price: item.product?.price || 0
+      }));
+
+      const orderId = await orderService.createOrder({
+        userId: user.uid,
+        items: orderItems,
+        total: total,
+        discount: discount,
+        discountedTotal: discount ? discountedTotal : total
+      });
+
+      showSuccessMessage('Order created successfully!');
+      
+      await clearCart();
+      
+      navigate(`/orders/${orderId}`);
+    } catch (error) {
+      showErrorMessage('Failed to create order. Please try again.');
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
 
   return (
@@ -155,12 +189,12 @@ export const Cart = () => {
                   <span className='text-amber-400'>Discount: ${discount}</span>
                   <span className='font-bold'>Total: ${discount ? discountedTotal : total}</span>
                   <OutlinedButton
-                    content="GO TO CHECKOUT"
+                    content={checkoutLoading ? "CREATING ORDER..." : "GO TO CHECKOUT"}
                     height={60}
                     width={200}
                     fontWeight="bold"
-                    onClick={() => navigate('/checkout')}
-                    isDisabled={count === 0}
+                    onClick={handleCheckout}
+                    isDisabled={count === 0 || checkoutLoading}
                   />
                 </div>
               </div>

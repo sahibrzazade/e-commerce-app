@@ -8,6 +8,7 @@ import { Wishlist } from '../pages/Wishlist';
 import { Cart } from '../pages/Cart';
 import { Profile } from '../pages/Profile';
 import PublicRoute from '../components/auth/PublicRoute';
+import { OrderDetails } from '../pages/OrderDetails';
 
 export const appRoutes: AppRoute[] = [
   { path: '/', element: <Home /> },
@@ -17,6 +18,7 @@ export const appRoutes: AppRoute[] = [
   { path: '/cart', element: <Cart /> },
   { path: '/product/:id', element: <ProductDetails /> },
   { path: '/profile', element: <Profile /> },
+  { path: '/orders/:orderId', element: <OrderDetails /> },
   { path: '/sign-in', element: <PublicRoute><SignIn /></PublicRoute> },
   { path: '/sign-up', element: <PublicRoute><SignUp /></PublicRoute> },
 ];

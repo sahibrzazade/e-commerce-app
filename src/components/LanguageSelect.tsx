@@ -57,7 +57,15 @@ export const LanguageSelect = ({ value, onChange, disabled = false, height = '40
                 }}
             >
                 {languages.map((lang) => (
-                    <MenuItem key={lang.code} value={lang.code}>
+                    <MenuItem
+                        key={lang.code}
+                        value={lang.code}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
                         {lang.flag} {showName && lang.name}
                     </MenuItem>
                 ))}
