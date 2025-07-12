@@ -77,12 +77,10 @@ export const deleteReview = async (productId: string, reviewId: string) => {
     
     const productRef = doc(db, 'products', productId);
     
-    // First update the reviews count
     await updateDoc(productRef, { 
       reviewsCount: increment(-1)
     });
     
-    // Then calculate and update the average stars
     const averageStars = await calculateAverageStars(productId);
     await updateDoc(productRef, { 
       stars: averageStars
