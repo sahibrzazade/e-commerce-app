@@ -9,11 +9,14 @@ import { getFirebaseAuthErrorMessage } from '../../utils/firebaseErrorMessages';
 import { FcGoogle } from 'react-icons/fc';
 
 export const SignInForm = () => {
+  const navigate = useNavigate();
+  
   const [signInError, setSignInError] = useState<string | null>(null);
+  
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignInFormType>({
     resolver: zodResolver(signInSchema),
   });
-  const navigate = useNavigate();
+
 
   const onSubmit = async (data: SignInFormType) => {
     setSignInError(null);

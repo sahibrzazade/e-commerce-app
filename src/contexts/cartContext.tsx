@@ -1,21 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { cartService } from '../services/cartService';
-import { CartItem, CartProduct } from '../types/cart';
+import { CartContextType, CartItem, CartProduct } from '../types';
 import { useAuthUser } from '../hooks/useAuthUser';
 import { productService } from '../services/productService';
 import { Product } from '../types/shop';
 import { WithChildren } from '../types';
-
-interface CartContextType {
-  cart: Record<string, CartItem>;
-  addToCart: (productId: string, quantity?: number) => Promise<void>;
-  removeFromCart: (productId: string) => Promise<void>;
-  updateCartItem: (productId: string, quantity: number) => Promise<void>;
-  clearCart: () => Promise<void>;
-  count: number;
-  total: number;
-  cartProducts: CartProduct[];
-}
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -29,14 +18,84 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }: WithChildren) => {
   const user = useAuthUser();
+
   const [cart, setCart] = useState<Record<string, CartItem>>({});
   const [products, setProducts] = useState<Record<string, Product | null>>({});
+  const [addLoading, setAddLoading] = useState(false);
+  const [removeLoading, setRemoveLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [clearLoading, setClearLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
+
 
   const fetchCart = async () => {
     if (!user) return;
-    const cartData = await cartService.getCart(user.uid);
-    setCart(cartData);
+    setFetchLoading(true);
+    try {
+      const cartData = await cartService.getCart(user.uid);
+      setCart(cartData);
+    } finally {
+      setFetchLoading(false);
+    }
   };
+
+  const addToCart = async (productId: string, quantity = 1) => {
+    if (!user) return;
+    setAddLoading(true);
+    try {
+      const currentQuantity = cart[productId]?.quantity || 0;
+      const newQuantity = currentQuantity + quantity;
+      await cartService.addToCart(user.uid, productId, newQuantity);
+      await fetchCart();
+    } finally {
+      setAddLoading(false);
+    }
+  };
+
+  const removeFromCart = async (productId: string) => {
+    if (!user) return;
+    setRemoveLoading(true);
+    try {
+      await cartService.removeFromCart(user.uid, productId);
+      await fetchCart();
+    } finally {
+      setRemoveLoading(false);
+    }
+  };
+
+  const updateCartItem = async (productId: string, quantity: number) => {
+    if (!user) return;
+    setUpdateLoading(true);
+    try {
+      await cartService.updateCartItem(user.uid, productId, quantity);
+      await fetchCart();
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
+  const clearCart = async () => {
+    if (!user) return;
+    setClearLoading(true);
+    try {
+      await cartService.clearCart(user.uid);
+      await fetchCart();
+    } finally {
+      setClearLoading(false);
+    }
+  };
+
+  const total = Object.entries(cart).reduce((sum, [id, item]) => {
+    const product = products[id];
+    if (!product) return sum;
+    return sum + product.price * item.quantity;
+  }, 0);
+
+  const cartProducts: CartProduct[] = Object.entries(cart).map(([id, item]) => ({
+    id,
+    quantity: item.quantity,
+    product: products[id] || null,
+  }));
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -61,44 +120,6 @@ export const CartProvider = ({ children }: WithChildren) => {
     else setCart({});
   }, [user]);
 
-  const addToCart = async (productId: string, quantity = 1) => {
-    if (!user) return;
-    const currentQuantity = cart[productId]?.quantity || 0;
-    const newQuantity = currentQuantity + quantity;
-    await cartService.addToCart(user.uid, productId, newQuantity);
-    await fetchCart();
-  };
-
-  const removeFromCart = async (productId: string) => {
-    if (!user) return;
-    await cartService.removeFromCart(user.uid, productId);
-    await fetchCart();
-  };
-
-  const updateCartItem = async (productId: string, quantity: number) => {
-    if (!user) return;
-    await cartService.updateCartItem(user.uid, productId, quantity);
-    await fetchCart();
-  };
-
-  const clearCart = async () => {
-    if (!user) return;
-    await cartService.clearCart(user.uid);
-    await fetchCart();
-  };
-
-  const total = Object.entries(cart).reduce((sum, [id, item]) => {
-    const product = products[id];
-    if (!product) return sum;
-    return sum + product.price * item.quantity;
-  }, 0);
-
-  const cartProducts: CartProduct[] = Object.entries(cart).map(([id, item]) => ({
-    id,
-    quantity: item.quantity,
-    product: products[id] || null,
-  }));
-
   return (
     <CartContext.Provider value={{
       cart,
@@ -108,7 +129,12 @@ export const CartProvider = ({ children }: WithChildren) => {
       clearCart,
       count: Object.values(cart).reduce((sum, item) => sum + item.quantity, 0),
       total,
-      cartProducts
+      cartProducts,
+      addLoading,
+      removeLoading,
+      updateLoading,
+      clearLoading,
+      fetchLoading
     }}>
       {children}
     </CartContext.Provider>

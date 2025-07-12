@@ -11,3 +11,19 @@ export interface CartProduct {
     quantity: number;
     product: Product | null;
 }
+
+export interface CartContextType {
+  cart: Record<string, CartItem>;
+  addToCart: (productId: string, quantity?: number) => Promise<void>;
+  removeFromCart: (productId: string) => Promise<void>;
+  updateCartItem: (productId: string, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
+  count: number;
+  total: number;
+  cartProducts: CartProduct[];
+  addLoading: boolean;
+  removeLoading: boolean;
+  updateLoading: boolean;
+  clearLoading: boolean;
+  fetchLoading: boolean;
+}

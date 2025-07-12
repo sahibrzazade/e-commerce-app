@@ -8,12 +8,10 @@ import { useAuthUser } from "../hooks/useAuthUser";
 
 export const Wishlist = () => {
     const { products, initialLoading, fetchData } = useProductsWithWishlist();
-
+    const user = useAuthUser()
     const navigate = useNavigate();
 
     const wishlistProducts = products.filter(p => p.isWishlisted);
-
-    const user = useAuthUser()
 
     return (
         <AppLayout>

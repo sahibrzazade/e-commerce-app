@@ -22,13 +22,12 @@ import { useDiscount } from '../hooks/useDiscount';
 import { useForm } from 'react-hook-form';
 
 export const Cart = () => {
-  const { removeFromCart, clearCart, updateCartItem, count, total, cartProducts } = useCart();
-
+  const { removeFromCart, removeLoading, clearCart, clearLoading, updateCartItem, updateLoading, count, total, cartProducts } = useCart();
   const { discount, discountedTotal, loading, applyCoupon, resetDiscount } = useDiscount();
-
   const user = useAuthUser();
-
   const navigate = useNavigate();
+
+  const dataSource = cartProducts;
 
   const { register, handleSubmit } = useForm<{ coupon: string }>();
 
@@ -48,14 +47,12 @@ export const Cart = () => {
     showSuccessMessage('Cart updated');
   };
 
-  const dataSource = cartProducts;
+  const handleRemoveCoupon = () => {
+    resetDiscount(total);
+  };
 
   const onSubmitCoupon = (data: { coupon: string }) => {
     applyCoupon(data.coupon);
-  };
-
-  const handleRemoveCoupon = () => {
-    resetDiscount(total);
   };
 
   return (
@@ -97,7 +94,7 @@ export const Cart = () => {
                           ) : null}
                         </TableCell>
                         <TableCell>
-                          <Typography fontWeight="bold" sx={{ color: 'white' }}>{row.product ? row.product.name : row.id}</Typography>
+                          <Typography fontWeight="bold" sx={{ color: 'white' }}>{row.product && row.product.name}</Typography>
                         </TableCell>
                         <TableCell>
                           <Typography sx={{ color: 'white' }}>
@@ -106,11 +103,11 @@ export const Cart = () => {
                         </TableCell>
                         <TableCell>
                           <div style={{ display: 'flex', alignItems: 'center', borderRadius: 6, width: 100, justifyContent: 'space-between' }}>
-                            <IconButton size="small" onClick={() => handleQuantityChange(row.id, row.quantity - 1)} disabled={row.quantity <= 1} sx={{ color: 'white' }}>
+                            <IconButton size="small" onClick={() => handleQuantityChange(row.id, row.quantity - 1)} disabled={row.quantity <= 1 || updateLoading} sx={{ color: 'white' }}>
                               <AiOutlineMinus />
                             </IconButton>
                             <Typography sx={{ color: 'white', minWidth: 24, textAlign: 'center' }}>{row.quantity}</Typography>
-                            <IconButton size="small" onClick={() => handleQuantityChange(row.id, row.quantity + 1)} sx={{ color: 'white' }}>
+                            <IconButton size="small" onClick={() => handleQuantityChange(row.id, row.quantity + 1)} disabled={updateLoading} sx={{ color: 'white' }}>
                               <AiOutlinePlus />
                             </IconButton>
                           </div>
@@ -126,6 +123,7 @@ export const Cart = () => {
                             color="error"
                             sx={{ height: 40, width: 40, minWidth: 0, padding: 0 }}
                             size="small" onClick={() => handleRemove(row.id)}
+                            disabled={removeLoading}
                           >
                             X
                           </Button>
@@ -150,7 +148,7 @@ export const Cart = () => {
                     </Button>}
                 </form>
                 <div className='flex flex-col items-end gap-y-4'>
-                  <Button variant="outlined" color="error" className='h-[50px]' onClick={handleClear}>
+                  <Button variant="outlined" color="error" className='h-[50px]' onClick={handleClear} disabled={clearLoading}>
                     Clear Cart
                   </Button>
                   <span>Subtotal: ${total}</span>

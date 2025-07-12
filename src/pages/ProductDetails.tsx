@@ -17,20 +17,20 @@ import { ReviewCard } from "../components/shop/ReviewCard";
 
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
-
-    const { addToCart } = useCart()
+    const { addToCart, addLoading } = useCart()
     const { product } = useProductWithWishlistById(id);
     const { refresh: refreshWishlist } = useWishlist();
     const user = useAuthUser();
+    const navigate = useNavigate();
 
     const [cartLoading, setCartLoading] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(product?.isWishlisted);
     const [buttonLoading, setButtonLoading] = useState(false);
-    const navigate = useNavigate();
-
+    const [deletingReviewId, setDeletingReviewId] = useState<string | null>(null);
     const [reviews, setReviews] = useState<Review[]>([]);
     const [reviewLoading, setReviewLoading] = useState(false);
     const [fetchingReviews, setFetchingReviews] = useState(true);
+    const [reviewStars, setReviewStars] = useState<number>(5);
 
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<{ text: string }>({
         defaultValues: { text: '' },
@@ -48,6 +48,61 @@ export const ProductDetails = () => {
             showErrorMessage('Failed to add to cart.');
         } finally {
             setCartLoading(false);
+        }
+    };
+
+    const handleReviewSubmit = async (data: { text: string }) => {
+        if (!user) {
+            showErrorMessage('You must be signed in to leave a review.');
+            return;
+        }
+        if (!data.text.trim()) {
+            showErrorMessage('Review cannot be empty.');
+            return;
+        }
+        if (reviewStars < 1 || reviewStars > 5) {
+            showErrorMessage('Please select a star rating between 1 and 5.');
+            return;
+        }
+        setReviewLoading(true);
+        try {
+            await addReview({
+                productId: id!,
+                userId: user.uid,
+                userName: user.displayName || user.email || 'Anonymous',
+                text: data.text.trim(),
+                stars: reviewStars,
+            });
+            reset();
+            setReviewStars(5);
+            showSuccessMessage('Review submitted!');
+            const fetched = await getReviewsByProductId(id!);
+            setReviews(fetched);
+        } catch (e) {
+            showErrorMessage('Failed to submit review.');
+        } finally {
+            setReviewLoading(false);
+        }
+    };
+
+    const toggleWishlist = async () => {
+        if (!user || !product) return;
+        setButtonLoading(true);
+        try {
+            if (isWishlisted) {
+                await wishlistService.removeFromWishlist(user.uid, product.id);
+                setIsWishlisted(false);
+                showErrorMessage('Removed from wishlist!');
+            } else {
+                await wishlistService.addToWishlist(user.uid, product.id);
+                setIsWishlisted(true);
+                showSuccessMessage('Added to wishlist!');
+            }
+            await refreshWishlist();
+        } catch (error) {
+            showErrorMessage('Failed to update wishlist.');
+        } finally {
+            setButtonLoading(false);
         }
     };
 
@@ -71,88 +126,40 @@ export const ProductDetails = () => {
         fetchReviews();
     }, [id]);
 
-    const toggleWishlist = async () => {
-        if (!user || !product) return;
-        setButtonLoading(true);
-        try {
-            if (isWishlisted) {
-                await wishlistService.removeFromWishlist(user.uid, product.id);
-                setIsWishlisted(false);
-                showErrorMessage('Removed from wishlist!');
-            } else {
-                await wishlistService.addToWishlist(user.uid, product.id);
-                setIsWishlisted(true);
-                showSuccessMessage('Added to wishlist!');
-            }
-            await refreshWishlist();
-        } catch (error) {
-            showErrorMessage('Failed to update wishlist.');
-        } finally {
-            setButtonLoading(false);
-        }
-    };
-
-    const handleReviewSubmit = async (data: { text: string }) => {
-        if (!user) {
-            showErrorMessage('You must be signed in to leave a review.');
-            return;
-        }
-        if (!data.text.trim()) {
-            showErrorMessage('Review cannot be empty.');
-            return;
-        }
-        setReviewLoading(true);
-        try {
-            await addReview({
-                productId: id!,
-                userId: user.uid,
-                userName: user.displayName || user.email || 'Anonymous',
-                userAvatar: user.photoURL || undefined,
-                text: data.text.trim(),
-            });
-            reset();
-            showSuccessMessage('Review submitted!');
-            const fetched = await getReviewsByProductId(id!);
-            setReviews(fetched);
-        } catch (e) {
-            showErrorMessage('Failed to submit review.');
-        } finally {
-            setReviewLoading(false);
-        }
-    };
-
     return (
         <AppLayout>
             {product && (
                 <div className="max-w-[1280px] py-12 mx-auto flex flex-col h-full">
-                    <div className="flex flex-row">
-                        <div className="flex-shrink-0 w-1/2 p-8 h-full">
+                    <div className="flex flex-col md:flex-row">
+                        <div className="flex-shrink-0 w-full md:w-1/2 p-8 h-full">
                             <img src={product.image} alt={product.name} className="w-full h-full" />
                         </div>
-                        <div className="w-1/2 flex flex-col p-8">
+                        <div className="w-full md:w-1/2 flex flex-col p-8">
                             <span className="text-4xl font-bold">{product.name}</span>
                             <div className="text-2xl py-4">
                                 <span>{product.brand}</span>
                                 <span> | </span>
                                 <span className={`font-bold ${product.isAvailable ? "text-green-600" : "text-red-600"}`}>{product.isAvailable ? "In Stock" : "Out of Stock"}</span>
                                 <span> | </span>
-                                <span>{product.stars}</span>
-                                <Rating
-                                    sx={{
-                                        '& .MuiRating-icon': {
-                                            color: 'white',
-                                        },
-                                        '& .MuiRating-iconEmpty': {
-                                            color: 'white',
-                                        },
-                                    }}
-                                    className="ms-1"
-                                    name="read-only"
-                                    defaultValue={product.stars}
-                                    precision={0.5}
-                                    readOnly
-                                />
-                                <span>({product.reviewsCount})</span>
+                                <div className="inline-block">
+                                    <span>{product.stars}</span>
+                                    <Rating
+                                        sx={{
+                                            '& .MuiRating-icon': {
+                                                color: 'white',
+                                            },
+                                            '& .MuiRating-iconEmpty': {
+                                                color: 'white',
+                                            },
+                                        }}
+                                        className="ms-1"
+                                        name="read-only"
+                                        defaultValue={product.stars}
+                                        precision={0.5}
+                                        readOnly
+                                    />
+                                    <span>({product.reviewsCount})</span>
+                                </div>
                             </div>
                             <span className="text-2xl font-bold">${product.price}</span>
                             <div className="px-4 py-4">
@@ -177,7 +184,7 @@ export const ProductDetails = () => {
                             <div className="py-4 flex flex-row gap-2">
 
                                 {product.isAvailable ?
-                                    <OutlinedButton content={<span>ADD TO CART <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" onClick={handleAddToCart} isDisabled={cartLoading} />
+                                    <OutlinedButton content={<span>ADD TO CART <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" onClick={handleAddToCart} isDisabled={cartLoading || addLoading} />
                                     :
                                     <OutlinedButton content={<span>RETURN TO THE SHOP</span>} height={60} width={200} fontWeight="bold" onClick={() => navigate('/shop')} />
                                 }
@@ -214,8 +221,10 @@ export const ProductDetails = () => {
                                         key={review.id}
                                         review={review}
                                         currentUserId={user?.uid}
+                                        removeLoading={deletingReviewId === review.id}
                                         onDelete={async () => {
                                             if (!product || !review.id) return;
+                                            setDeletingReviewId(review.id);
                                             try {
                                                 await deleteReview(product.id, review.id);
                                                 showErrorMessage('Review deleted!');
@@ -223,6 +232,8 @@ export const ProductDetails = () => {
                                                 setReviews(fetched);
                                             } catch (e) {
                                                 showErrorMessage('Failed to delete review.');
+                                            } finally {
+                                                setDeletingReviewId(null);
                                             }
                                         }}
                                     />
@@ -231,6 +242,26 @@ export const ProductDetails = () => {
                         )}
                         {user && (
                             <form className="flex flex-col space-y-4 mt-4" onSubmit={handleSubmit(handleReviewSubmit)}>
+                                <div className="flex flex-col space-y-2">
+                                    <label className="text-white font-bold">Your Rating:</label>
+                                    <Rating
+                                        sx={{
+                                            '& .MuiRating-icon': {
+                                                color: 'white',
+                                            },
+                                            '& .MuiRating-iconEmpty': {
+                                                color: 'white',
+                                            },
+                                        }}
+                                        name="review-stars"
+                                        value={reviewStars}
+                                        precision={1}
+                                        onChange={(_, newValue) => {
+                                            setReviewStars(newValue || 5);
+                                        }}
+                                        size="large"
+                                    />
+                                </div>
                                 <textarea
                                     placeholder="Leave a review..."
                                     className="w-full h-32 p-4 bg-black text-white border border-white outline-0 resize-none"

@@ -6,6 +6,7 @@ export interface Review {
   userId: string;
   userName: string;
   text: string;
+  stars: number;
   userAvatar?: string;
   createdAt?: Timestamp;
 } 
