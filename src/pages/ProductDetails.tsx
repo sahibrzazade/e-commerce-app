@@ -18,7 +18,7 @@ import { ReviewCard } from "../components/shop/ReviewCard";
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
     const { addToCart, addLoading } = useCart()
-    const { product } = useProductWithWishlistById(id);
+    const { product, fetchData: refreshProduct } = useProductWithWishlistById(id);
     const { refresh: refreshWishlist } = useWishlist();
     const user = useAuthUser();
     const navigate = useNavigate();
@@ -78,6 +78,7 @@ export const ProductDetails = () => {
             showSuccessMessage('Review submitted!');
             const fetched = await getReviewsByProductId(id!);
             setReviews(fetched);
+            await refreshProduct();
         } catch (e) {
             showErrorMessage('Failed to submit review.');
         } finally {
@@ -230,6 +231,7 @@ export const ProductDetails = () => {
                                                 showErrorMessage('Review deleted!');
                                                 const fetched = await getReviewsByProductId(product.id);
                                                 setReviews(fetched);
+                                                await refreshProduct();
                                             } catch (e) {
                                                 showErrorMessage('Failed to delete review.');
                                             } finally {

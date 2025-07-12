@@ -3,6 +3,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../configs/firebase";
 import { useAuthUser } from "../hooks/useAuthUser";
 import i18n from "../i18n/i18next";
+import { showErrorMessage } from "../utils/toastUtils";
 
 interface LanguageContextType {
   language: "az" | "en" | "tr";
@@ -18,15 +19,19 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
     const fetchLanguage = async () => {
       setLoading(true);
       try {
-        const userDoc = await getDoc(doc(db, "users", user?.uid));
-        const userData = userDoc.data();
-        if (userData && userData.language) {
-          setLanguage(userData.language);
-          i18n.changeLanguage(userData.language);
+        if (user) {
+          const userDoc = await getDoc(doc(db, "users", user?.uid));
+          const userData = userDoc.data();
+          if (userData && userData.language) {
+            setLanguage(userData.language);
+            i18n.changeLanguage(userData.language);
+          } else {
+            setLanguage("en");
+            i18n.changeLanguage("en");
+          }
         } else {
           setLanguage("en");
           i18n.changeLanguage("en");
@@ -42,14 +47,18 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, [user]);
 
   const changeLanguage = async (lang: "az" | "en" | "tr") => {
-    if (!user) return;
     setLanguage(lang);
     i18n.changeLanguage(lang);
-    setLoading(true);
-    try {
-      await setDoc(doc(db, "users", user?.uid), { language: lang }, { merge: true });
-    } finally {
-      setLoading(false);
+
+    if (user) {
+      setLoading(true);
+      try {
+        await setDoc(doc(db, "users", user?.uid), { language: lang }, { merge: true });
+      } catch (e) {
+        showErrorMessage("Failed to save language");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
