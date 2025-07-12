@@ -30,7 +30,6 @@ const calculateAverageStars = async (productId: string): Promise<number> => {
     const totalStars = reviews.reduce((sum, review) => sum + (review.stars || 0), 0);
     return Math.round((totalStars / reviews.length) * 10) / 10; 
   } catch (error) {
-    console.error('Error calculating average stars:', error);
     return 0;
   }
 };
@@ -86,7 +85,6 @@ export const deleteReview = async (productId: string, reviewId: string) => {
       stars: averageStars
     });
   } catch (error) {
-    console.error('Error deleting review:', error);
     throw error;
   }
 }; 

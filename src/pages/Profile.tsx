@@ -8,6 +8,7 @@ import { ProfileSettings } from "../components/profile/ProfileSettings"
 import { useAuthUser } from "../hooks/useAuthUser"
 import { OutlinedButton } from "../components/OutlinedButton"
 import { useNavigate } from "react-router-dom"
+import { ProfileOrders } from "../components/profile/ProfileOrders"
 
 export const Profile = () => {
     const user = useAuthUser();
@@ -18,6 +19,8 @@ export const Profile = () => {
             {user ?
                 <div className="max-w-6xl mx-auto py-8 px-4 flex flex-col gap-8">
                     <ProfileInfo />
+                    <hr className="border-t border-gray-300" />
+                    <ProfileOrders />
                     <hr className="border-t border-gray-300" />
                     <ProfileCart />
                     <hr className="border-t border-gray-300" />
