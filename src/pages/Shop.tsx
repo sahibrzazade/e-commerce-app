@@ -66,7 +66,7 @@ export const Shop = () => {
                     <div className="w-full h-[500px] bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: "url('https://dunker.qodeinteractive.com/wp-content/uploads/2023/01/inner-img-6.jpg')" }}>
                         <h1 className="text-5xl font-bold tracking-wide uppercase">Shop</h1>
                     </div>
-                    <div className="flex flex-col md:flex-row justify-around my-8">
+                    <div className="flex flex-col gap-y-4 md:gap-y-0 items-center md:flex-row justify-around my-8">
                         <ProductFilter onFiltersChange={handleFiltersChange} activeFilters={activeFilters} />
                         <SearchFilterInput value={search} onChange={setSearch} />
                         <SortOptions />
