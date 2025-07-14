@@ -35,17 +35,17 @@ export const ProductFilter = ({ onFiltersChange, activeFilters }: ProductFilterP
 
   return (
     <div className="relative">
-      <OutlinedButton 
-        content={<FilterOutlined />} 
-        height={40} 
-        width={40} 
-        fontWeight={"normal"} 
+      <OutlinedButton
+        content={<FilterOutlined />}
+        height={40}
+        width={40}
+        fontWeight={"normal"}
         onClick={handleFilterClick}
       />
       {hasActiveFilters && (
         <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
       )}
-      <FilterOffcanvas 
+      <FilterOffcanvas
         isOpen={isFilterOpen}
         onClose={handleCloseFilter}
         onApplyFilters={handleApplyFilters}
