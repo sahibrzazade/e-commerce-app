@@ -3,12 +3,13 @@ import { productService } from '../services/productService';
 import { wishlistService } from '../services/wishlistService';
 import { useAuthUser } from './useAuthUser';
 import { Product } from '../types/shop';
+import { FilterOptions } from '../types/filter';
 
 interface ProductWithWishlist extends Product {
   isWishlisted: boolean;
 }
 
-export function useProductsWithWishlist() {
+export function useAllProductsWithWishlistStatus(filters?: FilterOptions) {
   const user = useAuthUser();
 
   const [products, setProducts] = useState<ProductWithWishlist[]>([]);
@@ -20,12 +21,37 @@ export function useProductsWithWishlist() {
     if (showLoading) setLoading(true);
     setError(null);
     try {
-      const products = await productService.getProducts();
+      let backendFilters: FilterOptions = {
+        priceRange: [0, 1000],
+        categories: [],
+        brands: [],
+        rating: 0,
+        inStock: false,
+      };
+      if (filters) {
+        backendFilters = {
+          priceRange: filters.priceRange,
+          categories: filters.categories,
+          brands: filters.brands,
+          rating: 0, 
+          inStock: false, 
+        };
+      }
+      const products = await productService.getFilteredProducts(backendFilters);
       let wishlistIds: string[] = [];
       if (user) {
         wishlistIds = await wishlistService.getWishlist(user.uid);
       }
-      const productsWithWishlist = products.map(product => ({
+      let filtered = products;
+      if (filters) {
+        if (filters.rating > 0) {
+          filtered = filtered.filter(product => (product.stars || 0) >= filters.rating);
+        }
+        if (filters.inStock) {
+          filtered = filtered.filter(product => product.isAvailable);
+        }
+      }
+      const productsWithWishlist = filtered.map(product => ({
         ...product,
         isWishlisted: wishlistIds.includes(product.id),
       }));
@@ -44,7 +70,7 @@ export function useProductsWithWishlist() {
       setInitialLoading(false);
     };
     load();
-  }, [user]);
+  }, [user, filters ? JSON.stringify(filters) : '']);
 
   return { products, loading, initialLoading, error, fetchData };
 }
