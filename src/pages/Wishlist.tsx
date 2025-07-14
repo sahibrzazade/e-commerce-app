@@ -1,5 +1,5 @@
 import AppLayout from "../layouts/AppLayout"
-import { useProductsWithWishlist } from "../hooks/useProductsWithWishlist"
+import { useAllProductsWithWishlistStatus } from "../hooks/useAllProductsWithWishlistStatus"
 import { ProductCard } from "../components/shop/ProductCard"
 import { HeartFilled } from "@ant-design/icons";
 import { OutlinedButton } from "../components/OutlinedButton";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/useAuthUser";
 
 export const Wishlist = () => {
-    const { products, initialLoading, fetchData } = useProductsWithWishlist();
+    const { products, initialLoading, fetchData } = useAllProductsWithWishlistStatus();
     const user = useAuthUser()
     const navigate = useNavigate();
 

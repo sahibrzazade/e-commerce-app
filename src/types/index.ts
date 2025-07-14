@@ -12,3 +12,4 @@ export * from './review'
 export * from './carousel';
 export * from './language'
 export * from './order'
+export * from './filter'

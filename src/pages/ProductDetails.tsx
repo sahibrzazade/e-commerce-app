@@ -4,7 +4,7 @@ import { showErrorMessage, showSuccessMessage } from "../utils/toastUtils";
 import Rating from "@mui/material/Rating";
 import { OutlinedButton } from "../components/OutlinedButton";
 import { HeartOutlined, HeartFilled, ShoppingCartOutlined } from "@ant-design/icons";
-import { useProductWithWishlistById } from "../hooks/useProductsWithWishlist";
+import { useProductWithWishlistById } from "../hooks/useAllProductsWithWishlistStatus";
 import { useAuthUser } from "../hooks/useAuthUser";
 import { wishlistService } from "../services/wishlistService";
 import { useState, useEffect } from "react";

@@ -1,11 +1,11 @@
 import { HeartFilled } from "@ant-design/icons"
-import { useProductsWithWishlist } from "../../hooks/useProductsWithWishlist";
+import { useAllProductsWithWishlistStatus } from "../../hooks/useAllProductsWithWishlistStatus";
 import { useNavigate } from "react-router-dom";
 import { OutlinedButton } from "../OutlinedButton";
 import { ProductCard } from "../shop/ProductCard";
 
 export const ProfileWishlist = () => {
-    const { products: allProducts, loading: productsLoading, fetchData: refreshProducts } = useProductsWithWishlist();
+    const { products: allProducts, loading: productsLoading, fetchData: refreshProducts } = useAllProductsWithWishlistStatus();
     const wishlistProducts = allProducts.filter(p => p.isWishlisted);
     const navigate = useNavigate();
 
