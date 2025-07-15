@@ -65,7 +65,6 @@ const Icons: React.FC = () => {
           value={language}
           onChange={(value) => changeLanguage(value as Language)}
           disabled={languageLoading}
-          height="32px"
           showName={false}
         />
       </div>
@@ -93,7 +92,7 @@ const Icons: React.FC = () => {
         <div className={`absolute right-0 top-8 bg-black flex flex-col items-center z-50 p-6 border border-white transition-all duration-200 ease-out ${isUserMenuOpen
           ? 'opacity-100 visible pointer-events-auto'
           : 'opacity-0 invisible pointer-events-none'
-        } group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto`}>
+          } group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto`}>
           {user ? (
             <>
               <span className="text-white text-sm mb-4">Welcome back, {user.displayName}!</span>

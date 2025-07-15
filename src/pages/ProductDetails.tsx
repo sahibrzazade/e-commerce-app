@@ -14,6 +14,7 @@ import { getReviewsByProductId, addReview, deleteReview } from '../services/revi
 import { Review } from '../types';
 import { useForm } from 'react-hook-form';
 import { ReviewCard } from "../components/shop/ReviewCard";
+import { ratingSx } from "../styles/rating";
 
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -145,14 +146,7 @@ export const ProductDetails = () => {
                                 <div className="inline-block">
                                     <span>{product.stars}</span>
                                     <Rating
-                                        sx={{
-                                            '& .MuiRating-icon': {
-                                                color: 'white',
-                                            },
-                                            '& .MuiRating-iconEmpty': {
-                                                color: 'white',
-                                            },
-                                        }}
+                                        sx={ratingSx}
                                         className="ms-1"
                                         name="read-only"
                                         defaultValue={product.stars}
@@ -247,14 +241,7 @@ export const ProductDetails = () => {
                                 <div className="flex flex-col space-y-2">
                                     <label className="text-white font-bold">Your Rating:</label>
                                     <Rating
-                                        sx={{
-                                            '& .MuiRating-icon': {
-                                                color: 'white',
-                                            },
-                                            '& .MuiRating-iconEmpty': {
-                                                color: 'white',
-                                            },
-                                        }}
+                                        sx={ratingSx}
                                         name="review-stars"
                                         value={reviewStars}
                                         precision={1}

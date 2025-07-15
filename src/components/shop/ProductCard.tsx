@@ -9,6 +9,7 @@ import { showSuccessMessage, showErrorMessage } from '../../utils/toastUtils';
 import { useState, useEffect } from 'react';
 import { useWishlist } from '../../contexts/wishlistContext';
 import { useCart } from '../../contexts/cartContext';
+import { ratingSx } from '../../styles/rating';
 
 export const ProductCard = ({
   product,
@@ -93,14 +94,7 @@ export const ProductCard = ({
         <div className='flex flex-row my-1'>
           <span className='me-2'>{product.stars}</span>
           <Rating
-            sx={{
-              '& .MuiRating-icon': {
-                color: 'white',
-              },
-              '& .MuiRating-iconEmpty': {
-                color: 'white',
-              },
-            }}
+            sx={ratingSx}
             name="read-only"
             value={product.stars}
             precision={0.1}

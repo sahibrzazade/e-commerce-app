@@ -9,21 +9,51 @@ import { useAllProductsWithWishlistStatus } from "../hooks/useAllProductsWithWis
 import { useUrlFilters } from '../hooks/useUrlFilters';
 import { useMemo } from 'react';
 import { useUrlSearch } from '../hooks/useUrlSearch';
+import { useUrlSort } from '../hooks/useUrlSort';
 
 export const Shop = () => {
     const { filters: activeFilters, setFilters: setActiveFilters, resetFilters } = useUrlFilters();
     const { products, loading } = useAllProductsWithWishlistStatus(activeFilters);
-
     const [search, setSearch] = useUrlSearch();
+    const [sortBy] = useUrlSort();
 
     const filteredProducts = useMemo(() => {
-        if (!search.trim()) return products;
-        const searchLower = search.trim().toLowerCase();
-        return products.filter(product =>
-            (product.name && product.name.toLowerCase().includes(searchLower)) ||
-            (product.description && product.description.toLowerCase().includes(searchLower))
-        );
-    }, [products, search]);
+        let result = products;
+        if (search.trim()) {
+            const searchLower = search.trim().toLowerCase();
+            result = result.filter(product =>
+                (product.name && product.name.toLowerCase().includes(searchLower)) ||
+                (product.description && product.description.toLowerCase().includes(searchLower))
+            );
+        }
+
+        if (sortBy) {
+            result = [...result];
+            switch (sortBy) {
+                case 'name_asc':
+                    result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                    break;
+                case 'name_desc':
+                    result.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+                    break;
+                case 'price_asc':
+                    result.sort((a, b) => (a.price || 0) - (b.price || 0));
+                    break;
+                case 'price_desc':
+                    result.sort((a, b) => (b.price || 0) - (a.price || 0));
+                    break;
+                case 'stars_asc':
+                    result.sort((a, b) => (a.stars || 0) - (b.stars || 0));
+                    break;
+                case 'stars_desc':
+                    result.sort((a, b) => (b.stars || 0) - (a.stars || 0));
+                    break;
+                default:
+                    break;
+            }
+        }
+        return result;
+    }, [products, search, sortBy]);
 
     const handleFiltersChange = (filters: FilterOptions) => {
         setActiveFilters(filters);

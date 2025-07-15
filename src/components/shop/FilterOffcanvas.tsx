@@ -1,8 +1,10 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { Slider, Box, Typography } from "@mui/material";
+import Rating from '@mui/material/Rating';
 import { FilterOptions, FilterOffcanvasProps, Brand, Category } from "../../types";
 import { brandCategoryService } from '../../services/brandCategoryService';
+import { filterOffcanvasSliderSx } from "../../styles/filterOffcanvas";
 
 export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilters }: FilterOffcanvasProps) => {
   const [filters, setFilters] = useState<FilterOptions>(currentFilters);
@@ -113,20 +115,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
                   min={0}
                   max={1000}
                   step={10}
-                  sx={{
-                    '& .MuiSlider-thumb': {
-                      backgroundColor: '#000',
-                    },
-                    '& .MuiSlider-track': {
-                      backgroundColor: '#000',
-                    },
-                    '& .MuiSlider-rail': {
-                      backgroundColor: '#e5e7eb',
-                    },
-                    '& .MuiSlider-valueLabel': {
-                      backgroundColor: '#000',
-                    },
-                  }}
+                  sx={filterOffcanvasSliderSx}
                 />
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
                   <Typography variant="body2" color="text.secondary">
@@ -176,16 +165,13 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
             <div>
               <h3 className="text-lg font-semibold mb-3 text-gray-800">Minimum Rating</h3>
               <div className="flex items-center space-x-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    onClick={() => handleRatingChange(star)}
-                    className={`text-2xl ${star <= filters.rating ? 'text-yellow-400' : 'text-gray-300'
-                      } hover:text-yellow-400 transition-colors`}
-                  >
-                    ★
-                  </button>
-                ))}
+                <Rating
+                  name="filter-rating"
+                  value={filters.rating}
+                  onChange={(_event, newValue) => handleRatingChange(newValue || 0)}
+                  precision={1}
+                  size="large"
+                />
                 <span className="text-gray-600 ml-2">({filters.rating}+ stars)</span>
               </div>
             </div>
@@ -206,13 +192,13 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
           <div className="p-4 border-t border-gray-200 space-y-2">
             <button
               onClick={handleApplyFilters}
-              className="w-full bg-black text-white py-3 px-4 rounded-md hover:bg-gray-800 cursor-pointer transition-colors font-medium"
+              className="w-full bg-black text-white py-3 px-4 hover:bg-gray-800 cursor-pointer transition-colors font-medium"
             >
               Apply Filters
             </button>
             <button
               onClick={handleClearFilters}
-              className="w-full bg-gray-200 text-gray-800 py-3 px-4 rounded-md hover:bg-gray-300 cursor-pointer transition-colors font-medium"
+              className="w-full bg-gray-200 text-gray-800 py-3 px-4 hover:bg-gray-300 cursor-pointer transition-colors font-medium"
             >
               Clear All
             </button>
