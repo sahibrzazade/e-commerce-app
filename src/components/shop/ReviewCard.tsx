@@ -1,3 +1,4 @@
+import { ratingSx } from "../../styles/rating";
 import { Review } from "../../types"
 import Rating from "@mui/material/Rating";
 
@@ -32,14 +33,7 @@ export const ReviewCard = ({ review, removeLoading, onDelete, currentUserId, onC
             </div>
             <div className="flex items-center gap-2 mb-2">
                 <Rating
-                    sx={{
-                        '& .MuiRating-icon': {
-                            color: 'white',
-                        },
-                        '& .MuiRating-iconEmpty': {
-                            color: 'white',
-                        },
-                    }}
+                    sx={ratingSx}
                     name="read-only"
                     value={review.stars}
                     precision={0.5}
