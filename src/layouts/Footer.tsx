@@ -3,15 +3,16 @@ import { FaCreditCard, FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaPhone,
 import { FaLocationDot } from 'react-icons/fa6';
 import { TfiHeadphoneAlt } from 'react-icons/tfi';
 import { Link } from 'react-router-dom';
+import { themedBackground, themedText } from '../styles/themeClassNames';
 
 export const Footer = () => {
   return (
-    <div>
-      <div className="flex items-center bg-black justify-center text-white w-full px-4">
+    <div className={`${themedBackground} ${themedText}`}>
+      <div className={`flex items-center justify-center w-full px-4`}>
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 py-12 gap-6 border-t border-gray-700">
           <div className="flex items-center justify-center">
             <span
-              className="text-white text-8xl" style={{ fontFamily: 'Gochi Hand, cursive' }}>
+              className="text-8xl" style={{ fontFamily: 'Gochi Hand, cursive' }}>
               Cartly
             </span>
           </div>
@@ -35,7 +36,7 @@ export const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-center w-full bg-black text-white px-4">
+      <div className="flex items-center justify-center w-full px-4">
         <footer className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 border-t border-gray-700 py-6">
           <div className="mb-6 flex items-center justify-center md:justify-start">
             {/* <Link to="/">
@@ -44,7 +45,7 @@ export const Footer = () => {
           </div>
 
           <div className="mb-6">
-            <ul className="flex flex-col space-y-3 text-white">
+            <ul className="flex flex-col space-y-3">
               <li className="flex items-center">
                 <FaLocationDot />
                 <span className="ml-2">868 Fake Street, New York</span>
@@ -70,7 +71,7 @@ export const Footer = () => {
             <h5 className="text-lg font-semibold mb-3">
               About us
             </h5>
-            <ul className="flex flex-col space-y-2 text-white">
+            <ul className="flex flex-col space-y-2">
               <li>
                 <Link
                   className="hover:text-orange-400 transition duration-300"
@@ -86,7 +87,7 @@ export const Footer = () => {
             <h5 className="text-lg font-semibold mb-3">
               About us
             </h5>
-            <ul className="flex flex-col space-y-2 text-white">
+            <ul className="flex flex-col space-y-2">
               <li>
                 <Link
                   className="hover:text-orange-400 transition duration-300"

@@ -14,7 +14,9 @@ import { getReviewsByProductId, addReview, deleteReview } from '../services/revi
 import { Review } from '../types';
 import { useForm } from 'react-hook-form';
 import { ReviewCard } from "../components/shop/ReviewCard";
-import { ratingSx } from "../styles/rating";
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { themedBackground, themedBorder } from "../styles/themeClassNames";
 
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -146,12 +148,13 @@ export const ProductDetails = () => {
                                 <div className="inline-block">
                                     <span>{product.stars}</span>
                                     <Rating
-                                        sx={ratingSx}
                                         className="ms-1"
                                         name="read-only"
                                         defaultValue={product.stars}
                                         precision={0.5}
                                         readOnly
+                                        icon={<StarIcon sx={{ color: 'gold' }} />}
+                                        emptyIcon={<StarBorderIcon sx={{ color: 'gray' }} />}
                                     />
                                     <span>({product.reviewsCount})</span>
                                 </div>
@@ -239,9 +242,8 @@ export const ProductDetails = () => {
                         {user && (
                             <form className="flex flex-col space-y-4 mt-4" onSubmit={handleSubmit(handleReviewSubmit)}>
                                 <div className="flex flex-col space-y-2">
-                                    <label className="text-white font-bold">Your Rating:</label>
+                                    <label className="font-bold">Your Rating:</label>
                                     <Rating
-                                        sx={ratingSx}
                                         name="review-stars"
                                         value={reviewStars}
                                         precision={1}
@@ -249,11 +251,13 @@ export const ProductDetails = () => {
                                             setReviewStars(newValue || 5);
                                         }}
                                         size="large"
+                                        icon={<StarIcon sx={{ color: 'gold' }} />}
+                                        emptyIcon={<StarBorderIcon sx={{ color: 'gray' }} />}
                                     />
                                 </div>
                                 <textarea
                                     placeholder="Leave a review..."
-                                    className="w-full h-32 p-4 bg-black text-white border border-white outline-0 resize-none"
+                                    className={`${themedBackground} ${themedBorder} w-full h-32 p-4 outline-0 resize-none`}
                                     {...register('text', { required: 'Review cannot be empty.' })}
                                     disabled={reviewLoading || isSubmitting}
                                 ></textarea>

@@ -5,6 +5,7 @@ import { HeartFilled } from "@ant-design/icons";
 import { OutlinedButton } from "../components/OutlinedButton";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/useAuthUser";
+import { themedBorder } from "../styles/themeClassNames";
 
 export const Wishlist = () => {
     const { products, initialLoading, fetchData } = useAllProductsWithWishlistStatus();
@@ -17,7 +18,7 @@ export const Wishlist = () => {
         <AppLayout>
             {initialLoading ? (
                 <div className="flex justify-center items-center h-screen">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
+                    <div className={`${themedBorder} animate-spin rounded-full h-16 w-16 border-b-2`}></div>
                 </div>
             ) : (
                 <>

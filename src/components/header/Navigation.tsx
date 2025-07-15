@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { menuItems } from '../../constants/menuItems';
+import { themedBackground, themedBorder } from '../../styles/themeClassNames';
 
 const Navigation: React.FC = () => {
   return (
@@ -7,10 +8,10 @@ const Navigation: React.FC = () => {
       {menuItems.map((item) =>
         item.children ? (
           <div key={item.label} className="relative group/menu">
-            <span className="relative pb-1 uppercase font-bold text-white text-sm cursor-pointer flex items-center">
+            <span className="relative pb-1 uppercase font-bold text-sm cursor-pointer flex items-center">
               {item.label}
               <svg
-                className="ml-1 w-3 h-3 text-white"
+                className="ml-1 w-3 h-3"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -18,17 +19,17 @@ const Navigation: React.FC = () => {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
-              <span className="absolute left-0 -bottom-0.5 h-[3px] w-0 bg-white transition-all duration-300 group-hover/menu:w-full"></span>
+              <span className="absolute left-0 -bottom-0.5 h-[3px] w-0 bg-black dark:bg-white transition-all duration-300 group-hover/menu:w-full"></span>
             </span>
-            <div className="absolute left-0 top-10 bg-black flex flex-col items-start z-50 py-6 px-12 border border-white min-w-[240px] opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 ease-out">
+            <div className={`${themedBackground} ${themedBorder} absolute left-0 top-10 flex flex-col items-start z-50 py-6 px-12 min-w-[240px] opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 ease-out`}>
               {item.children.map((child) => (
                 <Link
                   key={child.path}
                   to={child.path}
-                  className="relative pb-1 uppercase font-bold text-white text-sm group/submenu"
+                  className="relative pb-1 uppercase font-bold text-sm group/submenu"
                 >
                   {child.label}
-                  <span className="absolute left-0 -bottom-0 h-[3px] w-0 bg-white transition-all duration-300 group-hover/submenu:w-full"></span>
+                  <span className="bg-black dark:bg-white absolute left-0 -bottom-0 h-[3px] w-0 transition-all duration-300 group-hover/submenu:w-full"></span>
                 </Link>
               ))}
             </div>
@@ -37,10 +38,10 @@ const Navigation: React.FC = () => {
           <Link
             key={item.path}
             to={item.path}
-            className="relative pb-1 uppercase font-bold text-white text-sm group"
+            className="relative pb-1 uppercase font-bold text-sm group"
           >
             {item.label}
-            <span className="absolute left-0 -bottom-0.5 h-[3px] w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
+            <span className="absolute left-0 -bottom-0.5 h-[3px] w-0 bg-black dark:bg-white transition-all duration-300 group-hover:w-full"></span>
           </Link>
         )
       )}

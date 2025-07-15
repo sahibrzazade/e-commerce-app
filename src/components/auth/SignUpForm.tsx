@@ -56,11 +56,11 @@ export const SignUpForm = () => {
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
       <div>
-        <label className="block text-white mb-1" htmlFor="name">Name</label>
+        <label className="block mb-1" htmlFor="name">Name</label>
         <input
           id="name"
           type="text"
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none bg-black text-white border-gray-600 placeholder-gray-500"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
           placeholder="Enter your name"
           {...register('name')}
           autoComplete="name"
@@ -68,11 +68,11 @@ export const SignUpForm = () => {
         {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name.message}</p>}
       </div>
       <div>
-        <label className="block text-white mb-1" htmlFor="email">Email</label>
+        <label className="block mb-1" htmlFor="email">Email</label>
         <input
           id="email"
           type="email"
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none bg-black text-white border-gray-600 placeholder-gray-500"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
           placeholder="Enter your email"
           {...register('email')}
           autoComplete="username"
@@ -80,11 +80,11 @@ export const SignUpForm = () => {
         {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
       </div>
       <div>
-        <label className="block text-white mb-1" htmlFor="password">Password</label>
+        <label className="block mb-1" htmlFor="password">Password</label>
         <input
           id="password"
           type="password"
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none bg-black text-white border-gray-600 placeholder-gray-500"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
           placeholder="Enter your password"
           {...register('password')}
           autoComplete="new-password"
@@ -94,7 +94,7 @@ export const SignUpForm = () => {
       {signUpError && <p className="text-red-400 text-sm mt-1">{signUpError}</p>}
       <button
         type="submit"
-        className="w-full bg-white text-black py-2 rounded-lg font-semibold hover:bg-gray-200 transition cursor-pointer disabled:opacity-60"
+        className="w-full py-2 rounded-lg font-semibold border border-gray-600 hover:bg-gray-200 hover:dark:bg-gray-900 transition cursor-pointer disabled:opacity-60"
         disabled={isSubmitting}
       >
         {isSubmitting ? 'Signing Up...' : 'Sign Up'}
@@ -104,7 +104,7 @@ export const SignUpForm = () => {
         <span className="mx-2 text-gray-500">or</span>
         <div className="flex-grow h-px bg-gray-700" />
       </div>
-      <button className="w-full flex items-center justify-center gap-2 border border-gray-600 py-2 rounded-lg hover:bg-gray-900 transition cursor-pointer text-white bg-black"
+      <button className="w-full flex items-center justify-center gap-2 border border-gray-600 py-2 rounded-lg hover:bg-gray-200 hover:dark:bg-gray-900 transition cursor-pointer"
         onClick={handleGoogleSignUp}
       >
         <FcGoogle />

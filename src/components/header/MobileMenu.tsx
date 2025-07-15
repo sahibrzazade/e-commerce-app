@@ -1,4 +1,5 @@
 import { menuItems } from '../../constants/menuItems';
+import { themedBackground } from '../../styles/themeClassNames';
 import { MobileMenuProps } from '../../types/index';
 import { Link } from 'react-router-dom';
 
@@ -9,15 +10,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isMenuOpen }) => {
 
   return (
     <div
-      className={`md:hidden bg-white mx-4 overflow-hidden transition-all duration-500 ease-in-out ${
-        isMenuOpen ? 'max-h-screen visible' : 'max-h-0 invisible'
-      }`}
+      className={`${themedBackground} md:hidden mx-4 overflow-hidden transition-all duration-500 ease-in-out ${isMenuOpen ? 'max-h-screen visible' : 'max-h-0 invisible'
+        }`}
     >
       {flatMenu.map((item, id) => (
         <Link
           key={id}
           to={item.path}
-          className="block py-3 px-4 bg-black text-primary-light text-lg"
+          className="block py-3 px-4 text-lg"
         >
           {item.label}
         </Link>

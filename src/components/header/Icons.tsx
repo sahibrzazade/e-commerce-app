@@ -15,6 +15,8 @@ import { useCart } from '../../contexts/cartContext';
 import { useLanguage } from '../../contexts/languageContext';
 import { LanguageSelect } from '../LanguageSelect';
 import { Language } from '../../types/language';
+import { themedBorder, themedBackground } from '../../styles/themeClassNames';
+import { useTheme } from '../../contexts/themeContext';
 
 const Icons: React.FC = () => {
   const navigate = useNavigate();
@@ -22,8 +24,14 @@ const Icons: React.FC = () => {
   const { count: wishlistCount } = useWishlist();
   const { count: cartCount } = useCart();
   const { language, changeLanguage, loading: languageLoading } = useLanguage();
+  const { theme } = useTheme();
+
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+
+  const themedIcon = {
+    color: theme === 'light' ? 'black' : 'white',
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -68,8 +76,12 @@ const Icons: React.FC = () => {
           showName={false}
         />
       </div>
+
       <div className="relative group">
-        <HeartOutlined onClick={() => navigate('/wishlist')} className="text-gray-600 cursor-pointer" />
+        <HeartOutlined
+          style={themedIcon}
+          onClick={() => navigate('/wishlist')}
+          className="cursor-pointer" />
         {user && (
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
             {wishlistCount}
@@ -77,7 +89,10 @@ const Icons: React.FC = () => {
         )}
       </div>
       <div className="relative group">
-        <ShoppingCartOutlined onClick={() => navigate('/cart')} className="text-gray-600 cursor-pointer" />
+        <ShoppingCartOutlined
+          style={themedIcon}
+          onClick={() => navigate('/cart')}
+          className="text-gray-600 cursor-pointer" />
         {user && (
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
             {cartCount}
@@ -86,16 +101,17 @@ const Icons: React.FC = () => {
       </div>
       <div className="relative group" ref={userMenuRef}>
         <UserOutlined
+          style={themedIcon}
           className="text-gray-600 cursor-pointer"
           onClick={toggleUserMenu}
         />
-        <div className={`absolute right-0 top-8 bg-black flex flex-col items-center z-50 p-6 border border-white transition-all duration-200 ease-out ${isUserMenuOpen
+        <div className={`${themedBorder} ${themedBackground} absolute right-0 top-8 flex flex-col items-center z-50 p-6 border transition-all duration-200 ease-out ${isUserMenuOpen
           ? 'opacity-100 visible pointer-events-auto'
           : 'opacity-0 invisible pointer-events-none'
           } group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto`}>
           {user ? (
             <>
-              <span className="text-white text-sm mb-4">Welcome back, {user.displayName}!</span>
+              <span className="text-sm mb-4">Welcome back, {user.displayName}!</span>
               <div className="flex flex-row gap-2">
                 <OutlinedButton
                   content="Profile"
@@ -115,7 +131,7 @@ const Icons: React.FC = () => {
             </>
           ) : (
             <>
-              <span className="text-white text-sm mb-4">You're not signed in</span>
+              <span className="text-sm mb-4">You're not signed in</span>
               <div className="flex flex-row gap-2">
                 <OutlinedButton
                   content="Sign In"

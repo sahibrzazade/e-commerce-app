@@ -10,9 +10,9 @@ import { FcGoogle } from 'react-icons/fc';
 
 export const SignInForm = () => {
   const navigate = useNavigate();
-  
+
   const [signInError, setSignInError] = useState<string | null>(null);
-  
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignInFormType>({
     resolver: zodResolver(signInSchema),
   });
@@ -47,11 +47,11 @@ export const SignInForm = () => {
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
       <div>
-        <label className="block text-white mb-1" htmlFor="email">Email</label>
+        <label className="block mb-1" htmlFor="email">Email</label>
         <input
           id="email"
           type="email"
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none bg-black text-white border-gray-600 placeholder-gray-500"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
           placeholder="Enter your email"
           {...register('email')}
           autoComplete="username"
@@ -59,11 +59,11 @@ export const SignInForm = () => {
         {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
       </div>
       <div>
-        <label className="block text-white mb-1" htmlFor="password">Password</label>
+        <label className="block mb-1" htmlFor="password">Password</label>
         <input
           id="password"
           type="password"
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none bg-black text-white border-gray-600 placeholder-gray-500"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
           placeholder="Enter your password"
           {...register('password')}
           autoComplete="current-password"
@@ -73,7 +73,7 @@ export const SignInForm = () => {
       {signInError && <p className="text-red-400 text-sm mt-1">{signInError}</p>}
       <button
         type="submit"
-        className="w-full bg-white text-black py-2 rounded-lg font-semibold hover:bg-gray-200 transition cursor-pointer disabled:opacity-60"
+        className="w-full py-2 rounded-lg font-semibold border border-gray-600 hover:bg-gray-200 hover:dark:bg-gray-900 transition cursor-pointer disabled:opacity-60"
         disabled={isSubmitting}
       >
         {isSubmitting ? 'Signing In...' : 'Sign In'}
@@ -85,7 +85,7 @@ export const SignInForm = () => {
       </div>
       <button
         type="button"
-        className="w-full flex items-center justify-center gap-2 border border-gray-600 py-2 rounded-lg hover:bg-gray-900 transition cursor-pointer text-white bg-black mt-4"
+        className="w-full flex items-center justify-center gap-2 border border-gray-600 py-2 rounded-lg hover:bg-gray-200 hover:dark:bg-gray-900 transition cursor-pointer mt-4"
         onClick={handleGoogleSignIn}
       >
         <FcGoogle />

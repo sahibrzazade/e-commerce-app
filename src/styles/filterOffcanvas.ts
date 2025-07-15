@@ -1,14 +1,14 @@
-export const filterOffcanvasSliderSx = {
+export const getFilterOffcanvasSliderSx = (theme: "light" | "dark") => ({
     '& .MuiSlider-thumb': {
-        backgroundColor: '#000',
+        backgroundColor: theme === "light" ? 'black' : "white",
     },
     '& .MuiSlider-track': {
-        backgroundColor: '#000',
+        backgroundColor: theme === "light" ? 'black' : "white",
     },
     '& .MuiSlider-rail': {
-        backgroundColor: '#e5e7eb',
+        backgroundColor: theme === "light" ? '#e5e7eb' : "#374151",
     },
     '& .MuiSlider-valueLabel': {
-        backgroundColor: '#000',
+        backgroundColor: theme === "light" ? 'black' : "white",
     },
-}
+})  

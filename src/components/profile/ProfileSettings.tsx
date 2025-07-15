@@ -13,6 +13,7 @@ import { TextInput } from '../TextInput';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { LanguageSelect } from '../LanguageSelect';
 import { Language } from '../../types/language';
+import { themedBackground } from "../../styles/themeClassNames";
 
 export const ProfileSettings = () => {
     const { theme, toggleTheme, loading: themeLoading } = useTheme();
@@ -51,14 +52,14 @@ export const ProfileSettings = () => {
                 <div className="flex items-center justify-between p-4 rounded-lg">
                     <div className="flex items-center gap-3">
                         <div className="w-6 h-6 rounded-full flex items-center justify-center bg-gray-400">
-                            <MoonFilled className="text-white" />
+                            <MoonFilled />
                         </div>
                         <div>
                             <h3 className="font-medium">Dark Mode</h3>
                             <p className="text-sm text-gray-600">Toggle between light and dark theme</p>
                         </div>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
+                    <label className="relative inline-flex items-center cursor-pointer group">
                         <input
                             type="checkbox"
                             className="sr-only peer"
@@ -66,7 +67,13 @@ export const ProfileSettings = () => {
                             onChange={toggleTheme}
                             disabled={themeLoading}
                         />
-                        <div className={`w-11 h-6 ${theme === "dark" ? "bg-gray-200 border-black" : "bg-black-600 border-white"} border-2  peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] ${theme === "dark" ? "after:bg-black" : "after:bg-white"} after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${theme === "dark" ? "after:translate-x-full after:border-white" : ""}`}></div>
+                        <div
+                            className={`w-11 h-6 flex items-center border-2 rounded-full transition-colors duration-300
+                                ${theme === "dark" ? "bg-white border-white" : "bg-gray-300 border-gray-300"}
+                                peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300`}
+                        >
+                            <span className={`${themedBackground} w-5 h-5 flex items-center justify-center rounded-full shadow-md transform transition-transform duration-300 ${theme === "dark" ? "translate-x-5" : "translate-x-0"}`}></span>
+                        </div>
                     </label>
                 </div>
 

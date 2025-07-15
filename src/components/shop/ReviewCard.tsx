@@ -1,15 +1,13 @@
-import { ratingSx } from "../../styles/rating";
 import { Review } from "../../types"
 import Rating from "@mui/material/Rating";
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { themedText } from "../../styles/themeClassNames";
 
 export const ReviewCard = ({ review, removeLoading, onDelete, currentUserId, onClick }: { review: Review, removeLoading?: boolean, onDelete?: () => void, currentUserId?: string, onClick?: () => void }) => {
     return (
         <div
-            className={
-                "text-white p-4 rounded transition " +
-                (onClick ? "cursor-pointer hover:bg-white/10" : "cursor-default ")
-
-            }
+            className={`${themedText} p-4 rounded transition ${onClick ? "cursor-pointer hover:bg-black/10 hover:dark:bg-white/10" : "cursor-default"}`}
             onClick={onClick}
         >
             <div className="flex items-center gap-2 mb-1">
@@ -17,12 +15,12 @@ export const ReviewCard = ({ review, removeLoading, onDelete, currentUserId, onC
                     {review.userName?.[0] || '?'}
                 </div>
                 <span className="font-bold">{review.userName}</span>
-                <span className="text-xs text-gray-400">{review.createdAt && review.createdAt.toDate().toLocaleString()}</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400">{review.createdAt && review.createdAt.toDate().toLocaleString()}</span>
                 {currentUserId && review.userId === currentUserId && onDelete && (
                     <button
                         className={`ml-2 text-xs border transition-all cursor-pointer rounded px-2 py-1 ${removeLoading
-                                ? 'text-gray-500 cursor-not-allowed'
-                                : 'text-red-400 hover:text-red-600'
+                            ? 'text-gray-500 cursor-not-allowed'
+                            : 'text-red-400 hover:text-red-600'
                             }`}
                         onClick={e => { e.stopPropagation(); onDelete(); }}
                         disabled={removeLoading}
@@ -33,16 +31,17 @@ export const ReviewCard = ({ review, removeLoading, onDelete, currentUserId, onC
             </div>
             <div className="flex items-center gap-2 mb-2">
                 <Rating
-                    sx={ratingSx}
                     name="read-only"
                     value={review.stars}
                     precision={0.5}
                     readOnly
                     size="small"
+                    icon={<StarIcon sx={{ color: 'gold' }} />}
+                    emptyIcon={<StarBorderIcon sx={{ color: 'gray' }} />}
                 />
-                <span className="text-sm text-gray-300">({review.stars} stars)</span>
+                <span className="text-sm text-gray-500 dark:text-gray-300">({review.stars} stars)</span>
             </div>
             <div className="text-base">{review.text}</div>
-        </div>
+        </div >
     )
 }
