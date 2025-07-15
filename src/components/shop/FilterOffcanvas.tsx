@@ -1,18 +1,21 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
-import { Slider, Box, Typography } from "@mui/material";
+import { Slider, Box } from "@mui/material";
 import Rating from '@mui/material/Rating';
 import { FilterOptions, FilterOffcanvasProps, Brand, Category } from "../../types";
 import { brandCategoryService } from '../../services/brandCategoryService';
-import { filterOffcanvasSliderSx } from "../../styles/filterOffcanvas";
+import { getFilterOffcanvasSliderSx } from "../../styles/filterOffcanvas";
+import { themedBorder, themedBackground } from "../../styles/themeClassNames";
+import { useTheme } from "../../contexts/themeContext";
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilters }: FilterOffcanvasProps) => {
-  const [filters, setFilters] = useState<FilterOptions>(currentFilters);
+  const { theme } = useTheme();
 
+  const [filters, setFilters] = useState<FilterOptions>(currentFilters);
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
-
-
 
   const handleCategoryChange = (category: string) => {
     setFilters(prev => ({
@@ -84,29 +87,28 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
 
   return (
     <>
-
       <div
         className={`fixed inset-0 bg-black z-40 transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'
           }`}
         onClick={onClose}
       />
 
-      <div className={`fixed left-0 top-0 h-full w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'
+      <div className={`${themedBackground} fixed left-0 top-0 h-full w-80 shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}>
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-center p-4 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-800">Filters</h2>
+            <h2 className="text-xl font-bold">Filters</h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-2 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer rounded-full transition-colors"
             >
-              <CloseOutlined className="text-gray-600 text-lg" />
+              <CloseOutlined className="text-lg" />
             </button>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-6">
             <div>
-              <h3 className="text-lg font-semibold mb-3 text-gray-800">Price Range</h3>
+              <h3 className="text-lg font-semibold mb-3">Price Range</h3>
               <Box sx={{ px: 2 }}>
                 <Slider
                   value={filters.priceRange}
@@ -115,21 +117,22 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
                   min={0}
                   max={1000}
                   step={10}
-                  sx={filterOffcanvasSliderSx}
+                  sx={getFilterOffcanvasSliderSx(theme)}
                 />
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-                  <Typography variant="body2" color="text.secondary">
+                  <span>
                     ${filters.priceRange[0]}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  </span>
+
+                  <span>
                     ${filters.priceRange[1]}
-                  </Typography>
+                  </span>
                 </Box>
               </Box>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-3 text-gray-800">Categories</h3>
+              <h3 className="text-lg font-semibold mb-3">Categories</h3>
               <div className="space-y-2">
                 {categories.map((category) => (
                   <label key={category.id} className="flex items-center space-x-2 cursor-pointer">
@@ -139,14 +142,14 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
                       onChange={() => handleCategoryChange(category.name)}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-gray-700">{category.name}</span>
+                    <span>{category.name}</span>
                   </label>
                 ))}
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-3 text-gray-800">Brands</h3>
+              <h3 className="text-lg font-semibold mb-3">Brands</h3>
               <div className="space-y-2">
                 {brands.map((brand) => (
                   <label key={brand.id} className="flex items-center space-x-2 cursor-pointer">
@@ -156,14 +159,14 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
                       onChange={() => handleBrandChange(brand.name)}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-gray-700">{brand.name}</span>
+                    <span>{brand.name}</span>
                   </label>
                 ))}
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-3 text-gray-800">Minimum Rating</h3>
+              <h3 className="text-lg font-semibold mb-3">Minimum Rating</h3>
               <div className="flex items-center space-x-2">
                 <Rating
                   name="filter-rating"
@@ -171,6 +174,8 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
                   onChange={(_event, newValue) => handleRatingChange(newValue || 0)}
                   precision={1}
                   size="large"
+                  icon={<StarIcon sx={{ color: 'gold' }} />}
+                  emptyIcon={<StarBorderIcon sx={{ color: 'gray' }} />}
                 />
                 <span className="text-gray-600 ml-2">({filters.rating}+ stars)</span>
               </div>
@@ -184,7 +189,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
                   onChange={(e) => handleStockChange(e.target.checked)}
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <span className="text-gray-700">In Stock Only</span>
+                <span>In Stock Only</span>
               </label>
             </div>
           </div>
@@ -192,7 +197,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
           <div className="p-4 border-t border-gray-200 space-y-2">
             <button
               onClick={handleApplyFilters}
-              className="w-full bg-black text-white py-3 px-4 hover:bg-gray-800 cursor-pointer transition-colors font-medium"
+              className={`${themedBorder} ${themedBackground} w-full py-3 px-4 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer transition-colors font-medium`}
             >
               Apply Filters
             </button>

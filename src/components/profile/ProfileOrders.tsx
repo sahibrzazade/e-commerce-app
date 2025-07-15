@@ -12,15 +12,20 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
     Typography,
 } from '@mui/material';
+import { getBackgroundSx, getTextSx } from "../../utils/themeSx";
+import { useTheme } from "../../contexts/themeContext";
 
 export const ProfileOrders = () => {
     const authUser = useAuthUser();
     const navigate = useNavigate();
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
+    const { theme } = useTheme();
+
+    const textSx = getTextSx(theme);
+    const backgroundSx = getBackgroundSx(theme);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -50,24 +55,24 @@ export const ProfileOrders = () => {
             ) : orders.length === 0 ? (
                 <span className="block text-center md:text-start">You have not placed any orders yet.</span>
             ) : (
-                <TableContainer component={Paper} sx={{ backgroundColor: '#23272f' }} className="mb-6">
+                <TableContainer sx={backgroundSx} className="mb-6">
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ color: 'white' }}>Order #</TableCell>
-                                <TableCell sx={{ color: 'white' }}>Date</TableCell>
-                                <TableCell sx={{ color: 'white' }}>Status</TableCell>
-                                <TableCell sx={{ color: 'white' }}>Total</TableCell>
-                                <TableCell sx={{ color: 'white' }}>Action</TableCell>
+                                <TableCell sx={textSx}>Order #</TableCell>
+                                <TableCell sx={textSx}>Date</TableCell>
+                                <TableCell sx={textSx}>Status</TableCell>
+                                <TableCell sx={textSx}>Total</TableCell>
+                                <TableCell sx={textSx}>Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {orders.map((order) => (
                                 <TableRow key={order.id} hover>
-                                    <TableCell sx={{ color: 'white' }}>{order.orderNumber || order.id}</TableCell>
-                                    <TableCell sx={{ color: 'white' }}>{order.createdAt.toDate().toLocaleDateString()}</TableCell>
-                                    <TableCell sx={{ color: 'white' }}><span className="capitalize text-amber-400">{order.status}</span></TableCell>
-                                    <TableCell sx={{ color: 'white' }}>${order.discountedTotal || order.total}</TableCell>
+                                    <TableCell sx={textSx}>{order.orderNumber || order.id}</TableCell>
+                                    <TableCell sx={textSx}>{order.createdAt.toDate().toLocaleDateString()}</TableCell>
+                                    <TableCell sx={textSx}><span className="capitalize text-amber-400">{order.status}</span></TableCell>
+                                    <TableCell sx={textSx}>${order.discountedTotal || order.total}</TableCell>
                                     <TableCell>
                                         <OutlinedButton
                                             content="View Details"

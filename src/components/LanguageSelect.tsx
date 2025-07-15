@@ -1,22 +1,23 @@
 import { Select, MenuItem, FormControl } from '@mui/material';
-import { LanguageSelectProps, LanguageOption } from '../types';
-import { languageMenuProps, languageSelectSx } from '../styles/languageSelect';
+import { LanguageSelectProps } from '../types';
+import { getLanguageMenuProps, getLanguageSelectSx } from '../styles/languageSelect';
+import { useTheme } from '../contexts/themeContext';
+import { languages } from '../constants/languageOptions';
 
-const languages: LanguageOption[] = [
-    { code: 'az', name: 'AZ', flag: '🇦🇿' },
-    { code: 'tr', name: 'TR', flag: '🇹🇷' },
-    { code: 'en', name: 'EN', flag: '🇬🇧' }
-];
+
 
 export const LanguageSelect = ({ value, onChange, disabled = false, showName = true }: LanguageSelectProps) => {
+
+    const { theme } = useTheme();
+
     return (
         <FormControl>
             <Select
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 disabled={disabled}
-                sx={languageSelectSx}
-                MenuProps={languageMenuProps}
+                sx={getLanguageSelectSx(theme)}
+                MenuProps={getLanguageMenuProps(theme)}
             >
                 {languages.map((lang) => (
                     <MenuItem

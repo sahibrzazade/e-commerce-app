@@ -1,18 +1,9 @@
 import { useCart } from '../contexts/cartContext';
 import AppLayout from '../layouts/AppLayout';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
+
   Button,
-  Typography,
-  IconButton,
 } from '@mui/material';
-import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { OutlinedButton } from '../components/OutlinedButton';
 import { useNavigate } from 'react-router-dom';
@@ -22,15 +13,22 @@ import { useDiscount } from '../hooks/useDiscount';
 import { useForm } from 'react-hook-form';
 import { orderService } from '../services/orderService';
 import { useState } from 'react';
+import { useTheme } from '../contexts/themeContext';
+import { themedBorder } from '../styles/themeClassNames';
+import { getTextSx, getBackgroundSx } from '../utils/themeSx';
+import { CartTable } from '../components/shop/CartTable';
 
 export const Cart = () => {
   const { removeFromCart, removeLoading, clearCart, clearLoading, updateCartItem, updateLoading, count, total, cartProducts } = useCart();
   const { discount, discountedTotal, loading, applyCoupon, resetDiscount } = useDiscount();
   const user = useAuthUser();
   const navigate = useNavigate();
+  const { theme } = useTheme();
+
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  const dataSource = cartProducts;
+  const textSx = getTextSx(theme);
+  const backgroundSx = getBackgroundSx(theme);
 
   const { register, handleSubmit } = useForm<{ coupon: string }>();
 
@@ -60,7 +58,7 @@ export const Cart = () => {
 
   const handleCheckout = async () => {
     if (!user || count === 0) return;
-    
+
     setCheckoutLoading(true);
     try {
       const orderItems = cartProducts.map(item => ({
@@ -78,9 +76,9 @@ export const Cart = () => {
       });
 
       showSuccessMessage('Order created successfully!');
-      
+
       await clearCart();
-      
+
       navigate(`/orders/${orderId}`);
     } catch (error) {
       showErrorMessage('Failed to create order. Please try again.');
@@ -107,72 +105,21 @@ export const Cart = () => {
             </div>
           ) : (
             <>
-              <TableContainer component={Paper} sx={{ backgroundColor: '#23272f' }} className="mb-4">
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ color: 'white' }}>Image</TableCell>
-                      <TableCell sx={{ color: 'white' }}>Product</TableCell>
-                      <TableCell sx={{ color: 'white' }}>Price</TableCell>
-                      <TableCell sx={{ color: 'white' }}>Quantity</TableCell>
-                      <TableCell sx={{ color: 'white' }}>Subtotal</TableCell>
-                      <TableCell sx={{ color: 'white' }}>Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {dataSource.map(row => (
-                      <TableRow key={row.id}>
-                        <TableCell>
-                          {row.product && row.product.image ? (
-                            <img src={row.product.image} alt={row.product.name} style={{ width: 64, height: 64, objectFit: 'cover' }} />
-                          ) : null}
-                        </TableCell>
-                        <TableCell>
-                          <Typography fontWeight="bold" sx={{ color: 'white' }}>{row.product && row.product.name}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography sx={{ color: 'white' }}>
-                            {row.product ? `$${row.product.price}` : '-'}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <div style={{ display: 'flex', alignItems: 'center', borderRadius: 6, width: 100, justifyContent: 'space-between' }}>
-                            <IconButton size="small" onClick={() => handleQuantityChange(row.id, row.quantity - 1)} disabled={row.quantity <= 1 || updateLoading} sx={{ color: 'white' }}>
-                              <AiOutlineMinus />
-                            </IconButton>
-                            <Typography sx={{ color: 'white', minWidth: 24, textAlign: 'center' }}>{row.quantity}</Typography>
-                            <IconButton size="small" onClick={() => handleQuantityChange(row.id, row.quantity + 1)} disabled={updateLoading} sx={{ color: 'white' }}>
-                              <AiOutlinePlus />
-                            </IconButton>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Typography sx={{ color: 'white' }}>
-                            {row.product ? `$${(row.product.price * row.quantity).toFixed(2)}` : '-'}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="outlined"
-                            color="error"
-                            sx={{ height: 40, width: 40, minWidth: 0, padding: 0 }}
-                            size="small" onClick={() => handleRemove(row.id)}
-                            disabled={removeLoading}
-                          >
-                            X
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <CartTable
+                dataSource={cartProducts}
+                textSx={textSx}
+                backgroundSx={backgroundSx}
+                updateLoading={updateLoading}
+                removeLoading={removeLoading}
+                onQuantityChange={handleQuantityChange}
+                onRemove={handleRemove}
+              />
               <div className="flex justify-between mt-4">
                 <form onSubmit={handleSubmit(onSubmitCoupon)} className='flex flex-row gap-2'>
                   <input
                     type="text"
                     {...register('coupon', { required: 'Coupon code is required' })}
-                    className="outline-none bg-primary-dark w-[300px] h-[50px] px-2 py-1 me-4 border-white"
+                    className={`${themedBorder} ${theme === "light" ? "bg-primary-light" : "bg-primary-dark"} outline-none w-[300px] h-[50px] px-2 py-1 me-4`}
                     disabled={discount ? true : false}
                   />
                   {!discount ?

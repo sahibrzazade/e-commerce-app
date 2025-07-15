@@ -9,7 +9,9 @@ import { showSuccessMessage, showErrorMessage } from '../../utils/toastUtils';
 import { useState, useEffect } from 'react';
 import { useWishlist } from '../../contexts/wishlistContext';
 import { useCart } from '../../contexts/cartContext';
-import { ratingSx } from '../../styles/rating';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { themedBorder } from '../../styles/themeClassNames';
 
 export const ProductCard = ({
   product,
@@ -67,7 +69,7 @@ export const ProductCard = ({
   return (
     <div>
       <div className='w-[290px] relative group'>
-        <img className='w-full h-[340px] border border-white'
+        <img className={`${themedBorder} w-full h-[340px] border`}
           src={product.image}
           alt="product image"
         />
@@ -94,11 +96,12 @@ export const ProductCard = ({
         <div className='flex flex-row my-1'>
           <span className='me-2'>{product.stars}</span>
           <Rating
-            sx={ratingSx}
             name="read-only"
             value={product.stars}
             precision={0.1}
             readOnly
+            icon={<StarIcon sx={{ color: 'gold' }} />}
+            emptyIcon={<StarBorderIcon sx={{ color: 'gray' }} />}
           />
           <span>({product.reviewsCount})</span>
         </div>

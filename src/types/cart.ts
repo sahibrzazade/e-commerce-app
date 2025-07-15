@@ -27,3 +27,13 @@ export interface CartContextType {
   clearLoading: boolean;
   fetchLoading: boolean;
 }
+
+export interface CartTableProps {
+  dataSource: CartProduct[];
+  textSx?: object;
+  backgroundSx?: object;
+  updateLoading?: boolean;
+  removeLoading?: boolean;
+  onQuantityChange: (productId: string, newQuantity: number) => void;
+  onRemove: (productId: string) => void;
+}

@@ -13,15 +13,21 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
     Typography,
     CircularProgress,
 } from '@mui/material';
+import { useTheme } from "../contexts/themeContext";
+import { getBackgroundSx, getTextSx } from "../utils/themeSx";
 
 export const OrderDetails = () => {
     const { orderId } = useParams<{ orderId: string }>();
     const navigate = useNavigate();
     const user = useAuthUser();
+    const { theme } = useTheme();
+
+    const textSx = getTextSx(theme);
+    const backgroundSx = getBackgroundSx(theme);
+
     const [order, setOrder] = useState<Order | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -72,9 +78,9 @@ export const OrderDetails = () => {
         return (
             <AppLayout>
                 <div className="flex justify-center items-center min-h-screen">
-                    <Typography variant="h5" color="white">
+                    <h1 className="text-2xl">
                         Order not found
-                    </Typography>
+                    </h1>
                 </div>
             </AppLayout>
         );
@@ -84,53 +90,53 @@ export const OrderDetails = () => {
         <AppLayout>
             <div className="max-w-4xl mx-auto p-4">
                 <div className="mb-6">
-                    <Typography variant="h4" color="white" className="mb-2">
+                    <h2 className="text-3xl mb-2">
                         Order #{order.orderNumber || order.id}
-                    </Typography>
-                    <Typography variant="body1" color="gray" className="mb-4">
+                    </h2>
+                    <h3 className="text-lg mb-2">
                         Status: <span className="text-amber-400 capitalize">{order.status}</span>
-                    </Typography>
-                    <Typography variant="body2" color="gray">
+                    </h3>
+                    <h3 className="text-lg mb-2">
                         Created: {order.createdAt.toDate().toLocaleDateString()}
-                    </Typography>
+                    </h3>
                 </div>
 
-                <TableContainer component={Paper} sx={{ backgroundColor: '#23272f' }} className="mb-6">
+                <TableContainer sx={backgroundSx} className="mb-6">
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ color: 'white' }}>Image</TableCell>
-                                <TableCell sx={{ color: 'white' }}>Product</TableCell>
-                                <TableCell sx={{ color: 'white' }}>Price</TableCell>
-                                <TableCell sx={{ color: 'white' }}>Quantity</TableCell>
-                                <TableCell sx={{ color: 'white' }}>Subtotal</TableCell>
+                                <TableCell sx={textSx}>Image</TableCell>
+                                <TableCell sx={textSx}>Product</TableCell>
+                                <TableCell sx={textSx}>Price</TableCell>
+                                <TableCell sx={textSx}>Quantity</TableCell>
+                                <TableCell sx={textSx}>Subtotal</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {order.items.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell>
-                                        <Typography sx={{ color: 'white' }}>
+                                        <Typography sx={textSx}>
                                             <img src={item.product?.image} style={{ width: 64, height: 64, objectFit: 'cover' }} />
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <Typography sx={{ color: 'white' }}>
+                                        <Typography sx={textSx}>
                                             {item.product?.name || `Product ${item.productId}`}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <Typography sx={{ color: 'white' }}>
+                                        <Typography sx={textSx}>
                                             ${item.price}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <Typography sx={{ color: 'white' }}>
+                                        <Typography sx={textSx}>
                                             {item.quantity}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <Typography sx={{ color: 'white' }}>
+                                        <Typography sx={textSx}>
                                             ${(item.price * item.quantity).toFixed(2)}
                                         </Typography>
                                     </TableCell>

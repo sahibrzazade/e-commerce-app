@@ -1,3 +1,4 @@
+import { themedText } from "../../styles/themeClassNames";
 import { FilterOptions } from "../../types";
 import { CloseOutlined } from "@ant-design/icons";
 
@@ -7,7 +8,7 @@ interface FilterSummaryProps {
 }
 
 export const FilterSummary = ({ filters, onClearFilter }: FilterSummaryProps) => {
-  const hasActiveFilters = 
+  const hasActiveFilters =
     filters.categories.length > 0 ||
     filters.brands.length > 0 ||
     filters.rating > 0 ||
@@ -19,8 +20,8 @@ export const FilterSummary = ({ filters, onClearFilter }: FilterSummaryProps) =>
 
   return (
     <div className="flex flex-wrap gap-2 mb-4 p-3">
-      <span className="text-sm font-medium text-gray-400">Active filters:</span>
-      
+      <span className={`${themedText} text-sm font-medium`}>Active filters:</span>
+
       {(filters.priceRange[0] > 0 || filters.priceRange[1] < 1000) && (
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800 hover:bg-blue-200 transition-all duration-200 ease-in-out">
           ${filters.priceRange[0]} - ${filters.priceRange[1]}
@@ -83,7 +84,7 @@ export const FilterSummary = ({ filters, onClearFilter }: FilterSummaryProps) =>
 
       <button
         onClick={() => onClearFilter('clearAll')}
-        className="text-xs text-gray-400 hover:text-white active:scale-95 underline cursor-pointer transition-all duration-200 ease-in-out"
+        className={`${themedText} text-xs active:scale-95 underline cursor-pointer transition-all duration-200 ease-in-out`}
       >
         Clear all
       </button>
