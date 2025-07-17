@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { useTheme } from "../contexts/themeContext";
 import { getBackgroundSx, getTextSx } from "../utils/themeSx";
+import dayjs from "dayjs";
 
 export const OrderDetails = () => {
     const { orderId } = useParams<{ orderId: string }>();
@@ -97,7 +98,7 @@ export const OrderDetails = () => {
                         Status: <span className="text-amber-400 capitalize">{order.status}</span>
                     </h3>
                     <h3 className="text-lg mb-2">
-                        Created: {order.createdAt.toDate().toLocaleDateString()}
+                        Created: {dayjs(order.createdAt.toDate()).format('DD/MM/YYYY HH:mm:ss')}
                     </h3>
                 </div>
 

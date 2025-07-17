@@ -48,7 +48,7 @@ export const ProfileReviews = () => {
                             key={review.id}
                             review={review}
                             currentUserId={authUser?.uid}
-                            onClick={() => navigate(`/product/${review.productId}`)}
+                            onClick={() => navigate(`/shop/${review.productId}`)}
                         />
                     ))}
                 </div>
