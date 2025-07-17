@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { getBackgroundSx, getTextSx } from "../../utils/themeSx";
 import { useTheme } from "../../contexts/themeContext";
+import dayjs from "dayjs";
 
 export const ProfileOrders = () => {
     const authUser = useAuthUser();
@@ -70,7 +71,7 @@ export const ProfileOrders = () => {
                             {orders.map((order) => (
                                 <TableRow key={order.id} hover>
                                     <TableCell sx={textSx}>{order.orderNumber || order.id}</TableCell>
-                                    <TableCell sx={textSx}>{order.createdAt.toDate().toLocaleDateString()}</TableCell>
+                                    <TableCell sx={textSx}>{dayjs(order.createdAt.toDate()).format('DD/MM/YYYY HH:mm:ss')}</TableCell>
                                     <TableCell sx={textSx}><span className="capitalize text-amber-400">{order.status}</span></TableCell>
                                     <TableCell sx={textSx}>${order.discountedTotal || order.total}</TableCell>
                                     <TableCell>

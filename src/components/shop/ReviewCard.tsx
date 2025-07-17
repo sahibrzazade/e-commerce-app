@@ -3,6 +3,7 @@ import Rating from "@mui/material/Rating";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { themedText } from "../../styles/themeClassNames";
+import dayjs from "dayjs";
 
 export const ReviewCard = ({ review, removeLoading, onDelete, currentUserId, onClick }: { review: Review, removeLoading?: boolean, onDelete?: () => void, currentUserId?: string, onClick?: () => void }) => {
     return (
@@ -15,7 +16,7 @@ export const ReviewCard = ({ review, removeLoading, onDelete, currentUserId, onC
                     {review.userName?.[0] || '?'}
                 </div>
                 <span className="font-bold">{review.userName}</span>
-                <span className="text-xs text-gray-600 dark:text-gray-400">{review.createdAt && review.createdAt.toDate().toLocaleString()}</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400">{review.createdAt && dayjs(review.createdAt.toDate()).format('DD/MM/YYYY HH:mm:ss')}</span>
                 {currentUserId && review.userId === currentUserId && onDelete && (
                     <button
                         className={`ml-2 text-xs border transition-all cursor-pointer rounded px-2 py-1 ${removeLoading

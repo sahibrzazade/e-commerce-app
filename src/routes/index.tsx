@@ -9,6 +9,8 @@ import { Cart } from '../pages/Cart';
 import { Profile } from '../pages/Profile';
 import PublicRoute from '../components/auth/PublicRoute';
 import { OrderDetails } from '../pages/OrderDetails';
+import { Blogs } from '../pages/Blogs';
+import BlogDetails from '../pages/BlogDetails';
 
 export const appRoutes: AppRoute[] = [
   { path: '/', element: <Home /> },
@@ -16,9 +18,11 @@ export const appRoutes: AppRoute[] = [
   { path: '/shop', element: <Shop /> },
   { path: '/wishlist', element: <Wishlist /> },
   { path: '/cart', element: <Cart /> },
-  { path: '/product/:id', element: <ProductDetails /> },
+  { path: '/shop/:id', element: <ProductDetails /> },
   { path: '/profile', element: <Profile /> },
   { path: '/orders/:orderId', element: <OrderDetails /> },
   { path: '/sign-in', element: <PublicRoute><SignIn /></PublicRoute> },
   { path: '/sign-up', element: <PublicRoute><SignUp /></PublicRoute> },
+  { path: '/blogs', element: <Blogs /> },
+  { path: '/blogs/:id', element: <BlogDetails /> },
 ];

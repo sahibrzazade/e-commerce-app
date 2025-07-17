@@ -75,7 +75,7 @@ export const ProductCard = ({
         />
         <div className="absolute top-0 left-0 h-full w-full bg-black/40 backdrop-blur-xs opacity-0 cursor-pointer group-hover:opacity-100 transition-opacity duration-300">
           <div className="flex flex-col justify-center items-center h-full">
-            <OutlinedButton content="DETAILS PAGE" onClick={() => navigate(`/product/${product.id}`)} height={40} width={180} fontWeight="normal" />
+            <OutlinedButton content="DETAILS PAGE" onClick={() => navigate(`/shop/${product.id}`)} height={40} width={180} fontWeight="normal" />
           </div>
         </div>
       </div>
