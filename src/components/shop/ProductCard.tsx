@@ -32,7 +32,6 @@ export const ProductCard = ({
     setCartLoading(true);
     try {
       await addToCart(product.id, 1);
-      showSuccessMessage('Added to cart!');
     } catch (error) {
       showErrorMessage('Failed to add to cart.');
     } finally {

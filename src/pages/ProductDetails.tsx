@@ -45,7 +45,6 @@ export const ProductDetails = () => {
         try {
             if (product) {
                 await addToCart(product.id, 1);
-                showSuccessMessage('Added to cart!');
             }
         } catch (error) {
             showErrorMessage('Failed to add to cart.');
