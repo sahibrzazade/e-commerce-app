@@ -22,7 +22,7 @@ const Icons: React.FC = () => {
   const navigate = useNavigate();
   const user = useAuthUser();
   const { count: wishlistCount } = useWishlist();
-  const { count: cartCount } = useCart();
+  const { count: cartCount, cartProducts, removeFromCart, clearCart, clearLoading, removeLoading, total } = useCart();
   const { language, changeLanguage, loading: languageLoading } = useLanguage();
   const { theme } = useTheme();
 
@@ -97,6 +97,77 @@ const Icons: React.FC = () => {
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
             {cartCount}
           </span>
+        )}
+        {user && (
+          <div className={`${themedBorder} ${themedBackground} absolute right-0 top-8 flex flex-col items-center z-50 p-6 border transition-all duration-200 ease-out ${isUserMenuOpen
+            ? 'opacity-100 visible pointer-events-auto'
+            : 'opacity-0 invisible pointer-events-none'
+            } group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto`}>
+            <>
+              <div className="w-64 max-h-80 overflow-y-auto flex flex-col gap-2 mb-4">
+                {cartProducts.length === 0 ? (
+                  <span className="text-sm text-gray-500 text-center">Your cart is empty.</span>
+                ) : (
+                  cartProducts.map(({ id, quantity, product }) => (
+                    <div key={id} className="flex items-center justify-between border-b pb-2 last:border-b-0">
+                      <div className="flex items-center gap-2">
+                        {product?.image && (
+                          <img src={product.image} alt={product.name} className="w-8 h-8 object-cover rounded" />
+                        )}
+                        <span className="text-sm font-medium">{product?.name || 'Product'}</span>
+                      </div>
+                      <div className="flex flex-col items-end gap-1">
+                        <span className="text-xs text-gray-600">Qty: {quantity}</span>
+                        <span className="text-xs font-semibold">${product?.price ? (product.price * quantity).toFixed(2) : '--'}</span>
+                        <button
+                          className="text-red-500 text-xs hover:underline cursor-pointer transition-all mt-1 disabled:opacity-50"
+                          title="Remove"
+                          disabled={removeLoading}
+                          onClick={() => removeFromCart(id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+                {cartProducts.length !== 0 &&
+                  <span className='text-sm inline-block text-end font-bold'>Total: ${total}</span>
+                }
+              </div>
+              <div className="flex flex-row gap-2 w-full items-center justify-center">
+                {cartProducts.length !== 0 ?
+                  <>
+                    <OutlinedButton
+                      content="Clear Cart"
+                      height={40}
+                      width={100}
+                      fontWeight="bold"
+                      onClick={() => { clearCart(); showErrorMessage('Cart cleared'); }}
+                      isDisabled={clearLoading}
+                    />
+
+                    <OutlinedButton
+                      content="Go to Cart"
+                      height={40}
+                      width={100}
+                      fontWeight="bold"
+                      onClick={() => handleNavigation('/cart')}
+                    />
+                  </>
+                  :
+                  <OutlinedButton
+                    content="Go to Shop"
+                    height={40}
+                    width={120}
+                    fontWeight="bold"
+                    onClick={() => handleNavigation('/shop')}
+                  />
+                }
+
+              </div>
+            </>
+          </div>
         )}
       </div>
       <div className="relative group" ref={userMenuRef}>

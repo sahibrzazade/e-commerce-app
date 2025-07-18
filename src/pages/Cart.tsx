@@ -34,7 +34,6 @@ export const Cart = () => {
 
   const handleRemove = async (productId: string) => {
     await removeFromCart(productId);
-    showErrorMessage('Product removed from cart');
   };
 
   const handleClear = async () => {
@@ -45,7 +44,6 @@ export const Cart = () => {
   const handleQuantityChange = async (productId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     await updateCartItem(productId, newQuantity);
-    showSuccessMessage('Cart updated');
   };
 
   const handleRemoveCoupon = () => {

@@ -5,6 +5,7 @@ import { useAuthUser } from '../hooks/useAuthUser';
 import { productService } from '../services/productService';
 import { Product } from '../types/shop';
 import { WithChildren } from '../types';
+import { showErrorMessage, showSuccessMessage } from '../utils/toastUtils';
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -27,7 +28,6 @@ export const CartProvider = ({ children }: WithChildren) => {
   const [clearLoading, setClearLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(false);
 
-
   const fetchCart = async () => {
     if (!user) return;
     setFetchLoading(true);
@@ -46,6 +46,7 @@ export const CartProvider = ({ children }: WithChildren) => {
       const currentQuantity = cart[productId]?.quantity || 0;
       const newQuantity = currentQuantity + quantity;
       await cartService.addToCart(user.uid, productId, newQuantity);
+      showSuccessMessage('Added to cart!');
       await fetchCart();
     } finally {
       setAddLoading(false);
@@ -57,6 +58,7 @@ export const CartProvider = ({ children }: WithChildren) => {
     setRemoveLoading(true);
     try {
       await cartService.removeFromCart(user.uid, productId);
+      showErrorMessage('Product removed from cart!');
       await fetchCart();
     } finally {
       setRemoveLoading(false);
@@ -68,6 +70,7 @@ export const CartProvider = ({ children }: WithChildren) => {
     setUpdateLoading(true);
     try {
       await cartService.updateCartItem(user.uid, productId, quantity);
+      showSuccessMessage('Cart updated');
       await fetchCart();
     } finally {
       setUpdateLoading(false);

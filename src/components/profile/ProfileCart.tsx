@@ -2,7 +2,6 @@ import { ShoppingCartOutlined } from "@ant-design/icons"
 import { OutlinedButton } from "../OutlinedButton"
 import { useCart } from "../../contexts/cartContext"
 import { useNavigate } from "react-router-dom"
-import { showErrorMessage, showSuccessMessage } from "../../utils/toastUtils"
 import { getBackgroundSx, getTextSx } from "../../utils/themeSx"
 import { useTheme } from "../../contexts/themeContext"
 import { CartTable } from "../shop/CartTable"
@@ -18,12 +17,10 @@ export const ProfileCart = () => {
     const handleQuantityChange = async (productId: string, newQuantity: number) => {
         if (newQuantity < 1) return;
         await updateCartItem(productId, newQuantity);
-        showSuccessMessage('Cart updated');
     };
 
     const handleRemove = async (productId: string) => {
         await removeFromCart(productId);
-        showErrorMessage('Product removed from cart');
     };
 
     return (
