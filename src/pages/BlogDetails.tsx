@@ -63,7 +63,7 @@ const BlogDetails = () => {
     return (
         <AppLayout>
             <div className="w-full h-[400px] bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: `url('${blog.imageUrl || "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1500&q=80"}')` }}>
-                <h1 className="text-5xl text-white font-bold tracking-wide uppercase line-clamp-2 text-center bg-black/40 px-4 py-2 rounded-lg">{blog.title}</h1>
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-4xl xl:text-5xl text-white font-bold tracking-wide uppercase line-clamp-2 text-center bg-black/40 px-4 py-2 rounded-lg">{blog.title}</h1>
             </div>
             <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden flex flex-col my-8">
                 <div className="p-6 flex flex-col flex-1">
