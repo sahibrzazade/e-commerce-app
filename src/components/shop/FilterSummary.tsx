@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { themedText } from "../../styles/themeClassNames";
 import { FilterOptions } from "../../types";
 import { CloseOutlined } from "@ant-design/icons";
@@ -7,7 +8,10 @@ interface FilterSummaryProps {
   onClearFilter: (filterType: keyof FilterOptions | 'clearAll', value?: any) => void;
 }
 
+
 export const FilterSummary = ({ filters, onClearFilter }: FilterSummaryProps) => {
+  const { t } = useTranslation();
+
   const hasActiveFilters =
     filters.categories.length > 0 ||
     filters.brands.length > 0 ||
@@ -20,7 +24,7 @@ export const FilterSummary = ({ filters, onClearFilter }: FilterSummaryProps) =>
 
   return (
     <div className="flex flex-wrap gap-2 mb-4 p-3">
-      <span className={`${themedText} text-sm font-medium`}>Active filters:</span>
+      <span className={`${themedText} text-sm font-medium`}>{t("filter.active-filters")}:</span>
 
       {(filters.priceRange[0] > 0 || filters.priceRange[1] < 1000) && (
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800 hover:bg-blue-200 transition-all duration-200 ease-in-out">
@@ -60,7 +64,7 @@ export const FilterSummary = ({ filters, onClearFilter }: FilterSummaryProps) =>
 
       {filters.rating > 0 && (
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800 hover:bg-yellow-200 transition-all duration-200 ease-in-out">
-          {filters.rating}+ stars
+          {filters.rating}+ {t("filter.stars")}
           <button
             onClick={() => onClearFilter('rating')}
             className="ml-1 hover:text-yellow-600 active:scale-95 cursor-pointer transition-all duration-200 ease-in-out"
@@ -72,7 +76,7 @@ export const FilterSummary = ({ filters, onClearFilter }: FilterSummaryProps) =>
 
       {filters.inStock && (
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 text-red-800 hover:bg-red-200 transition-all duration-200 ease-in-out">
-          In Stock Only
+          {t("filter.in-stock-only")}
           <button
             onClick={() => onClearFilter('inStock')}
             className="ml-1 hover:text-red-600 active:scale-95 cursor-pointer transition-all duration-200 ease-in-out"
@@ -86,7 +90,7 @@ export const FilterSummary = ({ filters, onClearFilter }: FilterSummaryProps) =>
         onClick={() => onClearFilter('clearAll')}
         className={`${themedText} text-xs active:scale-95 underline cursor-pointer transition-all duration-200 ease-in-out`}
       >
-        Clear all
+        {t("common:clear-all")}
       </button>
     </div>
   );

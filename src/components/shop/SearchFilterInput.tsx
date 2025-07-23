@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { TextInput } from "../TextInput"
 import { SearchFilterInputProps } from "../../types";
+import { useTranslation } from "react-i18next";
 
 export const SearchFilterInput = ({ value, onChange }: SearchFilterInputProps) => {
+    const { t } = useTranslation();
+
     const [inputValue, setInputValue] = useState(value);
 
     useEffect(() => {
@@ -20,7 +23,7 @@ export const SearchFilterInput = ({ value, onChange }: SearchFilterInputProps) =
 
     return (
         <div className="flex flex-row">
-            <label htmlFor="searchInput" className="mx-2">Search:</label>
+            <label htmlFor="searchInput" className="mx-2">{t("common:search")}:</label>
             <TextInput
                 name={"searchInput"}
                 value={inputValue}

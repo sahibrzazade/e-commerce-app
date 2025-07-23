@@ -4,8 +4,10 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { themedText } from "../../styles/themeClassNames";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 export const ReviewCard = ({ review, removeLoading, onDelete, currentUserId, onClick }: { review: Review, removeLoading?: boolean, onDelete?: () => void, currentUserId?: string, onClick?: () => void }) => {
+    const { t } = useTranslation();
     return (
         <div
             className={`${themedText} p-4 rounded transition ${onClick ? "cursor-pointer hover:bg-black/10 hover:dark:bg-white/10" : "cursor-default"}`}
@@ -40,7 +42,7 @@ export const ReviewCard = ({ review, removeLoading, onDelete, currentUserId, onC
                     icon={<StarIcon sx={{ color: 'gold' }} />}
                     emptyIcon={<StarBorderIcon sx={{ color: 'gray' }} />}
                 />
-                <span className="text-sm text-gray-500 dark:text-gray-300">({review.stars} stars)</span>
+                <span className="text-sm text-gray-500 dark:text-gray-300">({review.stars} {t("filter.stars")})</span>
             </div>
             <div className="text-base">{review.text}</div>
         </div >

@@ -12,16 +12,17 @@ import { useCart } from '../../contexts/cartContext';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { themedBorder } from '../../styles/themeClassNames';
+import { useTranslation } from 'react-i18next';
 
 export const ProductCard = ({
   product,
   onWishlistChange
 }: ProductCardProps) => {
-
   const user = useAuthUser()
   const navigate = useNavigate();
   const { addToCart, addLoading } = useCart();
   const { refresh: refreshWishlist } = useWishlist();
+  const { t } = useTranslation();
 
   const [isWishlisted, setIsWishlisted] = useState(product.isWishlisted);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -33,7 +34,7 @@ export const ProductCard = ({
     try {
       await addToCart(product.id, 1);
     } catch (error) {
-      showErrorMessage('Failed to add to cart.');
+      showErrorMessage(t("shop.add-to-cart-failed"));
     } finally {
       setCartLoading(false);
     }
@@ -46,16 +47,16 @@ export const ProductCard = ({
       if (isWishlisted) {
         await wishlistService.removeFromWishlist(user.uid, product.id);
         setIsWishlisted(false);
-        showErrorMessage('Removed from wishlist!');
+        showErrorMessage(t("shop.removed-from-wishlist"));
       } else {
         await wishlistService.addToWishlist(user.uid, product.id);
         setIsWishlisted(true);
-        showSuccessMessage('Added to wishlist!');
+        showSuccessMessage(t("shop.added-to-wishlist"));
       }
       await refreshWishlist();
       if (onWishlistChange) await onWishlistChange();
     } catch (error) {
-      showErrorMessage('Failed to update wishlist.');
+      showErrorMessage(t("shop.update-wishlist-failed"));
     } finally {
       setButtonLoading(false);
     }
@@ -74,7 +75,7 @@ export const ProductCard = ({
         />
         <div className="absolute top-0 left-0 h-full w-full bg-black/40 backdrop-blur-xs opacity-0 cursor-pointer group-hover:opacity-100 transition-opacity duration-300">
           <div className="flex flex-col justify-center items-center h-full">
-            <OutlinedButton content="DETAILS PAGE" onClick={() => navigate(`/shop/${product.id}`)} height={40} width={180} fontWeight="normal" />
+            <OutlinedButton content={t("shop.details-page")} onClick={() => navigate(`/shop/${product.id}`)} height={40} width={180} fontWeight="normal" />
           </div>
         </div>
       </div>
@@ -89,7 +90,7 @@ export const ProductCard = ({
               <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled /> : <HeartOutlined />} height={40} width={40} fontWeight="normal" isDisabled={buttonLoading} />
             </div>
             :
-            <span className='text-red-500'>You are not signed in</span>
+            <span className='text-red-500'>{t("auth.you-are-not-signed-in")}</span>
           }
         </div>
         <div className='flex flex-row my-1'>
@@ -108,7 +109,7 @@ export const ProductCard = ({
       <div className='flex flex-row justify-between items-center my-1'>
         <span className='font-bold pe-4'>{product.price}$</span>
         {!product.isAvailable && (
-          <span className='text-red-600'>Product is not available</span>
+          <span className='text-red-600'>{t("shop.product-not-available")}</span>
         )}
       </div>
     </div>

@@ -17,6 +17,7 @@ import { LanguageSelect } from '../LanguageSelect';
 import { Language } from '../../types/language';
 import { themedBorder, themedBackground } from '../../styles/themeClassNames';
 import { useTheme } from '../../contexts/themeContext';
+import { useTranslation } from 'react-i18next';
 
 const Icons: React.FC = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const Icons: React.FC = () => {
   const { count: cartCount, cartProducts, removeFromCart, clearCart, clearLoading, removeLoading, total } = useCart();
   const { language, changeLanguage, loading: languageLoading } = useLanguage();
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -49,11 +51,11 @@ const Icons: React.FC = () => {
   const handleSignOut = async () => {
     try {
       await authService.signOut();
-      showSuccessMessage('Sign Out successful');
+      showSuccessMessage(t("auth.sign-out-successful"));
       navigate('/');
       setIsUserMenuOpen(false);
     } catch (error) {
-      showErrorMessage('Sign Out failed. Please try again later.');
+      showErrorMessage(t("auth.sign-out-failed"));
     }
   };
 
@@ -106,7 +108,7 @@ const Icons: React.FC = () => {
             <>
               <div className="w-64 max-h-80 overflow-y-auto flex flex-col gap-2 mb-4">
                 {cartProducts.length === 0 ? (
-                  <span className="text-sm text-gray-500 text-center">Your cart is empty.</span>
+                  <span className="text-sm text-gray-500 text-center">{t("common:your-cart-is-empty")}</span>
                 ) : (
                   cartProducts.map(({ id, quantity, product }) => (
                     <div key={id} className="flex items-center justify-between border-b pb-2 last:border-b-0">
@@ -114,10 +116,10 @@ const Icons: React.FC = () => {
                         {product?.image && (
                           <img src={product.image} alt={product.name} className="w-8 h-8 object-cover rounded" />
                         )}
-                        <span className="text-sm font-medium">{product?.name || 'Product'}</span>
+                        <span className="text-sm font-medium">{product?.name}</span>
                       </div>
                       <div className="flex flex-col items-end gap-1">
-                        <span className="text-xs text-gray-600">Qty: {quantity}</span>
+                        <span className="text-xs text-gray-600">{t("common:quantity")}: {quantity}</span>
                         <span className="text-xs font-semibold">${product?.price ? (product.price * quantity).toFixed(2) : '--'}</span>
                         <button
                           className="text-red-500 text-xs hover:underline cursor-pointer transition-all mt-1 disabled:opacity-50"
@@ -125,30 +127,30 @@ const Icons: React.FC = () => {
                           disabled={removeLoading}
                           onClick={() => removeFromCart(id)}
                         >
-                          Remove
+                          {t("common:remove")}
                         </button>
                       </div>
                     </div>
                   ))
                 )}
                 {cartProducts.length !== 0 &&
-                  <span className='text-sm inline-block text-end font-bold'>Total: ${total}</span>
+                  <span className='text-sm inline-block text-end font-bold'>{t("common:total")}: ${total}</span>
                 }
               </div>
               <div className="flex flex-row gap-2 w-full items-center justify-center">
                 {cartProducts.length !== 0 ?
                   <>
                     <OutlinedButton
-                      content="Clear Cart"
+                      content={t("common:clear-cart")}
                       height={40}
                       width={100}
                       fontWeight="bold"
-                      onClick={() => { clearCart(); showErrorMessage('Cart cleared'); }}
+                      onClick={() => { clearCart(); showErrorMessage(t("common:cart-cleared")); }}
                       isDisabled={clearLoading}
                     />
 
                     <OutlinedButton
-                      content="Go to Cart"
+                      content={t("common:go-to-cart")}
                       height={40}
                       width={100}
                       fontWeight="bold"
@@ -157,7 +159,7 @@ const Icons: React.FC = () => {
                   </>
                   :
                   <OutlinedButton
-                    content="Go to Shop"
+                    content={t("common:go-to-shop")}
                     height={40}
                     width={120}
                     fontWeight="bold"
@@ -182,17 +184,17 @@ const Icons: React.FC = () => {
           } group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto`}>
           {user ? (
             <>
-              <span className="text-sm mb-4">Welcome back, {user.displayName}!</span>
+              <span className="text-sm mb-4">{t("common:welcome-back")}, {user.displayName}!</span>
               <div className="flex flex-row gap-2">
                 <OutlinedButton
-                  content="Profile"
+                  content={t("common:profile")}
                   height={40}
                   width={100}
                   fontWeight="bold"
                   onClick={() => handleNavigation('/profile')}
                 />
                 <OutlinedButton
-                  content="Sign Out"
+                  content={t("common:sign-out")}
                   height={40}
                   width={100}
                   fontWeight="bold"
@@ -202,17 +204,17 @@ const Icons: React.FC = () => {
             </>
           ) : (
             <>
-              <span className="text-sm mb-4">You're not signed in</span>
+              <span className="text-sm mb-4">{t("auth.you-are-not-signed-in")}</span>
               <div className="flex flex-row gap-2">
                 <OutlinedButton
-                  content="Sign In"
+                  content={t("common:sign-in")}
                   height={40}
                   width={100}
                   fontWeight="bold"
                   onClick={() => handleNavigation('/sign-in')}
                 />
                 <OutlinedButton
-                  content="Sign Up"
+                  content={t("common:sign-up")}
                   height={40}
                   width={100}
                   fontWeight="bold"

@@ -3,10 +3,12 @@ import { useUrlSort } from '../../hooks/useUrlSort';
 import { sortOptions } from '../../constants/sortOptions';
 import { getSortMenuProps, getSortSelectSx } from '../../styles/sortOptions';
 import { useTheme } from '../../contexts/themeContext';
+import { useTranslation } from 'react-i18next';
 
 export const SortOptions = () => {
   const [sortBy, setSortBy] = useUrlSort();
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <FormControl>
@@ -19,7 +21,7 @@ export const SortOptions = () => {
       >
         {sortOptions.map(option => (
           <MenuItem key={option.value} value={option.value} disabled={option.disabled || false}>
-            {option.label}
+            {t(option.labelKey)}
           </MenuItem>
         ))}
       </Select>

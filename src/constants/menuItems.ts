@@ -1,13 +1,13 @@
 export const menuItems = [
-  { label: 'Home', path: '/' },
-  { label: 'Shop', path: '/shop' },
-  { label: 'Blogs', path: '/blogs' },
+  { labelKey: "navigation.home", path: '/' },
+  { labelKey: "navigation.shop", path: '/shop' },
+  { labelKey: "navigation.blogs", path: '/blogs' },
   {
-    label: 'More',
+    labelKey: "navigation.more",
     children: [
-      { label: 'About Us', path: '/about-us' },
-      { label: 'Contact Us', path: '/contact' },
-      { label: 'FAQ', path: '/faq' },
+      { labelKey: "navigation.about-us", path: '/about-us' },
+      { labelKey: "navigation.contact-us", path: '/contact' },
+      { labelKey: "navigation.faq", path: '/faq' },
     ],
   },
 ];

@@ -10,6 +10,7 @@ import { getFirebaseAuthErrorMessage } from '../../utils/firebaseErrorMessages';
 import { authService } from '../../services/authService';
 import { userService } from '../../services/userService';
 import { FcGoogle } from 'react-icons/fc';
+import { useTranslation } from 'react-i18next';
 
 export const SignUpForm = () => {
   const [signUpError, setSignUpError] = useState<string | null>(null);
@@ -17,6 +18,7 @@ export const SignUpForm = () => {
     resolver: zodResolver(signUpSchema),
   });
   const navigate = useNavigate();
+  const { t } = useTranslation()
 
   const onSubmit = async (data: SignUpFormType) => {
     setSignUpError(null);
@@ -27,12 +29,12 @@ export const SignUpForm = () => {
         name: data.name,
         email: data.email,
       });
-      showSuccessMessage('Sign Up successful!');
+      showSuccessMessage(`${t("auth.sign-in-successful")}!`);
       navigate('/sign-in');
     } catch (err: any) {
-      const message = getFirebaseAuthErrorMessage ? getFirebaseAuthErrorMessage(err) : 'Something went wrong!';
-      setSignUpError(message);
-      showErrorMessage(message);
+      const messageKey = getFirebaseAuthErrorMessage(err);
+      setSignUpError(t(`errors.${messageKey}`));
+      showErrorMessage(t(`errors.${messageKey}`));
     }
   };
 
@@ -44,52 +46,52 @@ export const SignUpForm = () => {
         name: user.displayName || '',
         email: user.email || '',
       });
-      showSuccessMessage(`Welcome, ${response.user.displayName || response.user.email}!`);
+      showSuccessMessage(`${t("common:welcome")}, ${response.user.displayName || response.user.email}!`);
       navigate('/');
     } catch (err: any) {
-      const message = getFirebaseAuthErrorMessage ? getFirebaseAuthErrorMessage(err) : 'Something went wrong!';
-      setSignUpError(message);
-      showErrorMessage(message);
+      const messageKey = getFirebaseAuthErrorMessage(err);
+      setSignUpError(t(`errors.${messageKey}`));
+      showErrorMessage(t(`errors.${messageKey}`));
     }
   };
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
       <div>
-        <label className="block mb-1" htmlFor="name">Name</label>
+        <label className="block mb-1" htmlFor="name">{t("common:name")}</label>
         <input
           id="name"
           type="text"
           className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
-          placeholder="Enter your name"
+          placeholder={t("auth.enter-your-name")}
           {...register('name')}
           autoComplete="name"
         />
-        {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name.message}</p>}
+        {errors.name?.message && <p className="text-red-400 text-sm mt-1">{t(errors.name.message)}</p>}
       </div>
       <div>
-        <label className="block mb-1" htmlFor="email">Email</label>
+        <label className="block mb-1" htmlFor="email">{t("common:email")}</label>
         <input
           id="email"
           type="email"
           className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
-          placeholder="Enter your email"
+          placeholder={t("auth.enter-your-email")}
           {...register('email')}
           autoComplete="username"
         />
-        {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
+        {errors.email?.message && <p className="text-red-400 text-sm mt-1">{t(errors.email.message)}</p>}
       </div>
       <div>
-        <label className="block mb-1" htmlFor="password">Password</label>
+        <label className="block mb-1" htmlFor="password">{t("common:password")}</label>
         <input
           id="password"
           type="password"
           className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
-          placeholder="Enter your password"
+          placeholder={t("auth.enter-your-password")}
           {...register('password')}
           autoComplete="new-password"
         />
-        {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>}
+        {errors.password?.message && <p className="text-red-400 text-sm mt-1">{t(errors.password.message)}</p>}
       </div>
       {signUpError && <p className="text-red-400 text-sm mt-1">{signUpError}</p>}
       <button
@@ -97,18 +99,18 @@ export const SignUpForm = () => {
         className="w-full py-2 rounded-lg font-semibold border border-gray-600 hover:bg-gray-200 hover:dark:bg-gray-900 transition cursor-pointer disabled:opacity-60"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Signing Up...' : 'Sign Up'}
+        {isSubmitting ? t("auth.signing-up") : t("common:sign-up")}
       </button>
       <div className="flex items-center my-4">
         <div className="flex-grow h-px bg-gray-700" />
-        <span className="mx-2 text-gray-500">or</span>
+        <span className="mx-2 text-gray-500">{t("common:or")}</span>
         <div className="flex-grow h-px bg-gray-700" />
       </div>
       <button className="w-full flex items-center justify-center gap-2 border border-gray-600 py-2 rounded-lg hover:bg-gray-200 hover:dark:bg-gray-900 transition cursor-pointer"
         onClick={handleGoogleSignUp}
       >
         <FcGoogle />
-        Sign up with Google
+        {t("auth.sign-up-with-google")}
       </button>
     </form>
   );

@@ -4,8 +4,11 @@ import { FaLocationDot } from 'react-icons/fa6';
 import { TfiHeadphoneAlt } from 'react-icons/tfi';
 import { Link } from 'react-router-dom';
 import { themedBackground, themedText } from '../styles/themeClassNames';
+import { useTranslation } from 'react-i18next';
 
 export const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <div className={`${themedBackground} ${themedText}`}>
       <div className={`flex items-center justify-center w-full px-4`}>
@@ -19,19 +22,21 @@ export const Footer = () => {
           <div className="flex items-center lg:justify-center">
             <BsBox2 className="w-[62px] h-[62px]" />
             <span className="pl-3 font-bold text-sm">
-              {'FREE SHIPPING & RETURN POLICY'}
+              {t("footer.free-shipping-and-return-policy")}
             </span>
           </div>
 
           <div className="flex items-center lg:justify-center">
             <TfiHeadphoneAlt className="w-[62px] h-[62px]" />
-            <span className="pl-3 font-bold text-sm">{'90-DAY WARRANTY'}</span>
+            <span className="pl-3 font-bold text-sm">
+              {t("footer.90-day-warranty")}
+            </span>
           </div>
 
           <div className="flex items-center lg:justify-center">
             <FaCreditCard className="w-[62px] h-[62px]" />
             <span className="pl-3 font-bold text-sm">
-              {'NEW PRODUCT OFFERINGS '}
+              {t("footer.new-product-offerings")}
             </span>
           </div>
         </div>
@@ -68,40 +73,21 @@ export const Footer = () => {
           </div>
 
           <div className="mb-6">
-            <h5 className="text-lg font-semibold mb-3">
-              About us
-            </h5>
             <ul className="flex flex-col space-y-2">
+              <li>
+                <Link
+                  className="hover:text-orange-400 transition duration-300"
+                  to="/home"
+                >
+                  {t("navigation.home")}
+                </Link>
+              </li>
               <li>
                 <Link
                   className="hover:text-orange-400 transition duration-300"
                   to="/shop"
                 >
-                  Shop
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="mb-6">
-            <h5 className="text-lg font-semibold mb-3">
-              About us
-            </h5>
-            <ul className="flex flex-col space-y-2">
-              <li>
-                <Link
-                  className="hover:text-orange-400 transition duration-300"
-                  to="/about-us"
-                >
-                  About us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="hover:text-orange-400 transition duration-300"
-                  to="/contact"
-                >
-                  Contact
+                  {t("navigation.shop")}
                 </Link>
               </li>
               <li>
@@ -109,7 +95,28 @@ export const Footer = () => {
                   className="hover:text-orange-400 transition duration-300"
                   to="/blogs"
                 >
-                  Blogs
+                  {t("navigation.blogs")}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="mb-6">
+            <ul className="flex flex-col space-y-2">
+              <li>
+                <Link
+                  className="hover:text-orange-400 transition duration-300"
+                  to="/about-us"
+                >
+                  {t("navigation.about-us")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="hover:text-orange-400 transition duration-300"
+                  to="/contact-us"
+                >
+                  {t("navigation.contact-us")}
                 </Link>
               </li>
               <li>
@@ -117,7 +124,7 @@ export const Footer = () => {
                   className="hover:text-orange-400 transition duration-300"
                   to="/faq"
                 >
-                  FAQ
+                  {t("navigation.faq")}
                 </Link>
               </li>
             </ul>

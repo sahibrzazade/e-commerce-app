@@ -9,9 +9,11 @@ import { themedBorder, themedBackground } from "../../styles/themeClassNames";
 import { useTheme } from "../../contexts/themeContext";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { useTranslation } from "react-i18next";
 
 export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilters }: FilterOffcanvasProps) => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const [filters, setFilters] = useState<FilterOptions>(currentFilters);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -97,7 +99,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
         }`}>
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-center p-4 border-b border-gray-200">
-            <h2 className="text-xl font-bold">Filters</h2>
+            <h2 className="text-xl font-bold">{t("common:filters")}</h2>
             <button
               onClick={onClose}
               className="p-2 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer rounded-full transition-colors"
@@ -108,7 +110,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
 
           <div className="flex-1 overflow-y-auto p-4 space-y-6">
             <div>
-              <h3 className="text-lg font-semibold mb-3">Price Range</h3>
+              <h3 className="text-lg font-semibold mb-3">{t("filter.price-range")}</h3>
               <Box sx={{ px: 2 }}>
                 <Slider
                   value={filters.priceRange}
@@ -132,7 +134,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-3">Categories</h3>
+              <h3 className="text-lg font-semibold mb-3">{t("filter.categories")}</h3>
               <div className="space-y-2">
                 {categories.map((category) => (
                   <label key={category.id} className="flex items-center space-x-2 cursor-pointer">
@@ -149,7 +151,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-3">Brands</h3>
+              <h3 className="text-lg font-semibold mb-3">{t("filter.brands")}</h3>
               <div className="space-y-2">
                 {brands.map((brand) => (
                   <label key={brand.id} className="flex items-center space-x-2 cursor-pointer">
@@ -166,7 +168,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-3">Minimum Rating</h3>
+              <h3 className="text-lg font-semibold mb-3">{t("filter.minimum-rating")}</h3>
               <div className="flex items-center space-x-2">
                 <Rating
                   name="filter-rating"
@@ -177,7 +179,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
                   icon={<StarIcon sx={{ color: 'gold' }} />}
                   emptyIcon={<StarBorderIcon sx={{ color: 'gray' }} />}
                 />
-                <span className="text-gray-600 ml-2">({filters.rating}+ stars)</span>
+                <span className="text-gray-600 ml-2">({filters.rating}+ {t("filter.stars")})</span>
               </div>
             </div>
 
@@ -189,7 +191,7 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
                   onChange={(e) => handleStockChange(e.target.checked)}
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <span>In Stock Only</span>
+                <span>{t("filter.in-stock-only")}</span>
               </label>
             </div>
           </div>
@@ -199,13 +201,13 @@ export const FilterOffcanvas = ({ isOpen, onClose, onApplyFilters, currentFilter
               onClick={handleApplyFilters}
               className={`${themedBorder} ${themedBackground} w-full py-3 px-4 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer transition-colors font-medium`}
             >
-              Apply Filters
+              {t("filter.apply-filters")}
             </button>
             <button
               onClick={handleClearFilters}
               className="w-full bg-gray-200 text-gray-800 py-3 px-4 hover:bg-gray-300 cursor-pointer transition-colors font-medium"
             >
-              Clear All
+              {t("common:clear-all")}
             </button>
           </div>
         </div>

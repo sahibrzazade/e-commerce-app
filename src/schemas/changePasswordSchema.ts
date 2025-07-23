@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 export const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1, 'Current password is required'),
-  newPassword: z.string().min(6, 'New password must be at least 6 characters'),
-  confirmPassword: z.string().min(1, 'Please confirm your new password'),
+  currentPassword: z.string().min(1, 'errors.current-password-required'),
+  newPassword: z.string().min(6, 'errors.new-password-must-be-at-least-six-characters'),
+  confirmPassword: z.string().min(1, 'errors.please-confirm-your-new-password'),
 }).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords don't match",
+  message: "errors.passwords-dont-match",
   path: ["confirmPassword"],
 }).refine((data) => data.currentPassword !== data.newPassword, {
-  message: "New password must be different from current password",
+  message: "errors.new-password-must-be-different-from-current-password",
   path: ["newPassword"],
 });
 

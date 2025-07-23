@@ -6,6 +6,7 @@ import { productService } from '../services/productService';
 import { Product } from '../types/shop';
 import { WithChildren } from '../types';
 import { showErrorMessage, showSuccessMessage } from '../utils/toastUtils';
+import { useTranslation } from 'react-i18next';
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -19,6 +20,7 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }: WithChildren) => {
   const user = useAuthUser();
+  const { t } = useTranslation();
 
   const [cart, setCart] = useState<Record<string, CartItem>>({});
   const [products, setProducts] = useState<Record<string, Product | null>>({});
@@ -46,7 +48,7 @@ export const CartProvider = ({ children }: WithChildren) => {
       const currentQuantity = cart[productId]?.quantity || 0;
       const newQuantity = currentQuantity + quantity;
       await cartService.addToCart(user.uid, productId, newQuantity);
-      showSuccessMessage('Added to cart!');
+      showSuccessMessage(t("shop.added-to-cart"));
       await fetchCart();
     } finally {
       setAddLoading(false);
@@ -58,7 +60,7 @@ export const CartProvider = ({ children }: WithChildren) => {
     setRemoveLoading(true);
     try {
       await cartService.removeFromCart(user.uid, productId);
-      showErrorMessage('Product removed from cart!');
+      showErrorMessage(t("shop.product-removed-from-cart"));
       await fetchCart();
     } finally {
       setRemoveLoading(false);
@@ -70,7 +72,7 @@ export const CartProvider = ({ children }: WithChildren) => {
     setUpdateLoading(true);
     try {
       await cartService.updateCartItem(user.uid, productId, quantity);
-      showSuccessMessage('Cart updated');
+      showSuccessMessage(t("shop.cart-updated"));
       await fetchCart();
     } finally {
       setUpdateLoading(false);

@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { CartTableProps } from '../../types/cart';
+import { useTranslation } from 'react-i18next';
 
 export const CartTable: React.FC<CartTableProps> = ({
   dataSource,
@@ -22,17 +23,19 @@ export const CartTable: React.FC<CartTableProps> = ({
   onQuantityChange,
   onRemove,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <TableContainer sx={backgroundSx} className="mb-4">
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={textSx}>Image</TableCell>
-            <TableCell sx={textSx}>Product</TableCell>
-            <TableCell sx={textSx}>Price</TableCell>
-            <TableCell sx={textSx}>Quantity</TableCell>
-            <TableCell sx={textSx}>Subtotal</TableCell>
-            <TableCell sx={textSx}>Actions</TableCell>
+            <TableCell sx={textSx}>{t("common:image")}</TableCell>
+            <TableCell sx={textSx}>{t("common:product")}</TableCell>
+            <TableCell sx={textSx}>{t("common:price")}</TableCell>
+            <TableCell sx={textSx}>{t("common:quantity")}</TableCell>
+            <TableCell sx={textSx}>{t("common:subtotal")}</TableCell>
+            <TableCell sx={textSx}>{t("common:actions")}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
