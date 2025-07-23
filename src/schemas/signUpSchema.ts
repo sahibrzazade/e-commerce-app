@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const signUpSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  name: z.string().min(2, 'errors.name-must-be-at-least-two-characters'),
+  email: z.string().email('errors.invalid-email-address'),
+  password: z.string().min(6, 'auth.password-min-length'),
 });
 
 export type SignUpForm = z.infer<typeof signUpSchema>; 

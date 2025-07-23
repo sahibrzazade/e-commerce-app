@@ -8,7 +8,7 @@ export const OutlinedButton = ({ content, height, width, fontWeight, onClick, is
   return (
     <button
       onClick={onClick}
-      className={`${themedBorder} ${themedBackground} ${themedText} ${hoverStyle} flex items-center justify-center text-base border cursor-pointer transition duration-300 
+      className={`${themedBorder} ${themedBackground} ${themedText} ${hoverStyle} flex items-center justify-center px-2 text-base border cursor-pointer transition duration-300 
         ${fontWeight === 'bold' ? 'font-bold' : fontWeight === 'normal' ? 'font-normal' : 'font-thin'}`}
       style={{ height: height, width: width }}
       disabled={isDisabled}

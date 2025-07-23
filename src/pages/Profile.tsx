@@ -9,10 +9,12 @@ import { useAuthUser } from "../hooks/useAuthUser"
 import { OutlinedButton } from "../components/OutlinedButton"
 import { useNavigate } from "react-router-dom"
 import { ProfileOrders } from "../components/profile/ProfileOrders"
+import { useTranslation } from "react-i18next"
 
 export const Profile = () => {
     const user = useAuthUser();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     return (
         <AppLayout>
@@ -34,12 +36,12 @@ export const Profile = () => {
                 </div>
                 :
                 <div className="max-w-6xl mx-auto py-8 px-4">
-                    <h1 className="text-2xl font-bold text-center">Please sign in to view your profile</h1>
-                    <p className="text-center mt-4">You can manage your account, view your orders, and more once you are signed in.</p>
-                    <p className="text-center mt-2">Click the button below to sign in</p>
+                    <h1 className="text-2xl font-bold text-center">{t("auth.sign-in-to-view-profile")}</h1>
+                    <p className="text-center mt-4">{t("profile.manage-account-after-sign-in")}</p>
+                    <p className="text-center mt-2">{t("auth.click-button-to-sign-in")}</p>
                     <div className="flex justify-center mt-4">
                         <OutlinedButton
-                            content="Sign In"
+                            content={t("common:sign-in")}
                             height={60}
                             width={200}
                             fontWeight="bold"

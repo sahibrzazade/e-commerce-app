@@ -14,6 +14,7 @@ import { useAuthUser } from '../../hooks/useAuthUser';
 import { LanguageSelect } from '../LanguageSelect';
 import { Language } from '../../types/language';
 import { themedBackground } from "../../styles/themeClassNames";
+import { useTranslation } from "react-i18next";
 
 export const ProfileSettings = () => {
     const { theme, toggleTheme, loading: themeLoading } = useTheme();
@@ -21,6 +22,7 @@ export const ProfileSettings = () => {
     const user = useAuthUser();
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [changePasswordError, setChangePasswordError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     const isEmailPasswordUser = user?.providerData.some(provider => provider.providerId === 'password');
 
@@ -32,13 +34,13 @@ export const ProfileSettings = () => {
         setChangePasswordError(null);
         try {
             await authService.changePassword(data.currentPassword, data.newPassword);
-            showSuccessMessage('Password changed successfully!');
+            showSuccessMessage(t("password-changed-successfully"));
             reset();
             setShowChangePassword(false);
         } catch (err: any) {
-            const message = getFirebaseAuthErrorMessage(err);
-            setChangePasswordError(message);
-            showErrorMessage(message);
+            const messageKey = getFirebaseAuthErrorMessage(err);
+            setChangePasswordError(t(`errors.${messageKey}`));
+            showErrorMessage(t(`errors.${messageKey}`));
         }
     };
 
@@ -46,7 +48,7 @@ export const ProfileSettings = () => {
         <div className="rounded-lg p-6 gap-2">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
                 <SettingFilled className="text-2xl" />
-                <h2 className="text-2xl font-bold">Account Settings</h2>
+                <h2 className="text-2xl font-bold">{t("profile.account-settings")}</h2>
             </div>
             <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 rounded-lg">
@@ -55,8 +57,8 @@ export const ProfileSettings = () => {
                             <MoonFilled />
                         </div>
                         <div>
-                            <h3 className="font-medium">Dark Mode</h3>
-                            <p className="text-sm text-gray-600">Toggle between light and dark theme</p>
+                            <h3 className="font-medium">{t("common:dark-mode")}</h3>
+                            <p className="text-sm text-gray-600">{t("profile.toggle-theme")}</p>
                         </div>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer group">
@@ -83,8 +85,8 @@ export const ProfileSettings = () => {
                             <GlobalOutlined className="text-white" />
                         </div>
                         <div>
-                            <h3 className="font-medium">Language</h3>
-                            <p className="text-sm text-gray-600">Choose your preferred language</p>
+                            <h3 className="font-medium">{t("common:language")}</h3>
+                            <p className="text-sm text-gray-600">{t("profile.choose-your-preferred-language")}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -105,12 +107,12 @@ export const ProfileSettings = () => {
                                     <LockOutlined />
                                 </div>
                                 <div>
-                                    <h3 className="font-medium">Change Password</h3>
-                                    <p className="text-sm text-gray-600">Update your account password</p>
+                                    <h3 className="font-medium">{t("common:change-password")}</h3>
+                                    <p className="text-sm text-gray-600">{t("profile.update-account-password")}</p>
                                 </div>
                             </div>
                             <OutlinedButton
-                                content={showChangePassword ? 'Cancel' : 'Change'}
+                                content={showChangePassword ? t("common:cancel") : t("common:change")}
                                 height={40}
                                 width={80}
                                 fontWeight="normal"
@@ -122,46 +124,46 @@ export const ProfileSettings = () => {
                             <form onSubmit={handleSubmit(onSubmitChangePassword)} className="mt-4 space-y-4 p-4 rounded-lg">
                                 <div>
                                     <label className="block text-sm font-medium mb-1" htmlFor="currentPassword">
-                                        Current Password
+                                        {t("common:current-password")}
                                     </label>
                                     <TextInput
                                         id="currentPassword"
                                         type="password"
-                                        placeholder="Enter current password"
+                                        placeholder={t("profile.enter-current-password")}
                                         {...register('currentPassword')}
                                     />
-                                    {errors.currentPassword && (
-                                        <p className="text-red-500 text-sm mt-1">{errors.currentPassword.message}</p>
+                                    {errors.currentPassword?.message && (
+                                        <p className="text-red-500 text-sm mt-1">{t(errors.currentPassword.message)}</p>
                                     )}
                                 </div>
 
                                 <div>
                                     <label className="block text-sm font-medium mb-1" htmlFor="newPassword">
-                                        New Password
+                                        {t("common:new-password")}
                                     </label>
                                     <TextInput
                                         id="newPassword"
                                         type="password"
-                                        placeholder="Enter new password"
+                                        placeholder={t("profile.enter-new-password")}
                                         {...register('newPassword')}
                                     />
-                                    {errors.newPassword && (
-                                        <p className="text-red-500 text-sm mt-1">{errors.newPassword.message}</p>
+                                    {errors.newPassword?.message && (
+                                        <p className="text-red-500 text-sm mt-1">{t(errors.newPassword.message)}</p>
                                     )}
                                 </div>
 
                                 <div>
                                     <label className="block text-sm font-medium mb-1" htmlFor="confirmPassword">
-                                        Confirm New Password
+                                        {t("common:confirm-new-password")}
                                     </label>
                                     <TextInput
                                         id="confirmPassword"
                                         type="password"
-                                        placeholder="Confirm new password"
+                                        placeholder={t("common:confirm-new-password")}
                                         {...register('confirmPassword')}
                                     />
-                                    {errors.confirmPassword && (
-                                        <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
+                                    {errors.confirmPassword?.message && (
+                                        <p className="text-red-500 text-sm mt-1">{t(errors.confirmPassword.message)}</p>
                                     )}
                                 </div>
 
@@ -170,7 +172,7 @@ export const ProfileSettings = () => {
                                 )}
 
                                 <OutlinedButton
-                                    content={isSubmitting ? 'Changing Password...' : 'Change Password'}
+                                    content={isSubmitting ? t("profile.changing-password") : t("common:change-password")}
                                     height={40}
                                     width={300}
                                     fontWeight="normal"
@@ -190,8 +192,10 @@ export const ProfileSettings = () => {
                                     <LockOutlined />
                                 </div>
                                 <div>
-                                    <h3 className="font-medium">Google Account</h3>
-                                    <p className="text-sm text-gray-600">You signed in with Google. Password changes are managed through your Google account.</p>
+                                    <h3 className="font-medium">
+                                        {t("common:google-account")}
+                                    </h3>
+                                    <p className="text-sm text-gray-600">{t("profile.signed-in-with-google-info")}</p>
                                 </div>
                             </div>
                         </div>

@@ -3,9 +3,12 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 import { DiscountResult } from '../types';
 import { showErrorMessage, showSuccessMessage } from '../utils/toastUtils';
 import { useCart } from '../contexts/cartContext';
+import { useTranslation } from 'react-i18next';
 
 export function useDiscount(): DiscountResult {
+  const { t } = useTranslation();
   const { total } = useCart();
+
   const [discount, setDiscount] = useState<number>(0);
   const [discountedTotal, setDiscountedTotal] = useState<number>(total);
   const [loading, setLoading] = useState<boolean>(false);
@@ -19,7 +22,7 @@ export function useDiscount(): DiscountResult {
       const q = query(couponsRef, where('code', '==', code));
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty) {
-        showErrorMessage('Invalid coupon code');
+        showErrorMessage(t("shop.invalid-coupon-code"));
         setLoading(false);
         return;
       }
@@ -27,15 +30,15 @@ export function useDiscount(): DiscountResult {
       let discountValue = 0;
       if (coupon.type === 'fixed') {
         discountValue = coupon.discount;
-        showSuccessMessage(`Coupon applied: $${discountValue} off`);
+        showSuccessMessage(`${t("shop.coupon-applied")}: $${discountValue} ${t("shop.off")}`);
       } else if (coupon.type === 'percent') {
         discountValue = (total * coupon.discount) / 100;
-        showSuccessMessage(`Coupon applied: ${coupon.discount}% off`);
+        showSuccessMessage(`${t("shop.coupon-applied")}: ${coupon.discount}% ${t("shop.off")}`);
       }
       setDiscount(discountValue);
       setDiscountedTotal(Math.max(0, total - discountValue));
     } catch (error) {
-      showErrorMessage('Failed to apply coupon');
+      showErrorMessage(t("failed-to-apply-coupon"));
     } finally {
       setLoading(false);
     }
@@ -44,7 +47,7 @@ export function useDiscount(): DiscountResult {
   const resetDiscount = () => {
     setDiscount(0);
     setDiscountedTotal(total);
-    showErrorMessage('Coupon removed');
+    showErrorMessage(t("shop.coupon-removed"));
   };
 
   useEffect(() => {

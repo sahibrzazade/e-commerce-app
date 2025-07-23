@@ -10,9 +10,11 @@ import Button from "@mui/material/Button";
 import { showSuccessMessage, showErrorMessage } from "../../utils/toastUtils";
 import { updateProfile } from "firebase/auth";
 import { auth } from "../../configs/firebase";
+import { useTranslation } from "react-i18next";
 
 export const ProfileInfo = () => {
     const authUser = useAuthUser();
+    const { t } = useTranslation();
 
     const [user, setUser] = useState<User | null>(null);
     const [userLoading, setUserLoading] = useState(true);
@@ -48,9 +50,9 @@ export const ProfileInfo = () => {
             setUser((prev) => prev ? { ...prev, ...data } : prev);
             setEditMode(false);
             reset(data);
-            showSuccessMessage("Profile updated successfully!");
+            showSuccessMessage(t("profile.profile-updated-successfully"));
         } catch (e) {
-            showErrorMessage("Failed to update profile. Please try again.");
+            showErrorMessage(t("profile.update-profile-failed"));
         }
     };
 
@@ -58,7 +60,7 @@ export const ProfileInfo = () => {
         <div className="rounded-lg p-6 gap-2">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
                 <UserOutlined className="text-2xl" />
-                <h2 className="text-2xl font-bold">Profile</h2>
+                <h2 className="text-2xl font-bold">{t("common:profile")}</h2>
             </div>
             {userLoading ? (
                 <div className="flex justify-center items-center">
@@ -68,21 +70,21 @@ export const ProfileInfo = () => {
                 editMode ? (
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                         <div>
-                            <label className="font-bold">Name:</label>
+                            <label className="font-bold">{t("common:name")}:</label>
                             <TextInput
-                                {...register("name", { required: "Name is required" })}
+                                {...register("name", { required: t("profile.name-is-required") })}
                                 name="name"
                                 disabled={isSubmitting}
                             />
                             {errors.name && <span className="text-red-400 ml-2">{errors.name.message}</span>}
                         </div>
                         <div>
-                            <label className="font-bold">Email:</label>
+                            <label className="font-bold">{t("common:email")}:</label>
                             <span className="ml-2">{user.email}</span>
                         </div>
                         <div className="flex gap-2 mt-2">
                             <OutlinedButton
-                                content="Save"
+                                content={t("common:save")}
                                 height={36}
                                 width={80}
                                 fontWeight="bold"
@@ -100,7 +102,7 @@ export const ProfileInfo = () => {
                                     reset({ name: user.name });
                                 }}
                             >
-                                Cancel
+                                {t("common:cancel")}
                             </Button>
                         </div>
                     </form>
@@ -108,13 +110,12 @@ export const ProfileInfo = () => {
                     <>
                         <div className="flex flex-row items-center gap-2">
                             <div>
-                                <span className="font-bold">Name:</span> <span>{user.name}</span>
+                                <span className="font-bold">{t("common:name")}:</span> <span>{user.name}</span>
                             </div>
                             {!userLoading && user && !editMode && (
                                 <OutlinedButton
-                                    content="Edit"
+                                    content={t("common:edit")}
                                     height={36}
-                                    width={80}
                                     fontWeight="bold"
                                     onClick={() => setEditMode(true)}
                                     type="button"
@@ -123,13 +124,13 @@ export const ProfileInfo = () => {
                         </div>
                         <div className="flex flex-row items-center gap-2">
                             <div>
-                                <span className="font-bold">Email:</span> <span>{user.email}</span>
+                                <span className="font-bold">{t("common:email")}:</span> <span>{user.email}</span>
                             </div>
                         </div>
                     </>
                 )
             ) : (
-                <span className="text-red-400">User info not found.</span>
+                <span className="text-red-400">{t("profile.user-info-not-found")}</span>
             )}
         </div>
     )

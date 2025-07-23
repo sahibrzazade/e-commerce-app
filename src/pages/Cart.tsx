@@ -17,6 +17,7 @@ import { useTheme } from '../contexts/themeContext';
 import { themedBorder } from '../styles/themeClassNames';
 import { getTextSx, getBackgroundSx } from '../utils/themeSx';
 import { CartTable } from '../components/shop/CartTable';
+import { useTranslation } from 'react-i18next';
 
 export const Cart = () => {
   const { removeFromCart, removeLoading, clearCart, clearLoading, updateCartItem, updateLoading, count, total, cartProducts } = useCart();
@@ -24,6 +25,7 @@ export const Cart = () => {
   const user = useAuthUser();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
@@ -38,7 +40,7 @@ export const Cart = () => {
 
   const handleClear = async () => {
     await clearCart();
-    showErrorMessage('Cart cleared');
+    showErrorMessage(t("common:cart-cleared"));
   };
 
   const handleQuantityChange = async (productId: string, newQuantity: number) => {
@@ -73,13 +75,13 @@ export const Cart = () => {
         discountedTotal: discount ? discountedTotal : total
       });
 
-      showSuccessMessage('Order created successfully!');
+      showSuccessMessage(t("shop.order-created-successfully"));
 
       await clearCart();
 
       navigate(`/orders/${orderId}`);
     } catch (error) {
-      showErrorMessage('Failed to create order. Please try again.');
+      showErrorMessage(t("shop.order-creation-failed"));
     } finally {
       setCheckoutLoading(false);
     }
@@ -91,10 +93,10 @@ export const Cart = () => {
         <div className="max-w-4xl mx-auto p-4">
           {count === 0 ? (
             <div className="w-full flex flex-col items-center justify-center my-20">
-              <span className="text-4xl font-bold my-8 text-center">YOUR CART IS CURRENTLY EMPTY</span>
+              <span className="text-4xl uppercase font-bold my-8 text-center">{t("shop.your-cart-is-currently-empty")}</span>
               <ShoppingCartOutlined style={{ fontSize: 160, marginTop: 32, marginBottom: 32 }} />
               <OutlinedButton
-                content="RETURN TO SHOP"
+                content={t("common:return-to-shop")}
                 height={60}
                 width={200}
                 fontWeight="bold"
@@ -121,20 +123,20 @@ export const Cart = () => {
                     disabled={discount ? true : false}
                   />
                   {!discount ?
-                    <OutlinedButton content={loading ? 'APPLYING...' : 'APPLY COUPON'} height={50} width={180} fontWeight='bold' isDisabled={loading} type="submit" />
+                    <OutlinedButton content={loading ? t("common:applying") : t("common:apply-coupon")} height={50} width={180} fontWeight='bold' isDisabled={loading} type="submit" />
                     : <Button variant="outlined" color="error" className='h-[50px]' onClick={handleRemoveCoupon}>
-                      Remove Coupon
+                      {t("shop.remove-coupon")}
                     </Button>}
                 </form>
                 <div className='flex flex-col items-end gap-y-4'>
                   <Button variant="outlined" color="error" className='h-[50px]' onClick={handleClear} disabled={clearLoading}>
-                    Clear Cart
+                    {t("common:clear-cart")}
                   </Button>
-                  <span>Subtotal: ${total}</span>
-                  <span className='text-amber-400'>Discount: ${discount}</span>
-                  <span className='font-bold'>Total: ${discount ? discountedTotal : total}</span>
+                  <span>{t("common:subtotal")}: ${total}</span>
+                  <span className='text-amber-400'>{t("common:discount")}: ${discount}</span>
+                  <span className='font-bold'>{t("common:total")}: ${discount ? discountedTotal : total}</span>
                   <OutlinedButton
-                    content={checkoutLoading ? "CREATING ORDER..." : "GO TO CHECKOUT"}
+                    content={checkoutLoading ? t("shop.creating-order") : t("shop.go-to-checkout")}
                     height={60}
                     width={200}
                     fontWeight="bold"
@@ -148,10 +150,10 @@ export const Cart = () => {
         </div>
       ) : (
         <div className="w-full flex flex-col items-center justify-center my-20">
-          <span className="text-4xl font-bold my-8 text-center">PLEASE SIGN IN TO VIEW YOUR CART</span>
+          <span className="text-4xl font-bold my-8 text-center">{t("shop.please-sign-in-to-view-cart")}</span>
           <ShoppingCartOutlined style={{ fontSize: 160, marginTop: 32, marginBottom: 32 }} />
           <OutlinedButton
-            content="SIGN IN"
+            content={t("common:sign-in")}
             height={60}
             width={200}
             fontWeight="bold"

@@ -11,12 +11,14 @@ import { useMemo } from 'react';
 import { useUrlSearch } from '../hooks/useUrlSearch';
 import { useUrlSort } from '../hooks/useUrlSort';
 import { themedBorder } from "../styles/themeClassNames";
+import { useTranslation } from "react-i18next";
 
 export const Shop = () => {
     const { filters: activeFilters, setFilters: setActiveFilters, resetFilters } = useUrlFilters();
     const { products, loading } = useAllProductsWithWishlistStatus(activeFilters);
     const [search, setSearch] = useUrlSearch();
     const [sortBy] = useUrlSort();
+    const { t } = useTranslation();
 
     const filteredProducts = useMemo(() => {
         let result = products;
@@ -95,7 +97,7 @@ export const Shop = () => {
             ) :
                 <>
                     <div className="w-full h-[500px] bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: "url('https://dunker.qodeinteractive.com/wp-content/uploads/2023/01/inner-img-6.jpg')" }}>
-                        <h1 className="text-5xl text-white font-bold tracking-wide uppercase">Shop</h1>
+                        <h1 className="text-5xl text-white font-bold tracking-wide uppercase">{t("common:shop")}</h1>
                     </div>
                     <div className="flex flex-col gap-y-4 md:gap-y-0 items-center md:flex-row justify-around my-8">
                         <ProductFilter onFiltersChange={handleFiltersChange} activeFilters={activeFilters} />

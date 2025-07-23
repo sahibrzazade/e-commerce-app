@@ -4,10 +4,13 @@ import AppLayout from "../layouts/AppLayout";
 import { blogService } from "../services/blogService";
 import { BlogPost } from "../types/blogs";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const BlogDetails = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { t } = useTranslation();
+
     const [blog, setBlog] = useState<BlogPost | null>(null);
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
@@ -36,7 +39,7 @@ const BlogDetails = () => {
             published.sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime());
             setLatestBlogs(published.slice(0, 3));
         };
-        
+
         fetchBlog();
         fetchLatestBlogs();
     }, [id]);
@@ -54,8 +57,8 @@ const BlogDetails = () => {
         return (
             <AppLayout>
                 <div className="w-full flex flex-col items-center justify-center my-20">
-                    <span className="text-4xl font-bold my-8 text-center">BLOG POST NOT FOUND</span>
-                    <button className="mt-4 text-blue-500 hover:underline" onClick={() => navigate(-1)}>Go Back</button>
+                    <span className="text-4xl font-bold my-8 text-center">{t("blogs.post-not-found")}</span>
+                    <button className="mt-4 text-blue-500 hover:underline" onClick={() => navigate(-1)}>{t("common:go-back")}</button>
                 </div>
             </AppLayout>
         );
@@ -68,7 +71,10 @@ const BlogDetails = () => {
             <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden flex flex-col my-8">
                 <div className="p-6 flex flex-col flex-1">
                     <p className="text-sm text-gray-500 mb-2">
-                        By {blog.author} on {dayjs(blog.createdAt.toDate()).format('DD/MM/YYYY HH:mm:ss')}
+                        {t('blogs.published-by', {
+                            author: blog.author,
+                            date: dayjs(blog.createdAt.toDate()).format('DD/MM/YYYY HH:mm:ss')
+                        })}
                     </p>
                     {blog.tags && blog.tags.length > 0 && (
                         <div className="mb-2 flex flex-wrap gap-2">
@@ -78,12 +84,12 @@ const BlogDetails = () => {
                         </div>
                     )}
                     <p className="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line">{blog.content}</p>
-                    <span className="text-xs text-gray-400 mt-auto">Last updated: {dayjs(blog.updatedAt.toDate()).format('DD/MM/YYYY HH:mm:ss')}</span>
+                    <span className="text-xs text-gray-400 mt-auto">{t("common:last-updated")}: {dayjs(blog.updatedAt.toDate()).format('DD/MM/YYYY HH:mm:ss')}</span>
                 </div>
             </div>
             {latestBlogs.length > 0 && (
                 <div className="max-w-2xl mx-auto my-8">
-                    <h2 className="text-2xl font-bold mb-4">Latest Blogs</h2>
+                    <h2 className="text-2xl font-bold mb-4">{t("blogs.latest-blogs")}</h2>
                     <div className="flex flex-col gap-4">
                         {latestBlogs.map(blog => (
                             <Link key={blog.id} to={`/blogs/${blog.id}`} className="block p-4 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition">

@@ -1,15 +1,17 @@
 import { Link } from 'react-router-dom';
 import { menuItems } from '../../constants/menuItems';
 import { themedBackground, themedBorder } from '../../styles/themeClassNames';
+import { useTranslation } from 'react-i18next';
 
 const Navigation: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <nav className="hidden md:flex space-x-6 items-center">
       {menuItems.map((item) =>
         item.children ? (
-          <div key={item.label} className="relative group/menu">
+          <div key={item.labelKey} className="relative group/menu">
             <span className="relative pb-1 uppercase font-bold text-sm cursor-pointer flex items-center">
-              {item.label}
+              {t(item.labelKey)}
               <svg
                 className="ml-1 w-3 h-3"
                 fill="none"
@@ -28,7 +30,7 @@ const Navigation: React.FC = () => {
                   to={child.path}
                   className="relative pb-1 uppercase font-bold text-sm group/submenu"
                 >
-                  {child.label}
+                  {t(child.labelKey)}
                   <span className="bg-black dark:bg-white absolute left-0 -bottom-0 h-[3px] w-0 transition-all duration-300 group-hover/submenu:w-full"></span>
                 </Link>
               ))}
@@ -40,7 +42,7 @@ const Navigation: React.FC = () => {
             to={item.path}
             className="relative pb-1 uppercase font-bold text-sm group"
           >
-            {item.label}
+            {t(item.labelKey)}
             <span className="absolute left-0 -bottom-0.5 h-[3px] w-0 bg-black dark:bg-white transition-all duration-300 group-hover:w-full"></span>
           </Link>
         )

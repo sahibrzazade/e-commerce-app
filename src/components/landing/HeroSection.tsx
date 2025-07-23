@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { HeroSectionInterface } from '../../types';
 import { OutlinedButton } from '../OutlinedButton';
 import { themedBackground, themedText } from '../../styles/themeClassNames';
+import { useTranslation } from 'react-i18next';
 
 export const HeroSection = ({
   image,
@@ -10,8 +11,8 @@ export const HeroSection = ({
   titleText,
   isReversed,
 }: HeroSectionInterface) => {
-
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div
@@ -30,7 +31,7 @@ export const HeroSection = ({
           <span className="text-gray-500 dark:text-white-50 text-base mb-2 block font-bold">
             {subtitleText}
           </span>
-          <OutlinedButton content={'Shop Now!'} height={60} width={200} fontWeight='bold' onClick={() => navigate('/shop')} />
+          <OutlinedButton content={t("shop.shop-now")} height={60} width={200} fontWeight='bold' onClick={() => navigate('/shop')} />
         </div>
       </div>
     </div>

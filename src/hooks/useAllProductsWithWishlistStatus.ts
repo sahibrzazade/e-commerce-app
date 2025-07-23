@@ -4,6 +4,7 @@ import { wishlistService } from '../services/wishlistService';
 import { useAuthUser } from './useAuthUser';
 import { Product } from '../types/shop';
 import { FilterOptions } from '../types/filter';
+import { showErrorMessage } from '../utils/toastUtils';
 
 interface ProductWithWishlist extends Product {
   isWishlisted: boolean;
@@ -15,11 +16,9 @@ export function useAllProductsWithWishlistStatus(filters?: FilterOptions) {
   const [products, setProducts] = useState<ProductWithWishlist[]>([]);
   const [loading, setLoading] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchData = async (showLoading: boolean = true) => {
     if (showLoading) setLoading(true);
-    setError(null);
     try {
       let backendFilters: FilterOptions = {
         priceRange: [0, 1000],
@@ -33,8 +32,8 @@ export function useAllProductsWithWishlistStatus(filters?: FilterOptions) {
           priceRange: filters.priceRange,
           categories: filters.categories,
           brands: filters.brands,
-          rating: 0, 
-          inStock: false, 
+          rating: 0,
+          inStock: false,
         };
       }
       const products = await productService.getFilteredProducts(backendFilters);
@@ -57,7 +56,7 @@ export function useAllProductsWithWishlistStatus(filters?: FilterOptions) {
       }));
       setProducts(productsWithWishlist);
     } catch (err) {
-      setError('Failed to fetch products or wishlists.');
+      showErrorMessage();
     } finally {
       if (showLoading) setLoading(false);
     }
@@ -72,7 +71,7 @@ export function useAllProductsWithWishlistStatus(filters?: FilterOptions) {
     load();
   }, [user, filters ? JSON.stringify(filters) : '']);
 
-  return { products, loading, initialLoading, error, fetchData };
+  return { products, loading, initialLoading, fetchData };
 }
 
 export function useProductWithWishlistById(productId: string | undefined) {
@@ -80,7 +79,6 @@ export function useProductWithWishlistById(productId: string | undefined) {
 
   const [product, setProduct] = useState<ProductWithWishlist | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
     if (!productId) {
@@ -89,7 +87,6 @@ export function useProductWithWishlistById(productId: string | undefined) {
       return;
     }
     setLoading(true);
-    setError(null);
     try {
       const prod = await productService.getProductById(productId);
       if (!prod) {
@@ -104,7 +101,7 @@ export function useProductWithWishlistById(productId: string | undefined) {
       }
       setProduct({ ...prod, isWishlisted });
     } catch (err) {
-      setError('Failed to fetch product or wishlists.');
+      showErrorMessage();
     } finally {
       setLoading(false);
     }
@@ -114,5 +111,5 @@ export function useProductWithWishlistById(productId: string | undefined) {
     fetchData();
   }, [user, productId]);
 
-  return { product, loading, error, fetchData };
+  return { product, loading, fetchData };
 } 

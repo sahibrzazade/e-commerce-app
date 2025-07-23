@@ -4,6 +4,7 @@ import { db } from "../configs/firebase";
 import { useAuthUser } from "../hooks/useAuthUser";
 import i18n from "../i18n/i18next";
 import { showErrorMessage } from "../utils/toastUtils";
+import { useTranslation } from "react-i18next";
 
 interface LanguageContextType {
   language: "az" | "en" | "tr";
@@ -15,6 +16,8 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const user = useAuthUser();
+  const {t} = useTranslation();
+
   const [language, setLanguage] = useState<"az" | "en" | "tr">("en");
   const [loading, setLoading] = useState(true);
 
@@ -55,7 +58,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       try {
         await setDoc(doc(db, "users", user?.uid), { language: lang }, { merge: true });
       } catch (e) {
-        showErrorMessage("Failed to save language");
+        showErrorMessage(t("profile.save-language-failed"));
       } finally {
         setLoading(false);
       }

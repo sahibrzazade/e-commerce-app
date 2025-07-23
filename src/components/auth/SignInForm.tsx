@@ -7,9 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { showErrorMessage, showSuccessMessage } from '../../utils/toastUtils';
 import { getFirebaseAuthErrorMessage } from '../../utils/firebaseErrorMessages';
 import { FcGoogle } from 'react-icons/fc';
+import { useTranslation } from 'react-i18next';
+
 
 export const SignInForm = () => {
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const [signInError, setSignInError] = useState<string | null>(null);
 
@@ -22,12 +26,12 @@ export const SignInForm = () => {
     setSignInError(null);
     try {
       const response = await authService.signIn(data.email, data.password);
-      showSuccessMessage(`Welcome back, ${response.user.displayName}!`);
+      showSuccessMessage(`${t("common:welcome-back")}, ${response.user.displayName}!`);
       navigate('/');
     } catch (err: any) {
-      const message = getFirebaseAuthErrorMessage(err);
-      setSignInError(message);
-      showErrorMessage(message);
+      const messageKey = getFirebaseAuthErrorMessage(err);
+      setSignInError(t(`errors.${messageKey}`));
+      showErrorMessage(t(`errors.${messageKey}`));
     }
   };
 
@@ -35,40 +39,40 @@ export const SignInForm = () => {
     setSignInError(null);
     try {
       const response = await authService.signInWithGoogle();
-      showSuccessMessage(`Welcome, ${response.user.displayName}!`);
+      showSuccessMessage(`${t("common:welcome-back")}, ${response.user.displayName}!`);
       navigate('/');
     } catch (err: any) {
-      const message = getFirebaseAuthErrorMessage(err);
-      setSignInError(message);
-      showErrorMessage(message);
+      const messageKey = getFirebaseAuthErrorMessage(err);
+      setSignInError(t(`errors.${messageKey}`));
+      showErrorMessage(t(`errors.${messageKey}`));
     }
   };
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
       <div>
-        <label className="block mb-1" htmlFor="email">Email</label>
+        <label className="block mb-1" htmlFor="email">{t("common:email")}</label>
         <input
           id="email"
           type="email"
           className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
-          placeholder="Enter your email"
+          placeholder={t("auth.enter-your-email")}
           {...register('email')}
           autoComplete="username"
         />
-        {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
+        {errors.email?.message && <p className="text-red-400 text-sm mt-1">{t(errors.email.message)}</p>}
       </div>
       <div>
-        <label className="block mb-1" htmlFor="password">Password</label>
+        <label className="block mb-1" htmlFor="password">{t("common:password")}</label>
         <input
           id="password"
           type="password"
           className="w-full px-4 py-2 border rounded-lg focus:outline-none border-gray-600 placeholder-gray-500"
-          placeholder="Enter your password"
+          placeholder={t("auth.enter-your-password")}
           {...register('password')}
           autoComplete="current-password"
         />
-        {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>}
+        {errors.password?.message && <p className="text-red-400 text-sm mt-1">{t(errors.password.message)}</p>}
       </div>
       {signInError && <p className="text-red-400 text-sm mt-1">{signInError}</p>}
       <button
@@ -76,11 +80,11 @@ export const SignInForm = () => {
         className="w-full py-2 rounded-lg font-semibold border border-gray-600 hover:bg-gray-200 hover:dark:bg-gray-900 transition cursor-pointer disabled:opacity-60"
         disabled={isSubmitting}
       >
-        {isSubmitting ? 'Signing In...' : 'Sign In'}
+        {isSubmitting ? t("auth.signing-in") : t("common:sign-in")}
       </button>
       <div className="flex items-center my-4">
         <div className="flex-grow h-px bg-gray-700" />
-        <span className="mx-2 text-gray-500">or</span>
+        <span className="mx-2 text-gray-500">{t("common:or")}</span>
         <div className="flex-grow h-px bg-gray-700" />
       </div>
       <button
@@ -89,7 +93,7 @@ export const SignInForm = () => {
         onClick={handleGoogleSignIn}
       >
         <FcGoogle />
-        Sign in with Google
+        {t("auth.sign-in-with-google")}
       </button>
     </form>
   );

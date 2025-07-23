@@ -9,10 +9,14 @@ i18n
   .use(LanguageDetector)
   .init({
     fallbackLng: "en",
-
+    ns: ["translation", "common"], 
+    defaultNS: "translation",       
     interpolation: {
       escapeValue: false,
     },
+    backend: {
+      loadPath: "/locales/{{lng}}/{{ns}}.json"
+    }
   });
 
 export default i18n;

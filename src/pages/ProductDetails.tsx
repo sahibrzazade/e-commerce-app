@@ -17,6 +17,7 @@ import { ReviewCard } from "../components/shop/ReviewCard";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { themedBackground, themedBorder } from "../styles/themeClassNames";
+import { useTranslation } from "react-i18next";
 
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -25,6 +26,7 @@ export const ProductDetails = () => {
     const { refresh: refreshWishlist } = useWishlist();
     const user = useAuthUser();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [cartLoading, setCartLoading] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(product?.isWishlisted);
@@ -47,7 +49,7 @@ export const ProductDetails = () => {
                 await addToCart(product.id, 1);
             }
         } catch (error) {
-            showErrorMessage('Failed to add to cart.');
+            showErrorMessage(t("shop.add-to-cart-failed"));
         } finally {
             setCartLoading(false);
         }
@@ -55,15 +57,15 @@ export const ProductDetails = () => {
 
     const handleReviewSubmit = async (data: { text: string }) => {
         if (!user) {
-            showErrorMessage('You must be signed in to leave a review.');
+            showErrorMessage(t("shop.must-be-signed-in-to-review"));
             return;
         }
         if (!data.text.trim()) {
-            showErrorMessage('Review cannot be empty.');
+            showErrorMessage(t("shop.review-cannot-be-empty"));
             return;
         }
         if (reviewStars < 1 || reviewStars > 5) {
-            showErrorMessage('Please select a star rating between 1 and 5.');
+            showErrorMessage(t("shop.select-star-rating"));
             return;
         }
         setReviewLoading(true);
@@ -77,12 +79,12 @@ export const ProductDetails = () => {
             });
             reset();
             setReviewStars(5);
-            showSuccessMessage('Review submitted!');
+            showSuccessMessage(t("shop.review-submitted"));
             const fetched = await getReviewsByProductId(id!);
             setReviews(fetched);
             await refreshProduct();
         } catch (e) {
-            showErrorMessage('Failed to submit review.');
+            showErrorMessage(t("shop.failed-to-submit-review"));
         } finally {
             setReviewLoading(false);
         }
@@ -95,15 +97,15 @@ export const ProductDetails = () => {
             if (isWishlisted) {
                 await wishlistService.removeFromWishlist(user.uid, product.id);
                 setIsWishlisted(false);
-                showErrorMessage('Removed from wishlist!');
+                showErrorMessage(t("shop.removed-from-wishlist"));
             } else {
                 await wishlistService.addToWishlist(user.uid, product.id);
                 setIsWishlisted(true);
-                showSuccessMessage('Added to wishlist!');
+                showSuccessMessage(t("shop.added-to-wishlist"));
             }
             await refreshWishlist();
         } catch (error) {
-            showErrorMessage('Failed to update wishlist.');
+            showErrorMessage(t("shop.update-wishlist-failed"));
         } finally {
             setButtonLoading(false);
         }
@@ -121,7 +123,7 @@ export const ProductDetails = () => {
                 const fetched = await getReviewsByProductId(id);
                 setReviews(fetched);
             } catch (e) {
-                showErrorMessage('Failed to fetch reviews.');
+                showErrorMessage(t("shop.failed-to-fetch-reviews"));
             } finally {
                 setFetchingReviews(false);
             }
@@ -142,7 +144,7 @@ export const ProductDetails = () => {
                             <div className="text-2xl py-4">
                                 <span>{product.brand}</span>
                                 <span> | </span>
-                                <span className={`font-bold ${product.isAvailable ? "text-green-600" : "text-red-600"}`}>{product.isAvailable ? "In Stock" : "Out of Stock"}</span>
+                                <span className={`font-bold ${product.isAvailable ? "text-green-600" : "text-red-600"}`}>{product.isAvailable ? t("common:in-stock") : t("common:out-of-stock")}</span>
                                 <span> | </span>
                                 <div className="inline-block">
                                     <span>{product.stars}</span>
@@ -162,28 +164,28 @@ export const ProductDetails = () => {
                             <div className="px-4 py-4">
                                 <ul style={{ listStyleType: "square" }}>
                                     <li>
-                                        <span className="font-bold">How to Care: </span>
+                                        <span className="font-bold">{t("common:how-to-care")}: </span>
                                         {product.careInstructions}
                                     </li>
                                     <li>
-                                        <span className="font-bold">Material: </span>
+                                        <span className="font-bold">{t("common:material")}: </span>
                                         {product.material}
                                     </li>
                                 </ul>
                             </div>
                             <div className="py-4">
-                                <span className="font-bold">Category: </span>
+                                <span className="font-bold">{t("common:category")}: </span>
                                 <span>{product.category}</span>
                             </div>
                             {!product.isAvailable && (
-                                <span className="text-red-600 font-bold uppercase">This product is currently unavailable.</span>)
+                                <span className="text-red-600 font-bold uppercase">{t("shop.product-not-available")}</span>)
                             }
                             <div className="py-4 flex flex-row gap-2">
 
                                 {product.isAvailable ?
-                                    <OutlinedButton content={<span>ADD TO CART <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" onClick={handleAddToCart} isDisabled={cartLoading || addLoading} />
+                                    <OutlinedButton content={<span>{t("common:add-to-cart")} <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" onClick={handleAddToCart} isDisabled={cartLoading || addLoading} />
                                     :
-                                    <OutlinedButton content={<span>RETURN TO THE SHOP</span>} height={60} width={200} fontWeight="bold" onClick={() => navigate('/shop')} />
+                                    <OutlinedButton content={<span>{t("common:return-to-shop")}</span>} height={60} width={200} fontWeight="bold" onClick={() => navigate('/shop')} />
                                 }
                                 <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled className="text-2xl" /> : <HeartOutlined className="text-2xl" />} height={60} width={60} fontWeight="normal" isDisabled={buttonLoading} />
                             </div>
@@ -191,13 +193,13 @@ export const ProductDetails = () => {
                     </div>
                     <div className="h-px bg-gray-700"></div>
                     <div className="flex flex-col mx-8 my-4">
-                        <h1 className="self-start text-2xl inline-block bg-gray-300 text-black font-bold px-4 py-2 mb-2">Description</h1>
+                        <h1 className="self-start text-2xl inline-block bg-gray-300 text-black font-bold px-4 py-2 mb-2">{t("common:description")}</h1>
                         <div className="flex flex-row text-xl my-2">
-                            <span className="font-bold mr-1">Material:</span>
+                            <span className="font-bold mr-1">{t("common:material")}:</span>
                             <span>{product.material}</span>
                         </div>
                         <div className="flex flex-row text-lg my-2">
-                            <span className="font-bold mr-1">Care Instructions:</span>
+                            <span className="font-bold mr-1">{t("common:care-instructions")}:</span>
                             <span>{product.careInstructions}</span>
                         </div>
                         <div className="flex flex-row text-lg my-2">
@@ -206,11 +208,11 @@ export const ProductDetails = () => {
                     </div>
                     <div className="h-px bg-gray-700"></div>
                     <div className="flex flex-col mx-8 my-4">
-                        <h1 className="self-start text-2xl inline-block bg-gray-300 text-black font-bold px-4 py-2 mb-2">Reviews</h1>
+                        <h1 className="self-start text-2xl inline-block bg-gray-300 text-black font-bold px-4 py-2 mb-2">{t("common:reviews")}</h1>
                         {fetchingReviews ? (
-                            <span className="text-lg">Loading reviews...</span>
+                            <span className="text-lg">{t("shop.loading-reviews")}</span>
                         ) : reviews.length === 0 ? (
-                            <span className="text-lg">No reviews yet.</span>
+                            <span className="text-lg">{t("shop.no-reviews-yet")}</span>
                         ) : (
                             <div className="flex flex-col gap-4 mb-6">
                                 {reviews.map((review) => (
@@ -224,12 +226,12 @@ export const ProductDetails = () => {
                                             setDeletingReviewId(review.id);
                                             try {
                                                 await deleteReview(product.id, review.id);
-                                                showErrorMessage('Review deleted!');
+                                                showErrorMessage(t("shop.review-deleted"));
                                                 const fetched = await getReviewsByProductId(product.id);
                                                 setReviews(fetched);
                                                 await refreshProduct();
                                             } catch (e) {
-                                                showErrorMessage('Failed to delete review.');
+                                                showErrorMessage(t("shop.failed-to-delete-review"));
                                             } finally {
                                                 setDeletingReviewId(null);
                                             }
@@ -241,7 +243,7 @@ export const ProductDetails = () => {
                         {user && (
                             <form className="flex flex-col space-y-4 mt-4" onSubmit={handleSubmit(handleReviewSubmit)}>
                                 <div className="flex flex-col space-y-2">
-                                    <label className="font-bold">Your Rating:</label>
+                                    <label className="font-bold">{t("common:your-rating")}:</label>
                                     <Rating
                                         name="review-stars"
                                         value={reviewStars}
@@ -255,14 +257,14 @@ export const ProductDetails = () => {
                                     />
                                 </div>
                                 <textarea
-                                    placeholder="Leave a review..."
+                                    placeholder={t("shop.leave-review")}
                                     className={`${themedBackground} ${themedBorder} w-full h-32 p-4 outline-0 resize-none`}
-                                    {...register('text', { required: 'Review cannot be empty.' })}
+                                    {...register('text', { required: t("shop.review-cannot-be-empty") })}
                                     disabled={reviewLoading || isSubmitting}
                                 ></textarea>
                                 {errors.text && <span className="text-red-400 text-sm">{errors.text.message}</span>}
                                 <OutlinedButton
-                                    content={user ? (reviewLoading || isSubmitting ? 'Submitting...' : 'Submit Review') : 'Sign in to review'}
+                                    content={user ? (reviewLoading || isSubmitting ? t("common:submitting") : t("common:submit-review")) : t("shop.sign-in-to-review")}
                                     height={60}
                                     width={200}
                                     fontWeight="bold"

@@ -6,11 +6,13 @@ import { OutlinedButton } from "../components/OutlinedButton";
 import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "../hooks/useAuthUser";
 import { themedBorder } from "../styles/themeClassNames";
+import { useTranslation } from "react-i18next";
 
 export const Wishlist = () => {
     const { products, initialLoading, fetchData } = useAllProductsWithWishlistStatus();
     const user = useAuthUser()
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const wishlistProducts = products.filter(p => p.isWishlisted);
 
@@ -26,10 +28,10 @@ export const Wishlist = () => {
                         <div className="flex flex-wrap justify-center items-center gap-12 my-8">
                             {wishlistProducts.length === 0 ? (
                                 <div className="w-full flex flex-col items-center justify-center my-20">
-                                    <span className="text-4xl font-bold my-8 text-center">YOUR WISHLIST IS CURRENTLY EMPTY</span>
+                                    <span className="text-4xl uppercase font-bold my-8 text-center">{t("shop.your-wishlist-currently-empty")}</span>
                                     <HeartFilled style={{ fontSize: 160, marginTop: 32, marginBottom: 32 }} />
                                     <OutlinedButton
-                                        content="RETURN TO SHOP"
+                                        content={t("common:return-to-shop")}
                                         height={60}
                                         width={200}
                                         fontWeight="bold"
@@ -39,7 +41,7 @@ export const Wishlist = () => {
                             ) : (
                                 <>
                                     <div className="w-full flex justify-center items-center py-8">
-                                        <h1 className="text-5xl font-bold tracking-wide uppercase">Wishlist</h1>
+                                        <h1 className="text-5xl font-bold tracking-wide uppercase">{t("common:wishlist")}</h1>
                                     </div>
                                     {
                                         wishlistProducts.map(product => (
@@ -51,10 +53,10 @@ export const Wishlist = () => {
                         </div>
                         : (
                             <div className="w-full flex flex-col items-center justify-center my-20">
-                                <span className="text-4xl font-bold my-8 text-center">PLEASE SIGN IN TO VIEW YOUR WISHLIST</span>
+                                <span className="text-4xl font-bold my-8 text-center">{t("auth.sign-in-to-view-wishlist")}</span>
                                 <HeartFilled style={{ fontSize: 160, marginTop: 32, marginBottom: 32 }} />
                                 <OutlinedButton
-                                    content="SIGN IN"
+                                    content={t("common:sign-in")}
                                     height={60}
                                     width={200}
                                     fontWeight="bold"

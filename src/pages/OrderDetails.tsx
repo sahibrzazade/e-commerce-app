@@ -19,12 +19,14 @@ import {
 import { useTheme } from "../contexts/themeContext";
 import { getBackgroundSx, getTextSx } from "../utils/themeSx";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 export const OrderDetails = () => {
     const { orderId } = useParams<{ orderId: string }>();
     const navigate = useNavigate();
     const user = useAuthUser();
     const { theme } = useTheme();
+    const { t } = useTranslation();
 
     const textSx = getTextSx(theme);
     const backgroundSx = getBackgroundSx(theme);
@@ -42,20 +44,20 @@ export const OrderDetails = () => {
             try {
                 const orderData = await orderService.getOrder(orderId);
                 if (!orderData) {
-                    showErrorMessage('Order not found');
+                    showErrorMessage(t("shop.order-not-found"));
                     navigate('/cart');
                     return;
                 }
 
                 if (orderData.userId !== user.uid) {
-                    showErrorMessage('You are not authorized to view this order');
+                    showErrorMessage(t("shop.not-authorized-to-view-order"));
                     navigate('/cart');
                     return;
                 }
 
                 setOrder(orderData);
             } catch (error) {
-                showErrorMessage('Failed to load order');
+                showErrorMessage(t("shop.order-load-failed"));
                 navigate('/cart');
             } finally {
                 setLoading(false);
@@ -80,7 +82,7 @@ export const OrderDetails = () => {
             <AppLayout>
                 <div className="flex justify-center items-center min-h-screen">
                     <h1 className="text-2xl">
-                        Order not found
+                        {t("shop.order-not-found")}
                     </h1>
                 </div>
             </AppLayout>
@@ -92,13 +94,13 @@ export const OrderDetails = () => {
             <div className="max-w-4xl mx-auto p-4">
                 <div className="mb-6">
                     <h2 className="text-3xl mb-2">
-                        Order #{order.orderNumber || order.id}
+                        {t("common:order")} #{order.orderNumber || order.id}
                     </h2>
                     <h3 className="text-lg mb-2">
-                        Status: <span className="text-amber-400 capitalize">{order.status}</span>
+                        {t("common:status")}: <span className="text-amber-400 capitalize">{order.status}</span>
                     </h3>
                     <h3 className="text-lg mb-2">
-                        Created: {dayjs(order.createdAt.toDate()).format('DD/MM/YYYY HH:mm:ss')}
+                        {t("common:created")}: {dayjs(order.createdAt.toDate()).format('DD/MM/YYYY HH:mm:ss')}
                     </h3>
                 </div>
 
@@ -106,11 +108,11 @@ export const OrderDetails = () => {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={textSx}>Image</TableCell>
-                                <TableCell sx={textSx}>Product</TableCell>
-                                <TableCell sx={textSx}>Price</TableCell>
-                                <TableCell sx={textSx}>Quantity</TableCell>
-                                <TableCell sx={textSx}>Subtotal</TableCell>
+                                <TableCell sx={textSx}>{t("common:image")}</TableCell>
+                                <TableCell sx={textSx}>{t("common:product")}</TableCell>
+                                <TableCell sx={textSx}>{t("common:price")}</TableCell>
+                                <TableCell sx={textSx}>{t("common:quantity")}</TableCell>
+                                <TableCell sx={textSx}>{t("common:subtotal")}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -123,7 +125,7 @@ export const OrderDetails = () => {
                                     </TableCell>
                                     <TableCell>
                                         <Typography sx={textSx}>
-                                            {item.product?.name || `Product ${item.productId}`}
+                                            {item.product?.name || `${t("common:product")} ${item.productId}`}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -148,14 +150,14 @@ export const OrderDetails = () => {
                 </TableContainer>
 
                 <div className="flex flex-col items-end gap-y-2 mb-6">
-                    <span>Subtotal: ${order.total}</span>
-                    <span className="text-amber-400">Discount: ${order.discount && order.discount > 0 ? order.discount : 0}</span>
-                    <span className="font-bold">Total: ${order.discountedTotal || order.total}</span>
+                    <span>{t("common:subtotal")}: ${order.total}</span>
+                    <span className="text-amber-400">{t("common:discount")}: ${order.discount && order.discount > 0 ? order.discount : 0}</span>
+                    <span className="font-bold">{t("common:total")}: ${order.discountedTotal || order.total}</span>
                 </div>
 
                 <div className="flex justify-center">
                     <OutlinedButton
-                        content="RETURN TO SHOP"
+                        content={t("common:return-to-shop")}
                         height={60}
                         width={200}
                         fontWeight="bold"
