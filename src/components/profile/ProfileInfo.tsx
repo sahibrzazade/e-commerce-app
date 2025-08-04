@@ -86,7 +86,6 @@ export const ProfileInfo = () => {
                             <OutlinedButton
                                 content={t("common:save")}
                                 height={36}
-                                width={80}
                                 fontWeight="bold"
                                 type="submit"
                                 isDisabled={isSubmitting}
@@ -94,7 +93,7 @@ export const ProfileInfo = () => {
                             <Button
                                 variant="outlined"
                                 color="error"
-                                style={{ height: 36, width: 80, fontWeight: 400 }}
+                                style={{ height: 36, fontWeight: 400 }}
                                 type="button"
                                 disabled={isSubmitting}
                                 onClick={() => {

@@ -161,7 +161,6 @@ const Icons: React.FC = () => {
                   <OutlinedButton
                     content={t("common:go-to-shop")}
                     height={40}
-                    width={120}
                     fontWeight="bold"
                     onClick={() => handleNavigation('/shop')}
                   />

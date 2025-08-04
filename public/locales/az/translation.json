@@ -151,5 +151,18 @@
         "new-password-must-be-different-from-current-password": "Yeni şifrə mövcud şifrədən fərqli olmalıdır",
         "invalid-email-address": "Etibarsız e-poçt ünvanı",
         "name-must-be-at-least-two-characters": "Ad ən azı 2 simvoldan ibarət olmalıdır"
+    },
+    "about": {
+        "mission-title": "Missiyamız",
+        "mission-desc": "Cartly olaraq missiyamız yalnız dəb yaratmaq deyil — biz təcrübələr yaradırıq. Həqiqi stilin zamansız olduğuna inanırıq və dizayn etdiyimiz hər bir parça həyatınızın ən yaddaqalan anlarında sizə yoldaşlıq etmək üçün hazırlanır. Dünyanın ən keyfiyyətli materiallarını seçməkdən tutmuş hər detalı əllə mükəmməlləşdirməyə qədər, ənənə ilə innovasiyanı birləşdiririk və hər bir əsər zəriflik və keyfiyyətin nümunəsi olur. Vizyonumuz, fərdləri öz unikal kimliklərini inamla ifadə etməyə ruhlandırmaq, lüks dəbi müəyyən edən zəriflik və sənətkarlığı qucaqlamaqdır. Biz istəyirik ki, bizi kəşf etdiyiniz andan məhsulunuz sizə çatana qədər hər qarşılaşma gözəllik, incəlik və qayğı ilə dolu bir təcrübə olsun.",
+        "values-title": "Dəyərlərimiz",
+        "excellence": "Mükəmməllik",
+        "excellence-desc": "Hər detal önəmlidir, ilk eskizdən son tikişə qədər.",
+        "sophistication": "Zəriflik",
+        "sophistication-desc": "Dizayn, material və təcrübədə zərifliyi seçirik.",
+        "integrity": "Dürüstlük",
+        "integrity-desc": "Etik sənətkarlıq və məsuliyyətli mənbə seçimi hər qərarımıza rəhbərlik edir.",
+        "inspiration": "İlham",
+        "inspiration-desc": "Dəb sənətdir; bizim əsərlərimiz ilham vermək və gücləndirmək üçün yaradılıb."
     }
 }

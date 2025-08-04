@@ -151,5 +151,18 @@
         "new-password-must-be-different-from-current-password": "Yeni şifre, mevcut şifreden farklı olmalı",
         "invalid-email-address": "Geçersiz e-posta adresi",
         "name-must-be-at-least-two-characters": "İsim en az 2 karakter olmalı"
+    },
+    "about": {
+        "mission-title": "Misyonumuz",
+        "mission-desc": "Cartly olarak misyonumuz sadece moda yaratmak değil — deneyimler yaratmaktır. Gerçek stilin zamansız olduğuna inanıyoruz ve tasarladığımız her parça, hayatınızın en unutulmaz anlarında size eşlik etmek için hazırlanır. Dünyanın en iyi kumaşlarını seçmekten her detayı elde mükemmelleştirmeye kadar, geleneği yenilikle harmanlıyor ve her bir eseri zarafet ve kalitenin bir kanıtı haline getiriyoruz. Vizyonumuz, bireyleri benzersiz kimliklerini güvenle ifade etmeye ilham vermek ve lüks modayı tanımlayan zarafet ile sanatçılığı kucaklamalarını sağlamaktır. Sizi keşfettiğiniz andan ürününüz elinize ulaşana kadar her etkileşimi güzellik, incelik ve özen dolu bir deneyime dönüştürmeyi amaçlıyoruz.",
+        "values-title": "Değerlerimiz",
+        "excellence": "Mükemmellik",
+        "excellence-desc": "İlk eskizden son dikişe kadar her detay önemlidir.",
+        "sophistication": "Zarafet",
+        "sophistication-desc": "Tasarımda, malzemede ve deneyimde zarafeti benimsiyoruz.",
+        "integrity": "Dürüstlük",
+        "integrity-desc": "Etik işçilik ve sorumlu tedarik her kararımıza yön verir.",
+        "inspiration": "İlham",
+        "inspiration-desc": "Moda bir sanattır; eserlerimiz ilham vermek ve güçlendirmek için tasarlanmıştır."
     }
 }

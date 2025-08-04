@@ -151,5 +151,18 @@
         "new-password-must-be-different-from-current-password": "New password must be different from current password",
         "invalid-email-address": "Invalid email address",
         "name-must-be-at-least-two-characters": "Name must be at least 2 characters"
+    },
+    "about": {
+        "mission-title": "Our Mission",
+        "mission-desc": "At Cartly, our mission is to create more than fashion — we create experiences. We believe that true style is timeless, and each piece we design is crafted to accompany you through life’s most memorable moments. From selecting the world’s finest fabrics to perfecting every detail by hand, we blend tradition with innovation, ensuring each creation stands as a testament to elegance and quality. Our vision is to inspire individuals to express their unique identity with confidence, while embracing the sophistication and artistry that define luxury fashion. We aim to make every interaction, from the moment you discover us to the moment your piece arrives, an experience of beauty, refinement, and care.",
+        "values-title": "Our Values",
+        "excellence": "Excellence",
+        "excellence-desc": "Every detail matters, from the first sketch to the final stitch.",
+        "sophistication": "Sophistication",
+        "sophistication-desc": "We embrace elegance in design, materials, and experience.",
+        "integrity": "Integrity",
+        "integrity-desc": "Ethical craftsmanship and responsible sourcing guide every decision.",
+        "inspiration": "Inspiration",
+        "inspiration-desc": "Fashion is art; our creations are designed to inspire and empower."
     }
 }
