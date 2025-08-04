@@ -150,7 +150,8 @@
         "passwords-dont-match": "Şifreler uyuşmuyor",
         "new-password-must-be-different-from-current-password": "Yeni şifre, mevcut şifreden farklı olmalı",
         "invalid-email-address": "Geçersiz e-posta adresi",
-        "name-must-be-at-least-two-characters": "İsim en az 2 karakter olmalı"
+        "name-must-be-at-least-two-characters": "İsim en az 2 karakter olmalı",
+        "message-must-be-at-least-ten-characters": "Mesaj en az 10 karakter olmalı"
     },
     "about": {
         "mission-title": "Misyonumuz",
@@ -164,5 +165,14 @@
         "integrity-desc": "Etik işçilik ve sorumlu tedarik her kararımıza yön verir.",
         "inspiration": "İlham",
         "inspiration-desc": "Moda bir sanattır; eserlerimiz ilham vermek ve güçlendirmek için tasarlanmıştır."
+    },
+    "contact": {
+        "description": "Bir sorunuz mu var ya da birlikte çalışmak mı istiyorsunuz? Aşağıdaki formu doldurun, en kısa sürede size geri döneceğim.",
+        "name": "Adınız",
+        "email": "E-posta Adresiniz",
+        "message": "Mesajınız",
+        "send": "Mesaj Gönder",
+        "success": "Mesajınız başarıyla gönderildi!",
+        "error": "Mesajınız gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
     }
 }

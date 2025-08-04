@@ -12,6 +12,7 @@ import { OrderDetails } from '../pages/OrderDetails';
 import { Blogs } from '../pages/Blogs';
 import BlogDetails from '../pages/BlogDetails';
 import { AboutUs } from '../pages/AboutUs';
+import { ContactUs } from '../pages/ContactUs';
 
 export const appRoutes: AppRoute[] = [
   { path: '/', element: <Home /> },
@@ -27,4 +28,5 @@ export const appRoutes: AppRoute[] = [
   { path: '/blogs', element: <Blogs /> },
   { path: '/blogs/:id', element: <BlogDetails /> },
   { path: '/about-us', element: <AboutUs /> },
+  { path: '/contact-us', element: <ContactUs /> },
 ];
