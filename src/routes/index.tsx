@@ -11,6 +11,7 @@ import PublicRoute from '../components/auth/PublicRoute';
 import { OrderDetails } from '../pages/OrderDetails';
 import { Blogs } from '../pages/Blogs';
 import BlogDetails from '../pages/BlogDetails';
+import { AboutUs } from '../pages/AboutUs';
 
 export const appRoutes: AppRoute[] = [
   { path: '/', element: <Home /> },
@@ -25,4 +26,5 @@ export const appRoutes: AppRoute[] = [
   { path: '/sign-up', element: <PublicRoute><SignUp /></PublicRoute> },
   { path: '/blogs', element: <Blogs /> },
   { path: '/blogs/:id', element: <BlogDetails /> },
+  { path: '/about-us', element: <AboutUs /> },
 ];
