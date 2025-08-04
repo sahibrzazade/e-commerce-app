@@ -150,7 +150,8 @@
         "passwords-dont-match": "Şifrələr uyğun gəlmir",
         "new-password-must-be-different-from-current-password": "Yeni şifrə mövcud şifrədən fərqli olmalıdır",
         "invalid-email-address": "Etibarsız e-poçt ünvanı",
-        "name-must-be-at-least-two-characters": "Ad ən azı 2 simvoldan ibarət olmalıdır"
+        "name-must-be-at-least-two-characters": "Ad ən azı 2 simvoldan ibarət olmalıdır",
+        "message-must-be-at-least-ten-characters": "Mesaj ən azı 10 simvol olmalıdır"
     },
     "about": {
         "mission-title": "Missiyamız",
@@ -164,5 +165,14 @@
         "integrity-desc": "Etik sənətkarlıq və məsuliyyətli mənbə seçimi hər qərarımıza rəhbərlik edir.",
         "inspiration": "İlham",
         "inspiration-desc": "Dəb sənətdir; bizim əsərlərimiz ilham vermək və gücləndirmək üçün yaradılıb."
+    },
+    "contact": {
+        "description": "Sualınız var və ya əməkdaşlıq etmək istəyirsiniz? Aşağıdakı formanı doldurun, ən qısa zamanda sizinlə əlaqə saxlayacağam.",
+        "name": "Adınız",
+        "email": "E-poçtunuz",
+        "message": "Mesajınız",
+        "send": "Mesajı Göndər",
+        "success": "Mesajınız uğurla göndərildi!",
+        "error": "Mesaj göndərilərkən xəta baş verdi. Zəhmət olmasa bir az sonra yenidən cəhd edin."
     }
 }

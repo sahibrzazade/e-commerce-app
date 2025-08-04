@@ -150,7 +150,8 @@
         "passwords-dont-match": "Passwords don't match",
         "new-password-must-be-different-from-current-password": "New password must be different from current password",
         "invalid-email-address": "Invalid email address",
-        "name-must-be-at-least-two-characters": "Name must be at least 2 characters"
+        "name-must-be-at-least-two-characters": "Name must be at least 2 characters",
+        "message-must-be-at-least-ten-characters": "Message must be at least 10 characters"
     },
     "about": {
         "mission-title": "Our Mission",
@@ -164,5 +165,14 @@
         "integrity-desc": "Ethical craftsmanship and responsible sourcing guide every decision.",
         "inspiration": "Inspiration",
         "inspiration-desc": "Fashion is art; our creations are designed to inspire and empower."
+    },
+    "contact": {
+        "description": "Have a question or want to work together? Fill out the form below and I’ll get back to you as soon as possible.",
+        "name": "Your Name",
+        "email": "Your Email",
+        "message": "Your Message",
+        "send": "Send Message",
+        "success": "Your message has been sent successfully!",
+        "error": "There was an error sending your message. Please try again later."
     }
 }

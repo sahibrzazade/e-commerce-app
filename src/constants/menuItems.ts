@@ -6,7 +6,7 @@ export const menuItems = [
     labelKey: "navigation.more",
     children: [
       { labelKey: "navigation.about-us", path: '/about-us' },
-      { labelKey: "navigation.contact-us", path: '/contact' },
+      { labelKey: "navigation.contact-us", path: '/contact-us' },
       { labelKey: "navigation.faq", path: '/faq' },
     ],
   },
