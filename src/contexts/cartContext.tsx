@@ -20,7 +20,7 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }: WithChildren) => {
-  const user = useAuthUser();
+  const { user } = useAuthUser();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 

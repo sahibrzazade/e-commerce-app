@@ -13,7 +13,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const user = useAuthUser();
+  const { user } = useAuthUser();
   const [theme, setTheme] = useState<"dark" | "light">("light");
   const [loading, setLoading] = useState(true);
 

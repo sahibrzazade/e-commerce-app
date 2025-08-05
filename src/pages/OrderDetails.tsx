@@ -1,4 +1,5 @@
 import AppLayout from "../layouts/AppLayout";
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { orderService } from "../services/orderService";
 import { Order } from "../types";
@@ -13,18 +14,19 @@ import {
     TableHead,
     TableRow,
     Typography,
-    CircularProgress,
 } from '@mui/material';
+
 import { useTheme } from "../contexts/themeContext";
 import { getBackgroundSx, getTextSx } from "../utils/themeSx";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { useQuery } from '@tanstack/react-query';
+import { OrderDetailsSkeleton } from "../skeletons/OrderDetailsSkeleton";
 
 export const OrderDetails = () => {
     const { orderId } = useParams<{ orderId: string }>();
     const navigate = useNavigate();
-    const user = useAuthUser();
+    const { user } = useAuthUser();
     const { theme } = useTheme();
     const { t } = useTranslation();
 
@@ -62,12 +64,21 @@ export const OrderDetails = () => {
         refetchOnWindowFocus: false,
     });
 
-    if (loading) {
+    const [showSkeleton, setShowSkeleton] = useState(true);
+
+    useEffect(() => {
+        if (loading) {
+            setShowSkeleton(true);
+        } else {
+            const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+            return () => clearTimeout(timeout);
+        }
+    }, [loading]);
+
+    if (showSkeleton) {
         return (
             <AppLayout>
-                <div className="flex justify-center items-center min-h-screen">
-                    <CircularProgress />
-                </div>
+                <OrderDetailsSkeleton />
             </AppLayout>
         );
     }
@@ -92,10 +103,10 @@ export const OrderDetails = () => {
                         {t("common:order")} #{order.orderNumber || order.id}
                     </h2>
                     <h3 className="text-lg mb-2">
-                        {t("common:status")}: <span className="text-amber-400 capitalize">{order.status}</span>
+                        {t("common:status")}: <span className="text-amber-400 capitalize">{order.status ?? ""}</span>
                     </h3>
                     <h3 className="text-lg mb-2">
-                        {t("common:created")}: {dayjs(order.createdAt.toDate()).format('DD/MM/YYYY HH:mm:ss')}
+                        {t("common:created")}: {order.createdAt ? dayjs(order.createdAt.toDate()).format('DD/MM/YYYY HH:mm:ss') : ""}
                     </h3>
                 </div>
 
@@ -111,7 +122,7 @@ export const OrderDetails = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {order.items.map((item, index) => (
+                            {order.items?.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell>
                                         <Typography sx={textSx}>
@@ -145,9 +156,9 @@ export const OrderDetails = () => {
                 </TableContainer>
 
                 <div className="flex flex-col items-end gap-y-2 mb-6">
-                    <span>{t("common:subtotal")}: ${order.total}</span>
+                    <span>{t("common:subtotal")}: ${order.total ?? 0}</span>
                     <span className="text-amber-400">{t("common:discount")}: ${order.discount && order.discount > 0 ? order.discount : 0}</span>
-                    <span className="font-bold">{t("common:total")}: ${order.discountedTotal || order.total}</span>
+                    <span className="font-bold">{t("common:total")}: ${order.discountedTotal ?? order.total ?? 0}</span>
                 </div>
 
                 <div className="flex justify-center">

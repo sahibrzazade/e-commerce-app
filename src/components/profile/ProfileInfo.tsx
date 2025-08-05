@@ -1,6 +1,6 @@
 import { UserOutlined } from "@ant-design/icons";
 import { useAuthUser } from "../../hooks/useAuthUser";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { userService } from "../../services/userService";
 import { useForm } from "react-hook-form";
 import { TextInput } from "../TextInput";
@@ -11,13 +11,12 @@ import { updateProfile } from "firebase/auth";
 import { auth } from "../../configs/firebase";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { ProfileInfoSkeleton } from "../../skeletons/ProfileInfoSkeleton";
 
 export const ProfileInfo = () => {
-    const authUser = useAuthUser();
+    const { user: authUser, loading: authLoading } = useAuthUser();
     const { t } = useTranslation();
     const queryClient = useQueryClient();
-
-    const [editMode, setEditMode] = useState(false);
 
     const {
         register,
@@ -37,8 +36,21 @@ export const ProfileInfo = () => {
             if (u) reset({ name: u.name });
             return u;
         },
-        enabled: !!authUser?.uid,
+        enabled: !!authUser?.uid && !authLoading,
     });
+
+    const [editMode, setEditMode] = useState(false);
+    const [showSkeleton, setShowSkeleton] = useState(false);
+
+
+    useEffect(() => {
+        if (!userLoading) {
+            const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+            return () => clearTimeout(timeout);
+        } else {
+            setShowSkeleton(true);
+        }
+    }, [userLoading]);
 
     const updateUserMutation = useMutation({
         mutationFn: async (data: { name: string }) => {
@@ -71,10 +83,8 @@ export const ProfileInfo = () => {
                 <h2 className="text-2xl font-bold">{t("common:profile")}</h2>
             </div>
 
-            {userLoading ? (
-                <div className="flex justify-center items-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
-                </div>
+            {showSkeleton ? (
+                <ProfileInfoSkeleton />
             ) : user ? (
                 editMode ? (
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">

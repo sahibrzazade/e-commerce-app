@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 
 const Icons: React.FC = () => {
   const navigate = useNavigate();
-  const user = useAuthUser();
+  const { user } = useAuthUser();
   const { count: wishlistCount } = useWishlist();
   const { count: cartCount, cartProducts, removeFromCart, clearCart, clearLoading, removeLoading, total } = useCart();
   const { language, changeLanguage, loading: languageLoading } = useLanguage();

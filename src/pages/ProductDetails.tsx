@@ -18,13 +18,14 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { themedBackground, themedBorder } from "../styles/themeClassNames";
 import { useTranslation } from "react-i18next";
 import { useQuery } from '@tanstack/react-query';
+import { ProductDetailsSkeleton } from "../skeletons/ProductDetailsSkeleton";
 
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
     const { addToCart, addLoading } = useCart()
     const { product, refetch: refreshProduct } = useProductWithWishlistById(id);
     const { refresh: refreshWishlist } = useWishlist();
-    const user = useAuthUser();
+    const { user } = useAuthUser();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -124,6 +125,25 @@ export const ProductDetails = () => {
     useEffect(() => {
         setIsWishlisted(product?.isWishlisted);
     }, [product]);
+
+    const [showSkeleton, setShowSkeleton] = useState(false);
+
+    useEffect(() => {
+        if (fetchingReviews) {
+            setShowSkeleton(true);
+        } else {
+            const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+            return () => clearTimeout(timeout);
+        }
+    }, [fetchingReviews]);
+
+    if (showSkeleton) {
+        return (
+            <AppLayout>
+                <ProductDetailsSkeleton />
+            </AppLayout>
+        );
+    }
 
     return (
         <AppLayout>

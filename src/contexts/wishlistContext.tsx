@@ -8,8 +8,8 @@ const WishlistContext = createContext<WishlistContextType>({ count: 0, refresh: 
 export const useWishlist = () => useContext(WishlistContext);
 
 export const WishlistProvider = ({ children }: WithChildren) => {
-  const user = useAuthUser();
-  
+  const { user } = useAuthUser();
+
   const [count, setCount] = useState(0);
 
   const refresh = async () => {
