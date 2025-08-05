@@ -42,8 +42,8 @@
         "shop": "Mağaza",
         "blogs": "Bloglar",
         "more": "Daha Fazla",
-        "about-us": "Hakkımızda",
-        "contact-us": "İletişim",
+        "about": "Hakkımızda",
+        "contact": "İletişim",
         "faq": "SSS"
     },
     "footer": {
@@ -174,5 +174,61 @@
         "send": "Mesaj Gönder",
         "success": "Mesajınız başarıyla gönderildi!",
         "error": "Mesajınız gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+    },
+    "faq": {
+        "title": "Sık Sorulan Sorular",
+        "subtitle": "Ürünlerimiz, kargo, iade ve daha fazlası hakkında yaygın soruların cevaplarını bulun",
+        "categories": {
+            "general": "Genel",
+            "shipping": "Kargo & Teslimat",
+            "returns": "İade",
+            "products": "Ürünler",
+            "account": "Hesap & Siparişler"
+        },
+        "questions": {
+            "what-is-cartly": "Cartly nedir?",
+            "what-is-cartly-answer": "Cartly, zamansız, zarif giyim ve aksesuar yaratan premium bir moda markasıdır. Kaliteli işçilik, sürdürülebilir malzemeler ve sofistike tasarıma odaklanarak size kalıcı parçalar sunuyoruz.",
+            
+            "how-to-sign-up": "Nasıl hesap oluşturabilirim?",
+            "how-to-sign-up-answer": "Üst navigasyondaki 'Kayıt Ol' butonuna tıklayarak hesap oluşturabilirsiniz. E-posta ve şifrenizle kayıt olabilir veya hızlı erişim için Google hesabınızı kullanabilirsiniz.",
+            
+            "how-to-place-order": "Nasıl sipariş verebilirim?",
+            "how-to-place-order-answer": "Sipariş vermek için ürünlerimizi inceleyin, sepetinize ürün ekleyin ve ödeme sayfasına geçin. Satın alma işlemini tamamlamak için giriş yapmanız gerekecek. Büyük kredi kartları ve PayPal kabul ediyoruz.",
+            
+            "shipping-time": "Kargo ne kadar sürer?",
+            "shipping-time-answer": "Standart kargo genellikle ABD içinde 3-5 iş günü sürer. Uluslararası kargo, konumunuza bağlı olarak 7-14 iş günü sürebilir. Daha hızlı teslimat için ekspres kargo seçenekleri mevcuttur.",
+            
+            "track-order": "Siparişimi nasıl takip edebilirim?",
+            "track-order-answer": "Siparişiniz kargoya verildikten sonra takip bilgileriyle birlikte onay e-postası alacaksınız. Ayrıca hesabınıza giriş yaparak profilinizdeki 'Siparişleriniz' bölümünü ziyaret ederek siparişinizi takip edebilirsiniz.",
+            
+            "return-policy": "İade politikanız nedir?",
+            "return-policy-answer": "Orijinal ambalajında kullanılmamış tüm ürünler için 30 günlük iade politikası sunuyoruz. ABD müşterileri için iadeler ücretsizdir. Uluslararası iadeler kargo ücreti gerektirebilir.",
+            
+            "refund-time": "İadeler ne kadar sürer?",
+            "refund-time-answer": "İadeler genellikle iadenizi aldıktan sonra 3-5 iş günü içinde işlenir. İadenin hesabınızda görünmesi bankanıza veya kredi kartı sağlayıcınıza bağlıdır.",
+            
+            "product-quality": "Ürünlerinizin kalitesi nasıl?",
+            "product-quality-answer": "Sadece en kaliteli malzemeleri kullanıyor ve ürünlerimizi yaratmak için yetenekli zanaatkarlarla çalışıyoruz. Her ürün size ulaşmadan önce yüksek standartlarımızı karşıladığından emin olmak için titiz kalite kontrolünden geçer.",
+            
+            "care-instructions": "Ürünlerime nasıl bakmalıyım?",
+            "care-instructions-answer": "Bakım talimatları her ürünle birlikte verilir ve ürün sayfasında bulunabilir. Ürünlerinizin kalitesini ve dayanıklılığını korumak için bu talimatları takip etmenizi öneririz.",
+            
+            "change-password": "Şifremi nasıl değiştirebilirim?",
+            "change-password-answer": "Şifrenizi hesap ayarlarınızda değiştirebilirsiniz. Profilinize gidin, 'Hesap Ayarları'na tıklayın ve 'Şifre Değiştir'i seçin. Google ile kayıt olduysanız, şifre değişiklikleri Google hesabınız üzerinden yönetilir.",
+            
+            "forgot-password": "Şifremi unuttuysam ne yapmalıyım?",
+            "forgot-password-answer": "Şifrenizi unuttuysanız, giriş sayfasındaki 'Şifremi Unuttum' bağlantısına tıklayarak sıfırlayabilirsiniz. Şifrenizi sıfırlamak için talimatlarla birlikte bir e-posta alacaksınız.",
+            
+            "order-history": "Sipariş geçmişimi nasıl görüntüleyebilirim?",
+            "order-history-answer": "Hesabınıza giriş yaparak profilinizdeki 'Siparişleriniz' bölümünü ziyaret ederek tam sipariş geçmişinizi görüntüleyebilirsiniz. Burada tüm geçmiş ve mevcut siparişlerinizin detaylarını bulacaksınız.",
+            
+            "contact-support": "Müşteri hizmetleriyle nasıl iletişime geçebilirim?",
+            "contact-support-answer": "Müşteri hizmetleri ekibimizle İletişim sayfamız aracılığıyla veya doğrudan e-posta göndererek iletişime geçebilirsiniz. İş günlerinde genellikle 24 saat içinde yanıt veriyoruz."
+        },
+        "contact-section": {
+            "title": "Hala sorularınız mı var?",
+            "description": "Aradığınız cevabı bulamadınız mı? Lütfen dostane ekibimizle sohbet edin.",
+            "button": "Bize Ulaşın"
+        }
     }
 }

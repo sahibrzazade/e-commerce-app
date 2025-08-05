@@ -42,8 +42,8 @@
         "shop": "Shop",
         "blogs": "Blogs",
         "more": "More",
-        "about-us": "About Us",
-        "contact-us": "Contact Us",
+        "about": "About Us",
+        "contact": "Contact Us",
         "faq": "FAQ"
     },
     "footer": {
@@ -174,5 +174,61 @@
         "send": "Send Message",
         "success": "Your message has been sent successfully!",
         "error": "There was an error sending your message. Please try again later."
+    },
+    "faq": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Find answers to common questions about our products, shipping, returns, and more",
+        "categories": {
+            "general": "General",
+            "shipping": "Shipping & Delivery",
+            "returns": "Returns",
+            "products": "Products",
+            "account": "Account & Orders"
+        },
+        "questions": {
+            "what-is-cartly": "What is Cartly?",
+            "what-is-cartly-answer": "Cartly is a premium fashion brand that creates timeless, elegant clothing and accessories. We focus on quality craftsmanship, sustainable materials, and sophisticated design to provide you with pieces that last.",
+            
+            "how-to-sign-up": "How do I create an account?",
+            "how-to-sign-up-answer": "You can create an account by clicking the 'Sign Up' button in the top navigation. You can sign up with your email and password, or use your Google account for quick access.",
+            
+            "how-to-place-order": "How do I place an order?",
+            "how-to-place-order-answer": "To place an order, browse our products, add items to your cart, and proceed to checkout. You'll need to be signed in to complete your purchase. We accept major credit cards and PayPal.",
+            
+            "shipping-time": "How long does shipping take?",
+            "shipping-time-answer": "Standard shipping typically takes 3-5 business days within the continental US. International shipping may take 7-14 business days depending on your location. Express shipping options are available for faster delivery.",
+            
+            "track-order": "How can I track my order?",
+            "track-order-answer": "Once your order ships, you'll receive a confirmation email with tracking information. You can also track your order by signing into your account and visiting the 'Your Orders' section in your profile.",
+            
+            "return-policy": "What is your return policy?",
+            "return-policy-answer": "We offer a 30-day return policy for all unused items in their original packaging. Returns are free for US customers. International returns may incur shipping costs.",
+            
+            "refund-time": "How long do refunds take?",
+            "refund-time-answer": "Refunds are typically processed within 3-5 business days after we receive your return. The time it takes for the refund to appear in your account depends on your bank or credit card provider.",
+            
+            "product-quality": "What is the quality of your products?",
+            "product-quality-answer": "We use only the finest materials and work with skilled artisans to create our products. Each item undergoes rigorous quality control to ensure it meets our high standards before reaching you.",
+            
+            "care-instructions": "How should I care for my products?",
+            "care-instructions-answer": "Care instructions are provided with each product and can be found on the product page. We recommend following these instructions to maintain the quality and longevity of your items.",
+            
+            "change-password": "How do I change my password?",
+            "change-password-answer": "You can change your password in your account settings. Go to your profile, click on 'Account Settings', and select 'Change Password'. If you signed up with Google, password changes are managed through your Google account.",
+            
+            "forgot-password": "What if I forgot my password?",
+            "forgot-password-answer": "If you forgot your password, you can reset it by clicking the 'Forgot Password' link on the sign-in page. You'll receive an email with instructions to reset your password.",
+            
+            "order-history": "How can I view my order history?",
+            "order-history-answer": "You can view your complete order history by signing into your account and visiting the 'Your Orders' section in your profile. Here you'll find details about all your past and current orders.",
+            
+            "contact-support": "How can I contact customer support?",
+            "contact-support-answer": "You can contact our customer support team through our Contact Us page, or email us directly. We typically respond within 24 hours during business days."
+        },
+        "contact-section": {
+            "title": "Still have questions?",
+            "description": "Can't find the answer you're looking for? Please chat to our friendly team.",
+            "button": "Contact Us"
+        }
     }
 }

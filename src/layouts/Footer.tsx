@@ -106,17 +106,17 @@ export const Footer = () => {
               <li>
                 <Link
                   className="hover:text-orange-400 transition duration-300"
-                  to="/about-us"
+                  to="/about"
                 >
-                  {t("navigation.about-us")}
+                  {t("navigation.about")}
                 </Link>
               </li>
               <li>
                 <Link
                   className="hover:text-orange-400 transition duration-300"
-                  to="/contact-us"
+                  to="/contact"
                 >
-                  {t("navigation.contact-us")}
+                  {t("navigation.contact")}
                 </Link>
               </li>
               <li>
