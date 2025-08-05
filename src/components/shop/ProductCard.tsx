@@ -7,6 +7,7 @@ import { useAuthUser } from '../../hooks/useAuthUser';
 import { wishlistService } from '../../services/wishlistService';
 import { showSuccessMessage, showErrorMessage } from '../../utils/toastUtils';
 import { useState, useEffect } from 'react';
+import { useWishlist } from '../../contexts/wishlistContext';
 import { useCart } from '../../contexts/cartContext';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -17,11 +18,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 export const ProductCard = ({
   product
 }: ProductCardProps) => {
-  const user = useAuthUser()
+  const { user } = useAuthUser()
   const navigate = useNavigate();
   const { addToCart, addLoading } = useCart();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const { refresh } = useWishlist();
 
   const [isWishlisted, setIsWishlisted] = useState(product.isWishlisted);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -32,9 +34,10 @@ export const ProductCard = ({
       if (!user) throw new Error(t('auth.user-not-found'));
       return wishlistService.addToWishlist(user.uid, productId);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['products-with-wishlist', user?.uid] });
       setIsWishlisted(true);
+      await refresh();
       showSuccessMessage(t("shop.added-to-wishlist"));
     },
     onError: (error) => {
@@ -48,9 +51,10 @@ export const ProductCard = ({
       if (!user) throw new Error(t('auth.user-not-found'));
       return wishlistService.removeFromWishlist(user.uid, productId);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['products-with-wishlist', user?.uid] });
       setIsWishlisted(false);
+      await refresh();
       showErrorMessage(t("shop.removed-from-wishlist"));
     },
     onError: (error) => {

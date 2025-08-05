@@ -3,7 +3,7 @@ import { useAuthUser } from '../../hooks/useAuthUser';
 import { WithChildren } from '../../types';
 
 const PublicRoute = ({ children }: WithChildren) => {
-  const user = useAuthUser();
+  const { user } = useAuthUser();
   if (user) {
     return <Navigate to="/" replace />;
   }

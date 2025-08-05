@@ -17,9 +17,11 @@ import { useTheme } from "../../contexts/themeContext";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { ProfileOrdersSkeleton } from "../../skeletons/ProfileOrdersSkeleton";
 
-export const ProfileOrders = () => {
-    const authUser = useAuthUser();
+export function ProfileOrders() {
+    const { user: authUser, loading: authLoading } = useAuthUser();
     const navigate = useNavigate();
     const { theme } = useTheme();
     const { t } = useTranslation();
@@ -30,8 +32,19 @@ export const ProfileOrders = () => {
     const { data: orders = [], isLoading } = useQuery({
         queryKey: ['userOrders', authUser?.uid],
         queryFn: () => authUser ? orderService.getUserOrders(authUser.uid) : Promise.resolve([]),
-        enabled: !!authUser
+        enabled: !!authUser && !authLoading,
     });
+
+    const [showSkeleton, setShowSkeleton] = useState(false);
+
+    useEffect(() => {
+        if (!isLoading) {
+            const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+            return () => clearTimeout(timeout);
+        } else {
+            setShowSkeleton(true);
+        }
+    }, [isLoading]);
 
     return (
         <div className="rounded-lg p-6">
@@ -39,10 +52,8 @@ export const ProfileOrders = () => {
                 <TfiPackage className="text-2xl" />
                 <Typography variant="h5" className="font-bold">{t("profile.your-orders")}</Typography>
             </div>
-            {isLoading ? (
-                <div className="flex justify-center items-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
-                </div>
+            {showSkeleton ? (
+                <ProfileOrdersSkeleton />
             ) : orders.length === 0 ? (
                 <span className="block text-center md:text-start">{t("profile.no-orders-yet")}</span>
             ) : (

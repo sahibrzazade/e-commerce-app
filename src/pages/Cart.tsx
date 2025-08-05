@@ -12,7 +12,8 @@ import { useAuthUser } from '../hooks/useAuthUser';
 import { useDiscount } from '../hooks/useDiscount';
 import { useForm } from 'react-hook-form';
 import { orderService } from '../services/orderService';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { CartSkeleton } from '../skeletons/CartSkeleton';
 import { useTheme } from '../contexts/themeContext';
 import { themedBorder } from '../styles/themeClassNames';
 import { getTextSx, getBackgroundSx } from '../utils/themeSx';
@@ -22,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 export const Cart = () => {
   const { removeFromCart, removeLoading, clearCart, clearLoading, updateCartItem, updateLoading, count, total, cartProducts } = useCart();
   const { discount, discountedTotal, loading, applyCoupon, resetDiscount } = useDiscount();
-  const user = useAuthUser();
+  const { user, loading: userLoading } = useAuthUser();
   const navigate = useNavigate();
   const { theme } = useTheme();
   const { t } = useTranslation();
@@ -87,6 +88,25 @@ export const Cart = () => {
     }
   };
 
+
+  const [showSkeleton, setShowSkeleton] = useState(true);
+  useEffect(() => {
+    if (userLoading || loading || clearLoading || updateLoading) {
+      setShowSkeleton(true);
+    } else {
+      const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [userLoading, loading]);
+
+  if (showSkeleton) {
+    return (
+      <AppLayout>
+        <CartSkeleton />
+      </AppLayout>
+    );
+  }
+
   return (
     <AppLayout>
       {user ? (
@@ -114,12 +134,12 @@ export const Cart = () => {
                 onQuantityChange={handleQuantityChange}
                 onRemove={handleRemove}
               />
-              <div className="flex justify-between mt-4">
-                <form onSubmit={handleSubmit(onSubmitCoupon)} className='flex flex-row gap-2'>
+              <div className="flex flex-col md:flex-row justify-between mt-4">
+                <form onSubmit={handleSubmit(onSubmitCoupon)} className='flex flex-row gap-2 my-4 md:my-0'>
                   <input
                     type="text"
                     {...register('coupon', { required: 'Coupon code is required' })}
-                    className={`${themedBorder} ${theme === "light" ? "bg-primary-light" : "bg-primary-dark"} outline-none w-[300px] h-[50px] px-2 py-1 me-4`}
+                    className={`${themedBorder} ${theme === "light" ? "bg-primary-light" : "bg-primary-dark"} outline-none w-[200px] md:w-[300px] h-[50px] px-2 py-1 me-4`}
                     disabled={discount ? true : false}
                   />
                   {!discount ?

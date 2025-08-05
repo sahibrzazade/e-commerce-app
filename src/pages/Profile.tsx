@@ -10,11 +10,22 @@ import { OutlinedButton } from "../components/OutlinedButton"
 import { useNavigate } from "react-router-dom"
 import { ProfileOrders } from "../components/profile/ProfileOrders"
 import { useTranslation } from "react-i18next"
+import { themedBorder } from "../styles/themeClassNames"
 
 export const Profile = () => {
-    const user = useAuthUser();
+    const { user, loading } = useAuthUser();
     const navigate = useNavigate();
     const { t } = useTranslation();
+
+    if (loading) {
+        return (
+            <AppLayout>
+                <div className="flex justify-center items-center h-screen">
+                    <div className={`${themedBorder} animate-spin rounded-full h-16 w-16 border-b-2`}></div>
+                </div>
+            </AppLayout>
+        );
+    }
 
     return (
         <AppLayout>

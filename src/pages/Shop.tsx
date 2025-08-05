@@ -7,11 +7,11 @@ import { FilterOptions } from "../types";
 import { FilterSummary } from "../components/shop/FilterSummary";
 import { useAllProductsWithWishlistStatus } from "../hooks/useAllProductsWithWishlistStatus";
 import { useUrlFilters } from '../hooks/useUrlFilters';
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { useUrlSearch } from '../hooks/useUrlSearch';
 import { useUrlSort } from '../hooks/useUrlSort';
-import { themedBorder } from "../styles/themeClassNames";
 import { useTranslation } from "react-i18next";
+import { ProductCardSkeleton } from "../skeletons/ProductCardSkeleton";
 
 export const Shop = () => {
     const { filters: activeFilters, setFilters: setActiveFilters, resetFilters } = useUrlFilters();
@@ -19,6 +19,8 @@ export const Shop = () => {
     const [search, setSearch] = useUrlSearch();
     const [sortBy] = useUrlSort();
     const { t } = useTranslation();
+
+    const [showSkeleton, setShowSkeleton] = useState(false);
 
     const filteredProducts = useMemo(() => {
         let result = products;
@@ -88,30 +90,39 @@ export const Shop = () => {
         setActiveFilters(newFilters);
     };
 
+    useEffect(() => {
+        if (loading) {
+            setShowSkeleton(true);
+        } else {
+            const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+            return () => clearTimeout(timeout);
+        }
+    }, [loading]);
+
     return (
         <AppLayout>
-            {loading ? (
-                <div className="flex justify-center items-center h-screen">
-                    <div className={`${themedBorder} animate-spin rounded-full h-16 w-16 border-b-2`}></div>
+            <>
+                <div className="w-full h-[500px] bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: "url('https://dunker.qodeinteractive.com/wp-content/uploads/2023/01/inner-img-6.jpg')" }}>
+                    <h1 className="text-5xl text-white font-bold tracking-wide uppercase">{t("common:shop")}</h1>
                 </div>
-            ) :
-                <>
-                    <div className="w-full h-[500px] bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: "url('https://dunker.qodeinteractive.com/wp-content/uploads/2023/01/inner-img-6.jpg')" }}>
-                        <h1 className="text-5xl text-white font-bold tracking-wide uppercase">{t("common:shop")}</h1>
-                    </div>
-                    <div className="flex flex-col gap-y-4 md:gap-y-0 items-center md:flex-row justify-around my-8">
-                        <ProductFilter onFiltersChange={handleFiltersChange} activeFilters={activeFilters} />
-                        <SearchFilterInput value={search} onChange={setSearch} />
-                        <SortOptions />
-                    </div>
-                    <FilterSummary filters={activeFilters} onClearFilter={handleClearFilter} />
-                    <div className="flex flex-wrap justify-center items-center gap-12 my-8">
-                        {filteredProducts.map((product) => (
+                <div className="flex flex-col gap-y-4 md:gap-y-0 items-center md:flex-row justify-around my-8">
+                    <ProductFilter onFiltersChange={handleFiltersChange} activeFilters={activeFilters} />
+                    <SearchFilterInput value={search} onChange={setSearch} />
+                    <SortOptions />
+                </div>
+                <FilterSummary filters={activeFilters} onClearFilter={handleClearFilter} />
+                <div className="flex flex-wrap justify-center items-center gap-12 my-8">
+                    {showSkeleton ? (
+                        Array.from({ length: 8 }).map((_, idx) => (
+                            <ProductCardSkeleton key={idx} />
+                        ))
+                    ) :
+                        filteredProducts.map((product) => (
                             <ProductCard key={product.id} product={product} />
-                        ))}
-                    </div>
-                </>
-            }
+                        ))
+                    }
+                </div>
+            </>
         </AppLayout>
     );
 }

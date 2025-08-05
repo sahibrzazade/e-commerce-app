@@ -15,6 +15,6 @@ export interface Product {
 }
 
 export interface ProductCardProps {
-  product: Product
+  product: Product,
   onWishlistChange?: () => void;
 }

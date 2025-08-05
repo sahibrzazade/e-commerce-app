@@ -5,9 +5,11 @@ import { getReviewsByUserId } from "../../services/reviewService";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { ProfileReviewsSkeleton } from "../../skeletons/ProfileReviewsSkeleton";
 
 export const ProfileReviews = () => {
-    const authUser = useAuthUser();
+    const { user: authUser, loading: authLoading } = useAuthUser();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -20,8 +22,19 @@ export const ProfileReviews = () => {
             if (!authUser?.uid) return [];
             return getReviewsByUserId(authUser.uid);
         },
-        enabled: !!authUser?.uid,
+        enabled: !!authUser?.uid && !authLoading,
     });
+
+    const [showSkeleton, setShowSkeleton] = useState(false);
+
+    useEffect(() => {
+        if (!reviewsLoading) {
+            const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+            return () => clearTimeout(timeout);
+        } else {
+            setShowSkeleton(true);
+        }
+    }, [reviewsLoading]);
 
     return (
         <div className="rounded-lg p-6">
@@ -29,10 +42,8 @@ export const ProfileReviews = () => {
                 <StarFilled className="text-2xl text-yellow-400" />
                 <h2 className="text-xl font-bold">{t("profile.your-reviews")}</h2>
             </div>
-            {reviewsLoading ? (
-                <div className="flex justify-center items-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
-                </div>
+            {showSkeleton ? (
+                <ProfileReviewsSkeleton />
             ) : reviews.length === 0 ? (
                 <span className="block text-center md:text-start">{t("profile.no-reviews-yet")}</span>
             ) : (

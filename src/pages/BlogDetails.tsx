@@ -5,6 +5,8 @@ import { BlogPost } from "../types/blogs";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { BlogDetailsSkeleton } from "../skeletons/BlogDetailsSkeleton";
 
 const BlogDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -42,12 +44,21 @@ const BlogDetails = () => {
         refetchOnWindowFocus: false,
     });
 
-    if (loading) {
+    const [showSkeleton, setShowSkeleton] = useState(false);
+
+    useEffect(() => {
+        if (!loading) {
+            const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+            return () => clearTimeout(timeout);
+        } else {
+            setShowSkeleton(true);
+        }
+    }, [loading]);
+
+    if (showSkeleton) {
         return (
             <AppLayout>
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-2"></div>
-                </div>
+                <BlogDetailsSkeleton />
             </AppLayout>
         );
     }

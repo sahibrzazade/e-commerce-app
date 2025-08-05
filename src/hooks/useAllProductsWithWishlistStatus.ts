@@ -51,12 +51,11 @@ async function fetchProductsWithWishlistStatus(
 }
 
 export function useAllProductsWithWishlistStatus(filters?: FilterOptions) {
-  const user = useAuthUser();
+  const { user } = useAuthUser();
 
   const {
     data: products = [],
     isLoading,
-    isFetching,
     error,
     refetch,
   } = useQuery<ProductWithWishlist[], Error>({
@@ -74,25 +73,24 @@ export function useAllProductsWithWishlistStatus(filters?: FilterOptions) {
       }
     },
     enabled: !!user,
-    staleTime: 1000 * 60 * 5, 
+    staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
 
   return {
     products,
-    loading: isLoading || isFetching,
+    loading: isLoading,
     error,
     refetch,
   };
 }
 
 export function useProductWithWishlistById(productId: string | undefined) {
-  const user = useAuthUser();
+  const { user } = useAuthUser();
 
   const {
     data: product,
     isLoading,
-    isFetching,
     error,
     refetch,
   } = useQuery<ProductWithWishlist | null, Error>({
@@ -124,7 +122,7 @@ export function useProductWithWishlistById(productId: string | undefined) {
 
   return {
     product,
-    loading: isLoading || isFetching,
+    loading: isLoading,
     error,
     refetch,
   };

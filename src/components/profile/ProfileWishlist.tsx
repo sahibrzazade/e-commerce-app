@@ -4,12 +4,25 @@ import { useNavigate } from "react-router-dom";
 import { OutlinedButton } from "../OutlinedButton";
 import { ProductCard } from "../shop/ProductCard";
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from 'react';
+import { ProfileWishlistSkeleton } from "../../skeletons/ProfileWishlistSkeleton";
 
 export const ProfileWishlist = () => {
     const { products: allProducts, loading: productsLoading, refetch: refreshProducts } = useAllProductsWithWishlistStatus();
     const wishlistProducts = allProducts.filter(p => p.isWishlisted);
     const navigate = useNavigate();
     const { t } = useTranslation();
+
+    const [showSkeleton, setShowSkeleton] = useState(false);
+
+    useEffect(() => {
+        if (!productsLoading) {
+            const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+            return () => clearTimeout(timeout);
+        } else {
+            setShowSkeleton(true);
+        }
+    }, [productsLoading]);
 
     return (
         <div className="rounded-lg p-6">
@@ -19,10 +32,8 @@ export const ProfileWishlist = () => {
                     {t("common:wishlist")}
                 </h2>
             </div>
-            {productsLoading ? (
-                <div className="flex justify-center items-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
-                </div>
+            {showSkeleton ? (
+                <ProfileWishlistSkeleton />
             ) : wishlistProducts.length === 0 ? (
                 <div className="flex flex-col items-center justify-center my-8">
                     <span className="text-lg my-4">
@@ -40,3 +51,4 @@ export const ProfileWishlist = () => {
         </div>
     )
 }
+

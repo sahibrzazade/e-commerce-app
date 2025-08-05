@@ -5,9 +5,12 @@ import dayjs from "dayjs"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { BlogsSkeleton } from "../skeletons/BlogsSkeleton"
 
 export const Blogs = () => {
     const { t } = useTranslation();
+    const [showSkeleton, setShowSkeleton] = useState(false);
 
     const {
         data: blogs = [],
@@ -22,15 +25,22 @@ export const Blogs = () => {
         refetchOnWindowFocus: false,
     });
 
+    useEffect(() => {
+        if (!loading) {
+            const timeout = setTimeout(() => setShowSkeleton(false), 1000);
+            return () => clearTimeout(timeout);
+        } else {
+            setShowSkeleton(true);
+        }
+    }, [loading]);
+
     return (
         <AppLayout>
             <div className="w-full h-[400px] bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1500&q=80')" }}>
                 <h1 className="text-5xl text-white font-bold tracking-wide uppercase">{t("navigation.blogs")}</h1>
             </div>
-            {loading ? (
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
-                </div>
+            {showSkeleton ? (
+                <BlogsSkeleton />
             ) : blogs.length === 0 ? (
                 <div className="w-full flex flex-col items-center justify-center my-20">
                     <span className="text-4xl font-bold my-8 text-center">{t("blogs.no-posts-found")}</span>

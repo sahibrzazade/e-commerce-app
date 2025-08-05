@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 export const ProfileSettings = () => {
     const { theme, toggleTheme, loading: themeLoading } = useTheme();
     const { language, changeLanguage, loading: languageLoading } = useLanguage();
-    const user = useAuthUser();
+    const { user } = useAuthUser();
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [changePasswordError, setChangePasswordError] = useState<string | null>(null);
     const { t } = useTranslation();
