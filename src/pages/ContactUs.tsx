@@ -42,7 +42,7 @@ export const ContactUs = () => {
                     }}
                 >
                     <h1 className="text-5xl text-white font-bold tracking-wide uppercase">
-                        {t("common:contact-us")}
+                        {t("navigation.contact")}
                     </h1>
                 </div>
 

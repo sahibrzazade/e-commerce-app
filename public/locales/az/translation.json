@@ -42,8 +42,8 @@
         "shop": "Mağaza",
         "blogs": "Bloqlar",
         "more": "Daha çox",
-        "about-us": "Haqqımızda",
-        "contact-us": "Əlaqə",
+        "about": "Haqqımızda",
+        "contact": "Əlaqə",
         "faq": "FAQ"
     },
     "footer": {
@@ -174,5 +174,61 @@
         "send": "Mesajı Göndər",
         "success": "Mesajınız uğurla göndərildi!",
         "error": "Mesaj göndərilərkən xəta baş verdi. Zəhmət olmasa bir az sonra yenidən cəhd edin."
+    },
+    "faq": {
+        "title": "Tez-tez Verilən Suallar",
+        "subtitle": "Məhsullarımız, çatdırılma, qaytarma və daha çox haqqında ümumi sualların cavablarını tapın",
+        "categories": {
+            "general": "Ümumi",
+            "shipping": "Çatdırılma & Çatdırılma",
+            "returns": "Qaytarma & Qaytarma",
+            "products": "Məhsullar",
+            "account": "Hesab & Sifarişlər"
+        },
+        "questions": {
+            "what-is-cartly": "Cartly nədir?",
+            "what-is-cartly-answer": "Cartly, zamansız, zərif geyim və aksesuarlar yaradan premium dəb brendidir. Biz keyfiyyətli sənətkarlıq, dayanıqlı materiallar və mürəkkəb dizayn üzərində fokuslanaraq sizə davamlı parçalar təqdim edirik.",
+            
+            "how-to-sign-up": "Hesab yaratmaq üçün necə?",
+            "how-to-sign-up-answer": "Yuxarı naviqasiyada 'Qeydiyyat' düyməsinə klikləməklə hesab yarada bilərsiniz. E-poçt və şifrənizlə qeydiyyatdan keçə bilər və ya sürətli giriş üçün Google hesabınızdan istifadə edə bilərsiniz.",
+            
+            "how-to-place-order": "Sifariş vermək üçün necə?",
+            "how-to-place-order-answer": "Sifariş vermək üçün məhsullarımızı baxın, səbətinizə əşyalar əlavə edin və ödəniş səhifəsinə keçin. Alış-verişi tamamlamaq üçün daxil olmanız lazımdır. Biz əsas kredit kartları və PayPal qəbul edirik.",
+            
+            "shipping-time": "Çatdırılma nə qədər çəkir?",
+            "shipping-time-answer": "Standart çatdırılma adətən ABŞ daxilində 3-5 iş günü çəkir. Beynəlxalq çatdırılma yerləşdiyiniz yerə görə 7-14 iş günü çəkə bilər. Daha sürətli çatdırılma üçün ekspres çatdırılma seçimləri mövcuddur.",
+            
+            "track-order": "Sifarişimi necə izləyə bilərəm?",
+            "track-order-answer": "Sifarişiniz göndərildikdən sonra izləmə məlumatları ilə birlikdə təsdiq e-poçtu alacaqsınız. Həmçinin hesabınıza daxil olaraq profilinizdəki 'Sifarişləriniz' bölməsini ziyarət edərək sifarişinizi izləyə bilərsiniz.",
+            
+            "return-policy": "Qaytarma siyasətiniz nədir?",
+            "return-policy-answer": "Orijinal qablaşdırmasında istifadə edilməmiş bütün əşyalar üçün 30 günlük qaytarma siyasəti təklif edirik. ABŞ müştəriləri üçün qaytarmalar pulsuzdur. Beynəlxalq qaytarmalar çatdırılma haqqı tələb edə bilər.",
+            
+            "refund-time": "Qaytarmalar nə qədər çəkir?",
+            "refund-time-answer": "Qaytarmalar adətən qaytarmanızı aldıqdan sonra 3-5 iş günü ərzində emal edilir. Qaytarmanın hesabınızda görünməsi bankınıza və ya kredit kartı təminatçınıza bağlıdır.",
+            
+            "product-quality": "Məhsullarınızın keyfiyyəti necədir?",
+            "product-quality-answer": "Yalnız ən keyfiyyətli materiallardan istifadə edirik və məhsullarımızı yaratmaq üçün bacarıqlı sənətkarlarla işləyirik. Hər bir əşya sizə çatana qədər yüksək standartlarımızı qarşıladığından əmin olmaq üçün ciddi keyfiyyət nəzarətindən keçir.",
+            
+            "care-instructions": "Məhsullarıma necə qayğı göstərməliyəm?",
+            "care-instructions-answer": "Qayğı təlimatları hər məhsulla birlikdə verilir və məhsul səhifəsində tapıla bilər. Məhsullarınızın keyfiyyətini və davamlılığını qorumaq üçün bu təlimatları izləməyi tövsiyə edirik.",
+            
+            "change-password": "Şifrəmi necə dəyişdirə bilərəm?",
+            "change-password-answer": "Şifrənizi hesab parametrlərində dəyişdirə bilərsiniz. Profilinizə gedin, 'Hesab Parametrləri'ni klikləyin və 'Şifrəni Dəyişdir'i seçin. Google ilə qeydiyyatdan keçmisinizsə, şifrə dəyişiklikləri Google hesabınız vasitəsilə idarə olunur.",
+            
+            "forgot-password": "Şifrəmi unutmusamsa nə etməliyəm?",
+            "forgot-password-answer": "Şifrənizi unutmusunuzsa, giriş səhifəsindəki 'Şifrəmi Unutdum' bağlantısına klikləməklə sıfırlaya bilərsiniz. Şifrənizi sıfırlamaq üçün təlimatlar ilə birlikdə e-poçt alacaqsınız.",
+            
+            "order-history": "Sifariş tarixçimi necə görə bilərəm?",
+            "order-history-answer": "Hesabınıza daxil olaraq profilinizdəki 'Sifarişləriniz' bölməsini ziyarət edərək tam sifariş tarixçinizi görə bilərsiniz. Burada bütün keçmiş və cari sifarişlərinizin detallarını tapacaqsınız.",
+            
+            "contact-support": "Müştəri dəstəyi ilə necə əlaqə saxlaya bilərəm?",
+            "contact-support-answer": "Müştəri dəstəyi komandamızla Əlaqə səhifəmiz vasitəsilə və ya birbaşa e-poçt göndərməklə əlaqə saxlaya bilərsiniz. İş günlərində adətən 24 saat ərzində cavab veririk."
+        },
+        "contact-section": {
+            "title": "Hələ suallarınız var?",
+            "description": "Axtardığınız cavabı tapa bilmirsiniz? Zəhmət olmasa dostcasına komandamızla söhbət edin.",
+            "button": "Bizimlə Əlaqə"
+        }
     }
 }
