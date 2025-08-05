@@ -11,18 +11,18 @@ import { useState, useEffect } from "react";
 import { useWishlist } from '../contexts/wishlistContext';
 import { useCart } from "../contexts/cartContext";
 import { getReviewsByProductId, addReview, deleteReview } from '../services/reviewService';
-import { Review } from '../types';
 import { useForm } from 'react-hook-form';
 import { ReviewCard } from "../components/shop/ReviewCard";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { themedBackground, themedBorder } from "../styles/themeClassNames";
 import { useTranslation } from "react-i18next";
+import { useQuery } from '@tanstack/react-query';
 
 export const ProductDetails = () => {
     const { id } = useParams<{ id: string }>();
     const { addToCart, addLoading } = useCart()
-    const { product, fetchData: refreshProduct } = useProductWithWishlistById(id);
+    const { product, refetch: refreshProduct } = useProductWithWishlistById(id);
     const { refresh: refreshWishlist } = useWishlist();
     const user = useAuthUser();
     const navigate = useNavigate();
@@ -32,13 +32,24 @@ export const ProductDetails = () => {
     const [isWishlisted, setIsWishlisted] = useState(product?.isWishlisted);
     const [buttonLoading, setButtonLoading] = useState(false);
     const [deletingReviewId, setDeletingReviewId] = useState<string | null>(null);
-    const [reviews, setReviews] = useState<Review[]>([]);
     const [reviewLoading, setReviewLoading] = useState(false);
-    const [fetchingReviews, setFetchingReviews] = useState(true);
     const [reviewStars, setReviewStars] = useState<number>(5);
 
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<{ text: string }>({
         defaultValues: { text: '' },
+    });
+
+    const {
+        data: reviews = [],
+        isLoading: fetchingReviews,
+        refetch: refetchReviews
+    } = useQuery({
+        queryKey: ["product-reviews", id],
+        queryFn: async () => {
+            if (!id) return [];
+            return getReviewsByProductId(id);
+        },
+        enabled: !!id,
     });
 
     const handleAddToCart = async () => {
@@ -80,8 +91,7 @@ export const ProductDetails = () => {
             reset();
             setReviewStars(5);
             showSuccessMessage(t("shop.review-submitted"));
-            const fetched = await getReviewsByProductId(id!);
-            setReviews(fetched);
+            await refetchReviews();
             await refreshProduct();
         } catch (e) {
             showErrorMessage(t("shop.failed-to-submit-review"));
@@ -114,22 +124,6 @@ export const ProductDetails = () => {
     useEffect(() => {
         setIsWishlisted(product?.isWishlisted);
     }, [product]);
-
-    useEffect(() => {
-        const fetchReviews = async () => {
-            if (!id) return;
-            setFetchingReviews(true);
-            try {
-                const fetched = await getReviewsByProductId(id);
-                setReviews(fetched);
-            } catch (e) {
-                showErrorMessage(t("shop.failed-to-fetch-reviews"));
-            } finally {
-                setFetchingReviews(false);
-            }
-        };
-        fetchReviews();
-    }, [id]);
 
     return (
         <AppLayout>
@@ -227,8 +221,7 @@ export const ProductDetails = () => {
                                             try {
                                                 await deleteReview(product.id, review.id);
                                                 showErrorMessage(t("shop.review-deleted"));
-                                                const fetched = await getReviewsByProductId(product.id);
-                                                setReviews(fetched);
+                                                await refetchReviews();
                                                 await refreshProduct();
                                             } catch (e) {
                                                 showErrorMessage(t("shop.failed-to-delete-review"));

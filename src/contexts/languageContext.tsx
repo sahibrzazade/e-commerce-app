@@ -16,7 +16,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const user = useAuthUser();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const [language, setLanguage] = useState<"az" | "en" | "tr">("en");
   const [loading, setLoading] = useState(true);

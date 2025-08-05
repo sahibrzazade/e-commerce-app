@@ -9,7 +9,7 @@ import { themedBorder } from "../styles/themeClassNames";
 import { useTranslation } from "react-i18next";
 
 export const Wishlist = () => {
-    const { products, initialLoading, fetchData } = useAllProductsWithWishlistStatus();
+    const { products, loading, refetch } = useAllProductsWithWishlistStatus();
     const user = useAuthUser()
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -18,7 +18,7 @@ export const Wishlist = () => {
 
     return (
         <AppLayout>
-            {initialLoading ? (
+            {loading ? (
                 <div className="flex justify-center items-center h-screen">
                     <div className={`${themedBorder} animate-spin rounded-full h-16 w-16 border-b-2`}></div>
                 </div>
@@ -45,7 +45,7 @@ export const Wishlist = () => {
                                     </div>
                                     {
                                         wishlistProducts.map(product => (
-                                            <ProductCard key={product.id} product={product} onWishlistChange={() => fetchData(false)} />
+                                            <ProductCard key={product.id} product={product} onWishlistChange={() => refetch()} />
                                         ))
                                     }
                                 </>

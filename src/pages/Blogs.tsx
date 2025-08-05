@@ -1,26 +1,26 @@
-import { useEffect, useState } from "react"
 import AppLayout from "../layouts/AppLayout"
 import { blogService } from "../services/blogService"
 import { BlogPost } from "../types/blogs"
 import dayjs from "dayjs"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { useQuery } from '@tanstack/react-query';
 
 export const Blogs = () => {
     const { t } = useTranslation();
 
-    const [blogs, setBlogs] = useState<BlogPost[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            setLoading(true);
+    const {
+        data: blogs = [],
+        isLoading: loading,
+    } = useQuery<BlogPost[]>({
+        queryKey: ['blogs'],
+        queryFn: async () => {
             const data = await blogService.getAllPosts();
-            setBlogs(data.filter((post: BlogPost) => post.isPublished));
-            setLoading(false);
-        }
-        fetchBlogs()
-    }, [])
+            return data.filter((post: BlogPost) => post.isPublished);
+        },
+        staleTime: 1000 * 60 * 5,
+        refetchOnWindowFocus: false,
+    });
 
     return (
         <AppLayout>

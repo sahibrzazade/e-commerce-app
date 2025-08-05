@@ -1,35 +1,27 @@
 import { StarFilled } from "@ant-design/icons"
 import { ReviewCard } from "../shop/ReviewCard"
-import { Review } from "../../types";
-import { useEffect, useState } from "react";
 import { useAuthUser } from "../../hooks/useAuthUser";
 import { getReviewsByUserId } from "../../services/reviewService";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useQuery } from '@tanstack/react-query';
 
 export const ProfileReviews = () => {
     const authUser = useAuthUser();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const [reviews, setReviews] = useState<Review[]>([]);
-    const [reviewsLoading, setReviewsLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchReviews = async () => {
-            if (authUser?.uid) {
-                setReviewsLoading(true);
-                const r = await getReviewsByUserId(authUser.uid);
-                setReviews(r);
-                setReviewsLoading(false);
-            } else {
-                setReviews([]);
-                setReviewsLoading(false);
-            }
-        };
-        fetchReviews();
-    }, [authUser]);
-
+    const {
+        data: reviews = [],
+        isLoading: reviewsLoading,
+    } = useQuery({
+        queryKey: ["user-reviews", authUser?.uid],
+        queryFn: async () => {
+            if (!authUser?.uid) return [];
+            return getReviewsByUserId(authUser.uid);
+        },
+        enabled: !!authUser?.uid,
+    });
 
     return (
         <div className="rounded-lg p-6">

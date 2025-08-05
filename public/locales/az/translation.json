@@ -35,7 +35,8 @@
         "dont-have-account": "Hesabınız yoxdur?",
         "create-your-account": "Hesab yaradın",
         "sign-up-get-started": "Başlamaq üçün qeydiyyatdan keçin.",
-        "already-have-account": "Artıq hesabınız var?"
+        "already-have-account": "Artıq hesabınız var?",
+        "user-not-found": "İstifadəçi tapılmadı"
     },
     "navigation": {
         "home": "Ana Səhifə",

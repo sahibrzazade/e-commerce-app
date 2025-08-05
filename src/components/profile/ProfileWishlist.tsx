@@ -6,7 +6,7 @@ import { ProductCard } from "../shop/ProductCard";
 import { useTranslation } from "react-i18next";
 
 export const ProfileWishlist = () => {
-    const { products: allProducts, loading: productsLoading, fetchData: refreshProducts } = useAllProductsWithWishlistStatus();
+    const { products: allProducts, loading: productsLoading, refetch: refreshProducts } = useAllProductsWithWishlistStatus();
     const wishlistProducts = allProducts.filter(p => p.isWishlisted);
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -33,7 +33,7 @@ export const ProfileWishlist = () => {
             ) : (
                 <div className="flex flex-wrap items-center justify-center md:items-start md:justify-start gap-6">
                     {wishlistProducts.map(product => (
-                        <ProductCard key={product.id} product={product} onWishlistChange={() => refreshProducts(false)} />
+                        <ProductCard key={product.id} product={product} onWishlistChange={() => refreshProducts()} />
                     ))}
                 </div>
             )}
