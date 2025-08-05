@@ -1,6 +1,5 @@
 import AppLayout from "../layouts/AppLayout";
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { orderService } from "../services/orderService";
 import { Order } from "../types";
 import { useAuthUser } from "../hooks/useAuthUser";
@@ -20,6 +19,7 @@ import { useTheme } from "../contexts/themeContext";
 import { getBackgroundSx, getTextSx } from "../utils/themeSx";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { useQuery } from '@tanstack/react-query';
 
 export const OrderDetails = () => {
     const { orderId } = useParams<{ orderId: string }>();
@@ -31,41 +31,36 @@ export const OrderDetails = () => {
     const textSx = getTextSx(theme);
     const backgroundSx = getBackgroundSx(theme);
 
-    const [order, setOrder] = useState<Order | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchOrder = async () => {
-            if (!orderId || !user) {
-                setLoading(false);
-                return;
-            }
-
+    const {
+        data: order,
+        isLoading: loading,
+    } = useQuery<Order | null>({
+        queryKey: ['order', orderId, user?.uid],
+        queryFn: async () => {
+            if (!orderId || !user) return null;
             try {
                 const orderData = await orderService.getOrder(orderId);
                 if (!orderData) {
                     showErrorMessage(t("shop.order-not-found"));
                     navigate('/cart');
-                    return;
+                    return null;
                 }
-
                 if (orderData.userId !== user.uid) {
                     showErrorMessage(t("shop.not-authorized-to-view-order"));
                     navigate('/cart');
-                    return;
+                    return null;
                 }
-
-                setOrder(orderData);
+                return orderData;
             } catch (error) {
                 showErrorMessage(t("shop.order-load-failed"));
                 navigate('/cart');
-            } finally {
-                setLoading(false);
+                return null;
             }
-        };
-
-        fetchOrder();
-    }, [orderId, user, navigate]);
+        },
+        enabled: !!orderId && !!user,
+        staleTime: 1000 * 60 * 5,
+        refetchOnWindowFocus: false,
+    });
 
     if (loading) {
         return (

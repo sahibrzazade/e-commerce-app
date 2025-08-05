@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from '@tanstack/react-query';
 import AppLayout from "../layouts/AppLayout";
 import { TextInput } from "../components/TextInput";
 import { OutlinedButton } from "../components/OutlinedButton";
@@ -15,20 +16,25 @@ export const ContactUs = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
         reset,
     } = useForm<ContactForm>({
         resolver: zodResolver(contactSchema),
     });
 
-    const onSubmit = async (data: ContactForm) => {
-        try {
-            await contactService.addContactMessage(data);
+    const mutation = useMutation({
+        mutationFn: (data: ContactForm) => contactService.addContactMessage(data),
+        onSuccess: () => {
             showSuccessMessage(t("contact.success"));
             reset();
-        } catch (error) {
+        },
+        onError: () => {
             showErrorMessage(t("contact.error"));
-        }
+        },
+    });
+
+    const onSubmit = (data: ContactForm) => {
+        mutation.mutate(data);
     };
 
     return (
@@ -89,9 +95,16 @@ export const ContactUs = () => {
                             <p className="text-red-500 text-sm mt-1">{t(errors.message.message)}</p>
                         )}
 
-                        <OutlinedButton content={isSubmitting ? t("common:submitting") : t("contact.send")} fontWeight="normal" height={50} isDisabled={isSubmitting} type="submit" />
+                        <OutlinedButton
+                            content={mutation.status === "pending" ? t("common:submitting") : t("contact.send")}
+                            fontWeight="normal"
+                            height={50}
+                            isDisabled={mutation.status === "pending"}
+                            type="submit"
+                        />
                     </form>
-                    <div className="flex flex-row gap-4">
+
+                    <div className="flex flex-row gap-4 mt-4">
                         <a href="https://www.linkedin.com/in/sahib-rzazade/" target="_blank" rel="noopener noreferrer">
                             <FaLinkedin className="text-4xl" />
                         </a>

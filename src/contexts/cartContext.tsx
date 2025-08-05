@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext } from 'react';
 import { cartService } from '../services/cartService';
 import { CartContextType, CartItem, CartProduct } from '../types';
 import { useAuthUser } from '../hooks/useAuthUser';
@@ -7,6 +7,7 @@ import { Product } from '../types/shop';
 import { WithChildren } from '../types';
 import { showErrorMessage, showSuccessMessage } from '../utils/toastUtils';
 import { useTranslation } from 'react-i18next';
+import { useQuery, useMutation, useQueryClient, useQueries } from '@tanstack/react-query';
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -21,73 +22,127 @@ export const useCart = () => {
 export const CartProvider = ({ children }: WithChildren) => {
   const user = useAuthUser();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
-  const [cart, setCart] = useState<Record<string, CartItem>>({});
-  const [products, setProducts] = useState<Record<string, Product | null>>({});
-  const [addLoading, setAddLoading] = useState(false);
-  const [removeLoading, setRemoveLoading] = useState(false);
-  const [updateLoading, setUpdateLoading] = useState(false);
-  const [clearLoading, setClearLoading] = useState(false);
-  const [fetchLoading, setFetchLoading] = useState(false);
+  const {
+    data: cart = {},
+    isLoading: fetchLoading,
+  } = useQuery<Record<string, CartItem>>({
+    queryKey: ['cart', user?.uid],
+    queryFn: () => user ? cartService.getCart(user.uid) : Promise.resolve({}),
+    enabled: !!user,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  });
 
-  const fetchCart = async () => {
-    if (!user) return;
-    setFetchLoading(true);
-    try {
-      const cartData = await cartService.getCart(user.uid);
-      setCart(cartData);
-    } finally {
-      setFetchLoading(false);
-    }
-  };
+  const productIds = Object.keys(cart);
+  const productQueries = useQueries({
+    queries: productIds.map(id => ({
+      queryKey: ['product', id],
+      queryFn: () => productService.getProductById(id),
+      enabled: !!id,
+      staleTime: 1000 * 60 * 5,
+    }))
+  });
+  const products: Record<string, Product | null> = {};
+  productIds.forEach((id, idx) => {
+    products[id] = productQueries[idx]?.data ?? null;
+  });
 
-  const addToCart = async (productId: string, quantity = 1) => {
-    if (!user) return;
-    setAddLoading(true);
-    try {
+  const addMutation = useMutation({
+    mutationFn: async ({ productId, quantity }: { productId: string, quantity: number }) => {
+      if (!user) throw new Error(t('auth.user-not-found'));
       const currentQuantity = cart[productId]?.quantity || 0;
       const newQuantity = currentQuantity + quantity;
       await cartService.addToCart(user.uid, productId, newQuantity);
-      showSuccessMessage(t("shop.added-to-cart"));
-      await fetchCart();
-    } finally {
-      setAddLoading(false);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart', user?.uid] });
+      showSuccessMessage(t('shop.added-to-cart'));
+    },
+    onError: (error) => {
+      showErrorMessage(error instanceof Error ? error.message : t('shop.add-to-cart-failed'));
     }
-  };
+  });
 
-  const removeFromCart = async (productId: string) => {
-    if (!user) return;
-    setRemoveLoading(true);
-    try {
+  const removeMutation = useMutation({
+    mutationFn: async (productId: string) => {
+      if (!user) throw new Error(t('auth.user-not-found'));
       await cartService.removeFromCart(user.uid, productId);
-      showErrorMessage(t("shop.product-removed-from-cart"));
-      await fetchCart();
-    } finally {
-      setRemoveLoading(false);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart', user?.uid] });
+      showErrorMessage(t('shop.product-removed-from-cart'));
+    },
+    onError: (error) => {
+      showErrorMessage(error instanceof Error ? error.message : t('shop.update-wishlist-failed'));
     }
-  };
+  });
 
-  const updateCartItem = async (productId: string, quantity: number) => {
-    if (!user) return;
-    setUpdateLoading(true);
-    try {
+  const updateMutation = useMutation({
+    mutationFn: async ({ productId, quantity }: { productId: string, quantity: number }) => {
+      if (!user) throw new Error(t('auth.user-not-found'));
       await cartService.updateCartItem(user.uid, productId, quantity);
-      showSuccessMessage(t("shop.cart-updated"));
-      await fetchCart();
-    } finally {
-      setUpdateLoading(false);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart', user?.uid] });
+      showSuccessMessage(t('shop.cart-updated'));
+    },
+    onError: (error) => {
+      showErrorMessage(error instanceof Error ? error.message : t('shop.update-wishlist-failed'));
     }
-  };
+  });
 
-  const clearCart = async () => {
-    if (!user) return;
-    setClearLoading(true);
-    try {
+  const clearMutation = useMutation({
+    mutationFn: async () => {
+      if (!user) throw new Error(t('auth.user-not-found'));
       await cartService.clearCart(user.uid);
-      await fetchCart();
-    } finally {
-      setClearLoading(false);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart', user?.uid] });
+    },
+    onError: (error) => {
+      showErrorMessage(error instanceof Error ? error.message : t('shop.update-wishlist-failed'));
     }
+  });
+
+  const addToCart = async (productId: string, quantity = 1): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      addMutation.mutate(
+        { productId, quantity },
+        {
+          onSuccess: () => resolve(),
+          onError: (error) => reject(error),
+        }
+      );
+    });
+  };
+  const removeFromCart = async (productId: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      removeMutation.mutate(productId, {
+        onSuccess: () => resolve(),
+        onError: (error) => reject(error),
+      });
+    });
+  };
+  const updateCartItem = async (productId: string, quantity: number): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      updateMutation.mutate(
+        { productId, quantity },
+        {
+          onSuccess: () => resolve(),
+          onError: (error) => reject(error),
+        }
+      );
+    });
+  };
+  const clearCart = async (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      clearMutation.mutate(undefined, {
+        onSuccess: () => resolve(),
+        onError: (error) => reject(error),
+      });
+    });
   };
 
   const total = Object.entries(cart).reduce((sum, [id, item]) => {
@@ -102,29 +157,6 @@ export const CartProvider = ({ children }: WithChildren) => {
     product: products[id] || null,
   }));
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const productIds = Object.keys(cart);
-      if (productIds.length === 0) {
-        setProducts({});
-        return;
-      }
-      const productFetches = productIds.map(id => productService.getProductById(id));
-      const productResults = await Promise.all(productFetches);
-      const productMap: Record<string, Product | null> = {};
-      productIds.forEach((id, idx) => {
-        productMap[id] = productResults[idx];
-      });
-      setProducts(productMap);
-    };
-    fetchProducts();
-  }, [cart]);
-
-  useEffect(() => {
-    if (user) fetchCart();
-    else setCart({});
-  }, [user]);
-
   return (
     <CartContext.Provider value={{
       cart,
@@ -135,10 +167,10 @@ export const CartProvider = ({ children }: WithChildren) => {
       count: Object.values(cart).reduce((sum, item) => sum + item.quantity, 0),
       total,
       cartProducts,
-      addLoading,
-      removeLoading,
-      updateLoading,
-      clearLoading,
+      addLoading: addMutation.isPending,
+      removeLoading: removeMutation.isPending,
+      updateLoading: updateMutation.isPending,
+      clearLoading: clearMutation.isPending,
       fetchLoading
     }}>
       {children}

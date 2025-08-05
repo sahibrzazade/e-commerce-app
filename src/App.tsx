@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import { ThemeProvider } from "./contexts/themeContext";
 import { LanguageProvider } from "./contexts/languageContext";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -18,26 +19,30 @@ function ScrollToTop() {
   return null;
 }
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <CartProvider>
-          <WishlistProvider>
-            <Router>
-              <ToastContainer />
-              <ScrollToTop />
-              <ScrollToTopButton />
-              <Routes>
-                {appRoutes.map(({ path, element }) => (
-                  <Route key={path} path={path} element={element} />
-                ))}
-              </Routes>
-            </Router>
-          </WishlistProvider>
-        </CartProvider>
-      </LanguageProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <LanguageProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <Router>
+                <ToastContainer />
+                <ScrollToTop />
+                <ScrollToTopButton />
+                <Routes>
+                  {appRoutes.map(({ path, element }) => (
+                    <Route key={path} path={path} element={element} />
+                  ))}
+                </Routes>
+              </Router>
+            </WishlistProvider>
+          </CartProvider>
+        </LanguageProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

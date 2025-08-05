@@ -125,7 +125,13 @@ const Icons: React.FC = () => {
                           className="text-red-500 text-xs hover:underline cursor-pointer transition-all mt-1 disabled:opacity-50"
                           title="Remove"
                           disabled={removeLoading}
-                          onClick={() => removeFromCart(id)}
+                          onClick={async () => {
+                            try {
+                              await removeFromCart(id);
+                            } catch (e) {
+                              showErrorMessage();
+                            }
+                          }}
                         >
                           {t("common:remove")}
                         </button>
@@ -145,7 +151,14 @@ const Icons: React.FC = () => {
                       height={40}
                       width={100}
                       fontWeight="bold"
-                      onClick={() => { clearCart(); showErrorMessage(t("common:cart-cleared")); }}
+                      onClick={async () => {
+                        try {
+                          await clearCart();
+                          showErrorMessage(t("common:cart-cleared"));
+                        } catch (e) {
+                          showErrorMessage();
+                        }
+                      }}
                       isDisabled={clearLoading}
                     />
 

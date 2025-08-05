@@ -1,48 +1,46 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
 import { blogService } from "../services/blogService";
 import { BlogPost } from "../types/blogs";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { useQuery } from '@tanstack/react-query';
 
 const BlogDetails = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const [blog, setBlog] = useState<BlogPost | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [notFound, setNotFound] = useState(false);
-    const [latestBlogs, setLatestBlogs] = useState<BlogPost[]>([]);
-
-    useEffect(() => {
-        const fetchBlog = async () => {
-            setLoading(true);
-            if (!id) {
-                setNotFound(true);
-                setLoading(false);
-                return;
-            }
+    const {
+        data: blog,
+        isLoading: loading,
+    } = useQuery<BlogPost | null>({
+        queryKey: ['blog', id],
+        queryFn: async () => {
+            if (!id) return null;
             const post = await blogService.getPostById(id);
-            if (!post || !post.isPublished) {
-                setNotFound(true);
-            } else {
-                setBlog(post);
-            }
-            setLoading(false);
-        };
+            if (!post || !post.isPublished) return null;
+            return post;
+        },
+        enabled: !!id,
+        staleTime: 1000 * 60 * 5,
+        refetchOnWindowFocus: false,
+    });
 
-        const fetchLatestBlogs = async () => {
+    const {
+        data: latestBlogs = [],
+    } = useQuery<BlogPost[]>({
+        queryKey: ['latest-blogs', id],
+        queryFn: async () => {
             const all = await blogService.getAllPosts();
             const published = all.filter((b: BlogPost) => b.isPublished && b.id !== id);
             published.sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime());
-            setLatestBlogs(published.slice(0, 3));
-        };
-
-        fetchBlog();
-        fetchLatestBlogs();
-    }, [id]);
+            return published.slice(0, 3);
+        },
+        enabled: !!id,
+        staleTime: 1000 * 60 * 5,
+        refetchOnWindowFocus: false,
+    });
 
     if (loading) {
         return (
@@ -53,7 +51,7 @@ const BlogDetails = () => {
             </AppLayout>
         );
     }
-    if (notFound || !blog) {
+    if (!blog) {
         return (
             <AppLayout>
                 <div className="w-full flex flex-col items-center justify-center my-20">

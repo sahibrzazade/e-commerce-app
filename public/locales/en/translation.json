@@ -35,7 +35,8 @@
         "dont-have-account": "Don't have an account?",
         "create-your-account": "Create your account",
         "sign-up-get-started": "Sign up to get started.",
-        "already-have-account": "Already have an account?"
+        "already-have-account": "Already have an account?",
+        "user-not-found": "User not found"
     },
     "navigation": {
         "home": "Home",

@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import { useAuthUser } from "../../hooks/useAuthUser";
 import { orderService } from "../../services/orderService";
-import { Order } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { OutlinedButton } from "../OutlinedButton";
 import { TfiPackage } from "react-icons/tfi";
@@ -18,32 +16,22 @@ import { getBackgroundSx, getTextSx } from "../../utils/themeSx";
 import { useTheme } from "../../contexts/themeContext";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
 
 export const ProfileOrders = () => {
     const authUser = useAuthUser();
     const navigate = useNavigate();
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [loading, setLoading] = useState(true);
     const { theme } = useTheme();
     const { t } = useTranslation();
 
     const textSx = getTextSx(theme);
     const backgroundSx = getBackgroundSx(theme);
 
-    useEffect(() => {
-        const fetchOrders = async () => {
-            if (authUser?.uid) {
-                setLoading(true);
-                const o = await orderService.getUserOrders(authUser.uid);
-                setOrders(o);
-                setLoading(false);
-            } else {
-                setOrders([]);
-                setLoading(false);
-            }
-        };
-        fetchOrders();
-    }, [authUser]);
+    const { data: orders = [], isLoading } = useQuery({
+        queryKey: ['userOrders', authUser?.uid],
+        queryFn: () => authUser ? orderService.getUserOrders(authUser.uid) : Promise.resolve([]),
+        enabled: !!authUser
+    });
 
     return (
         <div className="rounded-lg p-6">
@@ -51,7 +39,7 @@ export const ProfileOrders = () => {
                 <TfiPackage className="text-2xl" />
                 <Typography variant="h5" className="font-bold">{t("profile.your-orders")}</Typography>
             </div>
-            {loading ? (
+            {isLoading ? (
                 <div className="flex justify-center items-center">
                     <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
                 </div>

@@ -35,7 +35,8 @@
         "dont-have-account": "Hesabınız yok mu?",
         "create-your-account": "Hesabınızı oluşturun",
         "sign-up-get-started": "Başlamak için kayıt olun.",
-        "already-have-account": "Zaten bir hesabınız var mı?"
+        "already-have-account": "Zaten bir hesabınız var mı?",
+        "user-not-found": "Kullanıcı bulunamadı"
     },
     "navigation": {
         "home": "Ana Sayfa",

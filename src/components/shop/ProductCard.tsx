@@ -7,26 +7,57 @@ import { useAuthUser } from '../../hooks/useAuthUser';
 import { wishlistService } from '../../services/wishlistService';
 import { showSuccessMessage, showErrorMessage } from '../../utils/toastUtils';
 import { useState, useEffect } from 'react';
-import { useWishlist } from '../../contexts/wishlistContext';
 import { useCart } from '../../contexts/cartContext';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { themedBorder } from '../../styles/themeClassNames';
 import { useTranslation } from 'react-i18next';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const ProductCard = ({
-  product,
-  onWishlistChange
+  product
 }: ProductCardProps) => {
   const user = useAuthUser()
   const navigate = useNavigate();
   const { addToCart, addLoading } = useCart();
-  const { refresh: refreshWishlist } = useWishlist();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const [isWishlisted, setIsWishlisted] = useState(product.isWishlisted);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
+
+  const addMutation = useMutation({
+    mutationFn: (productId: string) => {
+      if (!user) throw new Error(t('auth.user-not-found'));
+      return wishlistService.addToWishlist(user.uid, productId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products-with-wishlist', user?.uid] });
+      setIsWishlisted(true);
+      showSuccessMessage(t("shop.added-to-wishlist"));
+    },
+    onError: (error) => {
+      showErrorMessage(error instanceof Error ? error.message : t("shop.update-wishlist-failed"));
+    },
+    onSettled: () => setButtonLoading(false),
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: (productId: string) => {
+      if (!user) throw new Error(t('auth.user-not-found'));
+      return wishlistService.removeFromWishlist(user.uid, productId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products-with-wishlist', user?.uid] });
+      setIsWishlisted(false);
+      showErrorMessage(t("shop.removed-from-wishlist"));
+    },
+    onError: (error) => {
+      showErrorMessage(error instanceof Error ? error.message : t("shop.update-wishlist-failed"));
+    },
+    onSettled: () => setButtonLoading(false),
+  });
 
   const handleAddToCart = async () => {
     if (!user) return;
@@ -40,27 +71,15 @@ export const ProductCard = ({
     }
   };
 
-  const toggleWishlist = async () => {
+  const toggleWishlist = () => {
     if (!user) return;
     setButtonLoading(true);
-    try {
-      if (isWishlisted) {
-        await wishlistService.removeFromWishlist(user.uid, product.id);
-        setIsWishlisted(false);
-        showErrorMessage(t("shop.removed-from-wishlist"));
-      } else {
-        await wishlistService.addToWishlist(user.uid, product.id);
-        setIsWishlisted(true);
-        showSuccessMessage(t("shop.added-to-wishlist"));
-      }
-      await refreshWishlist();
-      if (onWishlistChange) await onWishlistChange();
-    } catch (error) {
-      showErrorMessage(t("shop.update-wishlist-failed"));
-    } finally {
-      setButtonLoading(false);
+    if (isWishlisted) {
+      removeMutation.mutate(product.id);
+    } else {
+      addMutation.mutate(product.id);
     }
-  }
+  };
 
   useEffect(() => {
     setIsWishlisted(product.isWishlisted);
@@ -75,7 +94,8 @@ export const ProductCard = ({
         />
         <div className="absolute top-0 left-0 h-full w-full bg-black/40 backdrop-blur-xs opacity-0 cursor-pointer group-hover:opacity-100 transition-opacity duration-300">
           <div className="flex flex-col justify-center items-center h-full">
-            <OutlinedButton content={t("shop.details-page")} onClick={() => navigate(`/shop/${product.id}`)} height={40} width={180} fontWeight="normal" />
+            <OutlinedButton content={t("shop.details-page")}
+              onClick={() => navigate(`/shop/${product.id}`)} height={40} width={180} fontWeight="normal" />
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
-import { UserOutlined } from "@ant-design/icons"
-import { User } from "../../types"
+import { UserOutlined } from "@ant-design/icons";
 import { useAuthUser } from "../../hooks/useAuthUser";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { userService } from "../../services/userService";
 import { useForm } from "react-hook-form";
 import { TextInput } from "../TextInput";
@@ -11,49 +10,58 @@ import { showSuccessMessage, showErrorMessage } from "../../utils/toastUtils";
 import { updateProfile } from "firebase/auth";
 import { auth } from "../../configs/firebase";
 import { useTranslation } from "react-i18next";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const ProfileInfo = () => {
     const authUser = useAuthUser();
     const { t } = useTranslation();
+    const queryClient = useQueryClient();
 
-    const [user, setUser] = useState<User | null>(null);
-    const [userLoading, setUserLoading] = useState(true);
     const [editMode, setEditMode] = useState(false);
 
-    const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<{ name: string }>();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<{ name: string }>();
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            if (authUser?.uid) {
-                setUserLoading(true);
-                const u = await userService.getUser(authUser.uid);
-                setUser(u);
-                setUserLoading(false);
-                if (u) {
-                    reset({ name: u.name });
-                }
-            } else {
-                setUser(null);
-                setUserLoading(false);
-            }
-        };
-        fetchUser();
-    }, [authUser, reset]);
+    const {
+        data: user,
+        isLoading: userLoading,
+    } = useQuery({
+        queryKey: ["user", authUser?.uid],
+        queryFn: async () => {
+            if (!authUser?.uid) return null;
+            const u = await userService.getUser(authUser.uid);
+            if (u) reset({ name: u.name });
+            return u;
+        },
+        enabled: !!authUser?.uid,
+    });
 
-    const onSubmit = async (data: { name: string }) => {
-        if (!authUser?.uid) return;
-        try {
+    const updateUserMutation = useMutation({
+        mutationFn: async (data: { name: string }) => {
+            if (!authUser?.uid) throw new Error("No auth user");
             await userService.updateUser(authUser.uid, data);
             if (auth.currentUser) {
                 await updateProfile(auth.currentUser, { displayName: data.name });
             }
-            setUser((prev) => prev ? { ...prev, ...data } : prev);
+            return data;
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["user", authUser?.uid] });
             setEditMode(false);
             reset(data);
             showSuccessMessage(t("profile.profile-updated-successfully"));
-        } catch (e) {
+        },
+        onError: () => {
             showErrorMessage(t("profile.update-profile-failed"));
-        }
+        },
+    });
+
+    const onSubmit = (data: { name: string }) => {
+        updateUserMutation.mutate(data);
     };
 
     return (
@@ -62,6 +70,7 @@ export const ProfileInfo = () => {
                 <UserOutlined className="text-2xl" />
                 <h2 className="text-2xl font-bold">{t("common:profile")}</h2>
             </div>
+
             {userLoading ? (
                 <div className="flex justify-center items-center">
                     <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
@@ -74,7 +83,7 @@ export const ProfileInfo = () => {
                             <TextInput
                                 {...register("name", { required: t("profile.name-is-required") })}
                                 name="name"
-                                disabled={isSubmitting}
+                                disabled={updateUserMutation.isPending}
                             />
                             {errors.name && <span className="text-red-400 ml-2">{errors.name.message}</span>}
                         </div>
@@ -88,14 +97,14 @@ export const ProfileInfo = () => {
                                 height={36}
                                 fontWeight="bold"
                                 type="submit"
-                                isDisabled={isSubmitting}
+                                isDisabled={updateUserMutation.isPending}
                             />
                             <Button
                                 variant="outlined"
                                 color="error"
                                 style={{ height: 36, fontWeight: 400 }}
                                 type="button"
-                                disabled={isSubmitting}
+                                disabled={updateUserMutation.isPending}
                                 onClick={() => {
                                     setEditMode(false);
                                     reset({ name: user.name });
@@ -132,5 +141,5 @@ export const ProfileInfo = () => {
                 <span className="text-red-400">{t("profile.user-info-not-found")}</span>
             )}
         </div>
-    )
-}
+    );
+};
