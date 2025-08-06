@@ -15,7 +15,7 @@ export const Wishlist = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const [showSkeleton, setShowSkeleton] = useState(true);
+    const [showSkeleton, setShowSkeleton] = useState(false);
 
     const wishlistProducts = products.filter(p => p.isWishlisted);
 

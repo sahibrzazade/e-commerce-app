@@ -16,7 +16,7 @@ import {
     Typography,
 } from '@mui/material';
 
-import { useTheme } from "../contexts/themeContext";
+import { useTheme } from "../contexts/ThemeContext";
 import { getBackgroundSx, getTextSx } from "../utils/themeSx";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
@@ -64,7 +64,7 @@ export const OrderDetails = () => {
         refetchOnWindowFocus: false,
     });
 
-    const [showSkeleton, setShowSkeleton] = useState(true);
+    const [showSkeleton, setShowSkeleton] = useState(false);
 
     useEffect(() => {
         if (loading) {

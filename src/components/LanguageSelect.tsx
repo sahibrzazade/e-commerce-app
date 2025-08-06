@@ -1,7 +1,7 @@
 import { Select, MenuItem, FormControl } from '@mui/material';
 import { LanguageSelectProps } from '../types';
 import { getLanguageMenuProps, getLanguageSelectSx } from '../styles/languageSelect';
-import { useTheme } from '../contexts/themeContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { languages } from '../constants/languageOptions';
 
 

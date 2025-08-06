@@ -8,8 +8,8 @@ import { useProductWithWishlistById } from "../hooks/useAllProductsWithWishlistS
 import { useAuthUser } from "../hooks/useAuthUser";
 import { wishlistService } from "../services/wishlistService";
 import { useState, useEffect } from "react";
-import { useWishlist } from '../contexts/wishlistContext';
-import { useCart } from "../contexts/cartContext";
+import { useWishlist } from '../contexts/WishlistContext';
+import { useCart } from "../contexts/CartContext";
 import { getReviewsByProductId, addReview, deleteReview } from '../services/reviewService';
 import { useForm } from 'react-hook-form';
 import { ReviewCard } from "../components/shop/ReviewCard";
@@ -195,13 +195,17 @@ export const ProductDetails = () => {
                                 <span className="text-red-600 font-bold uppercase">{t("shop.product-not-available")}</span>)
                             }
                             <div className="py-4 flex flex-row gap-2">
-
-                                {product.isAvailable ?
-                                    <OutlinedButton content={<span>{t("common:add-to-cart")} <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" onClick={handleAddToCart} isDisabled={cartLoading || addLoading} />
-                                    :
-                                    <OutlinedButton content={<span>{t("common:return-to-shop")}</span>} height={60} width={200} fontWeight="bold" onClick={() => navigate('/shop')} />
-                                }
-                                <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled className="text-2xl" /> : <HeartOutlined className="text-2xl" />} height={60} width={60} fontWeight="normal" isDisabled={buttonLoading} />
+                                {user ? (
+                                    <>
+                                        <OutlinedButton content={<span>{t("common:add-to-cart")} <ShoppingCartOutlined className="ps-1" /></span>} height={60} width={200} fontWeight="bold" onClick={handleAddToCart} isDisabled={cartLoading || addLoading} />
+                                        <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled className="text-2xl" /> : <HeartOutlined className="text-2xl" />} height={60} width={60} fontWeight="normal" isDisabled={buttonLoading} />
+                                    </>
+                                ) : (
+                                    <div className="flex flex-col gap-y-4">
+                                        <span className="text-red-600">{t("auth.you-are-not-signed-in")}</span>
+                                        <OutlinedButton content={t("common:sign-in")} height={60} width={200} fontWeight="bold" onClick={() => navigate('/sign-in')} />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

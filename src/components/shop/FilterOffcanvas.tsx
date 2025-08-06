@@ -6,7 +6,7 @@ import { FilterOptions, FilterOffcanvasProps, Brand, Category } from "../../type
 import { brandCategoryService } from '../../services/brandCategoryService';
 import { getFilterOffcanvasSliderSx } from "../../styles/filterOffcanvas";
 import { themedBorder, themedBackground } from "../../styles/themeClassNames";
-import { useTheme } from "../../contexts/themeContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useTranslation } from "react-i18next";

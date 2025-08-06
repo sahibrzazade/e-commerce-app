@@ -3,6 +3,7 @@ import { menuItems } from '../../constants/menuItems';
 import { themedBackground } from '../../styles/themeClassNames';
 import { MobileMenuProps } from '../../types/index';
 import { Link } from 'react-router-dom';
+import Icons from './Icons';
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isMenuOpen }) => {
   const { t } = useTranslation();
@@ -16,6 +17,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isMenuOpen }) => {
       className={`${themedBackground} md:hidden mx-4 overflow-hidden transition-all duration-500 ease-in-out ${isMenuOpen ? 'max-h-screen visible' : 'max-h-0 invisible'
         }`}
     >
+      <div className='flex items-center justify-center my-2'>
+        <Icons />
+      </div>
       {flatMenu.map((item) => (
         <Link
           key={item.path}

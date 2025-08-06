@@ -1,4 +1,4 @@
-import { useCart } from '../contexts/cartContext';
+import { useCart } from '../contexts/CartContext';
 import AppLayout from '../layouts/AppLayout';
 import {
 
@@ -14,14 +14,14 @@ import { useForm } from 'react-hook-form';
 import { orderService } from '../services/orderService';
 import { useState, useEffect } from 'react';
 import { CartSkeleton } from '../skeletons/CartSkeleton';
-import { useTheme } from '../contexts/themeContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { themedBorder } from '../styles/themeClassNames';
 import { getTextSx, getBackgroundSx } from '../utils/themeSx';
 import { CartTable } from '../components/shop/CartTable';
 import { useTranslation } from 'react-i18next';
 
 export const Cart = () => {
-  const { removeFromCart, removeLoading, clearCart, clearLoading, updateCartItem, updateLoading, count, total, cartProducts } = useCart();
+  const { removeFromCart, removeLoading, clearCart, clearLoading, updateCartItem, updateLoading, count, total, cartProducts, fetchLoading } = useCart();
   const { discount, discountedTotal, loading, applyCoupon, resetDiscount } = useDiscount();
   const { user, loading: userLoading } = useAuthUser();
   const navigate = useNavigate();
@@ -88,16 +88,16 @@ export const Cart = () => {
     }
   };
 
+  const [showSkeleton, setShowSkeleton] = useState(false);
 
-  const [showSkeleton, setShowSkeleton] = useState(true);
   useEffect(() => {
-    if (userLoading || loading || clearLoading || updateLoading) {
+    if (userLoading || fetchLoading) {
       setShowSkeleton(true);
     } else {
       const timeout = setTimeout(() => setShowSkeleton(false), 1000);
       return () => clearTimeout(timeout);
     }
-  }, [userLoading, loading]);
+  }, [userLoading, fetchLoading]);
 
   if (showSkeleton) {
     return (

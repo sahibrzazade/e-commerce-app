@@ -1,7 +1,7 @@
 import { Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
 import { getSkeletonSx } from "../utils/skeletonSx"
 import { getBackgroundSx } from "../utils/themeSx";
-import { useTheme } from "../contexts/themeContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 export const OrderDetailsSkeleton = () => {
     const { theme } = useTheme();

@@ -1,6 +1,6 @@
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import { HamburgerButtonProps } from '../../types/index';
-import { useTheme } from '../../contexts/themeContext';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const HamburgerButton: React.FC<HamburgerButtonProps> = ({
   isMenuOpen,
