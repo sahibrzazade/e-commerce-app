@@ -16,7 +16,7 @@ A modern and responsive e-commerce web application built with React, TypeScript,
 - 🖼️ Responsive and mobile-friendly UI
 - 📄 FAQ, About & Contact pages
 
-- ## 🛠️ Tech Stack
+## 🛠️ Tech Stack
 
 | Category          | Libraries / Tools                          |
 |------------------|---------------------------------------------|
