@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import { DiscountResult } from '../types';
 import { showErrorMessage, showSuccessMessage } from '../utils/toastUtils';
-import { useCart } from '../contexts/cartContext';
+import { useCart } from '../contexts/CartContext';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 

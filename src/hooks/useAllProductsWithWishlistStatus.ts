@@ -72,7 +72,6 @@ export function useAllProductsWithWishlistStatus(filters?: FilterOptions) {
         throw e;
       }
     },
-    enabled: !!user,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
@@ -115,7 +114,7 @@ export function useProductWithWishlistById(productId: string | undefined) {
         throw e;
       }
     },
-    enabled: !!user && !!productId,
+    enabled: !!productId,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });

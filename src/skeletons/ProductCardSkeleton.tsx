@@ -1,5 +1,5 @@
 import { Skeleton } from '@mui/material';
-import { useTheme } from '../contexts/themeContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { getSkeletonSx } from '../utils/skeletonSx';
 
 export const ProductCardSkeleton = () => {

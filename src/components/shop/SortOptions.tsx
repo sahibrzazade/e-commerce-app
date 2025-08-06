@@ -2,7 +2,7 @@ import { Select, MenuItem, FormControl } from '@mui/material';
 import { useUrlSort } from '../../hooks/useUrlSort';
 import { sortOptions } from '../../constants/sortOptions';
 import { getSortMenuProps, getSortSelectSx } from '../../styles/sortOptions';
-import { useTheme } from '../../contexts/themeContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
 export const SortOptions = () => {

@@ -1,5 +1,5 @@
 import { BsBox2 } from 'react-icons/bs';
-import { FaCreditCard, FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaPhone, FaTwitter } from 'react-icons/fa';
+import { FaCreditCard, FaEnvelope, FaGithub, FaLinkedin, FaPhone } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
 import { TfiHeadphoneAlt } from 'react-icons/tfi';
 import { Link } from 'react-router-dom';
@@ -44,9 +44,6 @@ export const Footer = () => {
       <div className="flex items-center justify-center w-full px-4">
         <footer className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 border-t border-gray-700 py-6">
           <div className="mb-6 flex items-center justify-center md:justify-start">
-            {/* <Link to="/">
-              <img src="" alt="Logo" width="200" height="72" />
-            </Link> */}
           </div>
 
           <div className="mb-6">
@@ -64,10 +61,12 @@ export const Footer = () => {
                 <span className="ml-2">example.info@gmail.com</span>
               </li>
               <li className="flex items-center space-x-4 pt-2">
-                <FaFacebook />
-                <FaInstagram />
-                <FaTwitter />
-                <FaLinkedin />
+                <a href="https://www.linkedin.com/in/sahib-rzazade/" target="_blank" rel="noopener noreferrer">
+                  <FaLinkedin className="text-4xl" />
+                </a>
+                <a href="https://www.github.com/sahibrzazade" target="_blank" rel="noopener noreferrer">
+                  <FaGithub className="text-4xl" />
+                </a>
               </li>
             </ul>
           </div>

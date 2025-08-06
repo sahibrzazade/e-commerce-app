@@ -1,10 +1,10 @@
 import { Skeleton } from "@mui/material"
 import { getSkeletonSx } from "../utils/skeletonSx"
-import { useTheme } from "../contexts/themeContext"
+import { useTheme } from "../contexts/ThemeContext"
 
 export const ProfileReviewsSkeleton = () => {
     const { theme } = useTheme();
-    
+
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2 p-4 rounded-lg">

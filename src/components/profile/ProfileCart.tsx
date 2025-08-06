@@ -1,9 +1,9 @@
 import { ShoppingCartOutlined } from "@ant-design/icons"
 import { OutlinedButton } from "../OutlinedButton"
-import { useCart } from "../../contexts/cartContext"
+import { useCart } from "../../contexts/CartContext"
 import { useNavigate } from "react-router-dom"
 import { getBackgroundSx, getTextSx } from "../../utils/themeSx"
-import { useTheme } from "../../contexts/themeContext"
+import { useTheme } from "../../contexts/ThemeContext"
 import { CartTable } from "../shop/CartTable"
 import { useTranslation } from "react-i18next"
 

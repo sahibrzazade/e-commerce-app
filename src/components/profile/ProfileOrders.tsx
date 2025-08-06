@@ -13,7 +13,7 @@ import {
     Typography,
 } from '@mui/material';
 import { getBackgroundSx, getTextSx } from "../../utils/themeSx";
-import { useTheme } from "../../contexts/themeContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";

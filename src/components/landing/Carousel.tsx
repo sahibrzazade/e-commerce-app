@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { CarouselProps } from '../../types';
-import { useTheme } from '../../contexts/themeContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import { themedBackground } from '../../styles/themeClassNames';
 
 

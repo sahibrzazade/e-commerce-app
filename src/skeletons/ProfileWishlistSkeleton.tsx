@@ -1,6 +1,6 @@
 import { Skeleton } from "@mui/material"
 import { getSkeletonSx } from "../utils/skeletonSx"
-import { useTheme } from "../contexts/themeContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 export const ProfileWishlistSkeleton = () => {
     const { theme } = useTheme();

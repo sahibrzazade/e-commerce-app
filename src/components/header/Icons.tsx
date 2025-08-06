@@ -10,13 +10,13 @@ import { OutlinedButton } from '../OutlinedButton';
 import { useAuthUser } from '../../hooks/useAuthUser';
 import { authService } from '../../services/authService';
 import { showErrorMessage, showSuccessMessage } from '../../utils/toastUtils';
-import { useWishlist } from '../../contexts/wishlistContext';
-import { useCart } from '../../contexts/cartContext';
-import { useLanguage } from '../../contexts/languageContext';
+import { useWishlist } from '../../contexts/WishlistContext';
+import { useCart } from '../../contexts/CartContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageSelect } from '../LanguageSelect';
 import { Language } from '../../types/language';
 import { themedBorder, themedBackground } from '../../styles/themeClassNames';
-import { useTheme } from '../../contexts/themeContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
 const Icons: React.FC = () => {
@@ -25,8 +25,9 @@ const Icons: React.FC = () => {
   const { count: wishlistCount } = useWishlist();
   const { count: cartCount, cartProducts, removeFromCart, clearCart, clearLoading, removeLoading, total } = useCart();
   const { language, changeLanguage, loading: languageLoading } = useLanguage();
-  const { theme } = useTheme();
   const { t } = useTranslation();
+  const { theme, toggleTheme, loading: themeLoading } = useTheme();
+
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -101,7 +102,7 @@ const Icons: React.FC = () => {
           </span>
         )}
         {user && (
-          <div className={`${themedBorder} ${themedBackground} absolute right-0 top-8 flex flex-col items-center z-50 p-6 border transition-all duration-200 ease-out ${isUserMenuOpen
+          <div className={`md:flex hidden ${themedBorder} ${themedBackground} absolute right-0 top-8 flex-col items-center z-50 p-6 border transition-all duration-200 ease-out ${isUserMenuOpen
             ? 'opacity-100 visible pointer-events-auto'
             : 'opacity-0 invisible pointer-events-none'
             } group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto`}>
@@ -194,47 +195,66 @@ const Icons: React.FC = () => {
           ? 'opacity-100 visible pointer-events-auto'
           : 'opacity-0 invisible pointer-events-none'
           } group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto`}>
-          {user ? (
-            <>
-              <span className="text-sm mb-4">{t("common:welcome-back")}, {user.displayName}!</span>
-              <div className="flex flex-row gap-2">
-                <OutlinedButton
-                  content={t("common:profile")}
-                  height={40}
-                  width={100}
-                  fontWeight="bold"
-                  onClick={() => handleNavigation('/profile')}
+          <div className='flex flex-col items-center'>
+            {user ? (
+              <>
+                <span className="text-sm mb-4">{t("common:welcome-back")}, {user.displayName}!</span>
+                <div className="flex flex-row gap-2">
+                  <OutlinedButton
+                    content={t("common:profile")}
+                    height={40}
+                    width={100}
+                    fontWeight="bold"
+                    onClick={() => handleNavigation('/profile')}
+                  />
+                  <OutlinedButton
+                    content={t("common:sign-out")}
+                    height={40}
+                    width={100}
+                    fontWeight="bold"
+                    onClick={handleSignOut}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <span className="text-sm mb-4">{t("auth.you-are-not-signed-in")}</span>
+                <div className="flex flex-row gap-2">
+                  <OutlinedButton
+                    content={t("common:sign-in")}
+                    height={40}
+                    width={100}
+                    fontWeight="bold"
+                    onClick={() => handleNavigation('/sign-in')}
+                  />
+                  <OutlinedButton
+                    content={t("common:sign-up")}
+                    height={40}
+                    width={100}
+                    fontWeight="bold"
+                    onClick={() => handleNavigation('/sign-up')}
+                  />
+                </div>
+              </>
+            )}
+            <div className='w-full flex flex-row justify-between items-center mt-4'>
+              <span className='text-sm'>Dark Mode</span>
+              <label className="relative inline-flex items-center cursor-pointer group">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={theme === "dark"}
+                  onChange={toggleTheme}
+                  disabled={themeLoading}
                 />
-                <OutlinedButton
-                  content={t("common:sign-out")}
-                  height={40}
-                  width={100}
-                  fontWeight="bold"
-                  onClick={handleSignOut}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <span className="text-sm mb-4">{t("auth.you-are-not-signed-in")}</span>
-              <div className="flex flex-row gap-2">
-                <OutlinedButton
-                  content={t("common:sign-in")}
-                  height={40}
-                  width={100}
-                  fontWeight="bold"
-                  onClick={() => handleNavigation('/sign-in')}
-                />
-                <OutlinedButton
-                  content={t("common:sign-up")}
-                  height={40}
-                  width={100}
-                  fontWeight="bold"
-                  onClick={() => handleNavigation('/sign-up')}
-                />
-              </div>
-            </>
-          )}
+                <div
+                  className={`w-11 h-6 flex items-center border-2 rounded-full transition-colors duration-300 ${theme === "dark" ? "bg-white border-white" : "bg-gray-300 border-gray-300"} peer-focus:outline-none`}
+                >
+                  <span className={`${themedBackground} w-5 h-5 flex items-center justify-center rounded-full shadow-md transform transition-transform duration-300 ${theme === "dark" ? "translate-x-5" : "translate-x-0"}`}></span>
+                </div>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </div>

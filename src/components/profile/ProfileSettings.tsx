@@ -1,6 +1,6 @@
 import { SettingFilled, MoonFilled, LockOutlined, GlobalOutlined } from "@ant-design/icons"
-import { useTheme } from "../../contexts/themeContext"
-import { useLanguage } from "../../contexts/languageContext"
+import { useTheme } from "../../contexts/ThemeContext"
+import { useLanguage } from "../../contexts/LanguageContext"
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';

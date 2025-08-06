@@ -13,6 +13,6 @@ export const getFirebaseAuthErrorMessage = (error: any): string => {
         case 'auth/wrong-password':
             return 'invalid-email-or-password-please-try-again';
         default:
-            return 'sign-in-failed-please';
+            return 'sign-in-failed-please-try-again';
     }
 };

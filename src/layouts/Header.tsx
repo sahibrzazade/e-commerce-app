@@ -14,7 +14,9 @@ export const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Logo />
         <Navigation />
-        <Icons />
+        <div className="hidden md:flex">
+          <Icons />
+        </div>
         <HamburgerButton isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       </div>
       <MobileMenu isMenuOpen={isMenuOpen} />
