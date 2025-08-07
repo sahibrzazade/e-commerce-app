@@ -10,7 +10,7 @@ export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
-    <header className={`${themedBackground} w-full shadow-md border-b`}>
+    <header className={`${themedBackground} w-full shadow-md border-b sticky top-0 z-50`}>
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Logo />
         <Navigation />
