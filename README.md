@@ -29,7 +29,7 @@ A modern and responsive e-commerce web application built with React, TypeScript,
 ### 🔐 Sign in
 ![Sign in](screenshots/login.png)
 
-### 🔐 Blogs
+### 📝 Blogs
 ![Blogs](screenshots/blogs.png)
 
 ## 🛠️ Tech Stack
