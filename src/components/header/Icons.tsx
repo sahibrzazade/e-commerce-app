@@ -238,7 +238,7 @@ const Icons: React.FC = () => {
               </>
             )}
             <div className='w-full flex flex-row justify-between items-center mt-4'>
-              <span className='text-sm'>Dark Mode</span>
+              <span className='text-sm'>{t("common:dark-mode")}</span>
               <label className="relative inline-flex items-center cursor-pointer group">
                 <input
                   type="checkbox"
