@@ -35,7 +35,7 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
               key={idx}
               src={src}
               alt={`slide-${idx}`}
-              className="w-full flex-shrink-0 select-none pointer-events-none"
+              className="w-full max-h-[900px] flex-shrink-0 select-none pointer-events-none"
               draggable={false}
             />
           ))}

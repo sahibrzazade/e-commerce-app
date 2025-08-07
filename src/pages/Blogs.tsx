@@ -36,7 +36,7 @@ export const Blogs = () => {
 
     return (
         <AppLayout>
-            <div className="w-full h-[400px] bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1500&q=80')" }}>
+            <div className="w-full h-[500px] bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1500&q=80')" }}>
                 <h1 className="text-5xl text-white font-bold tracking-wide uppercase">{t("navigation.blogs")}</h1>
             </div>
             {showSkeleton ? (

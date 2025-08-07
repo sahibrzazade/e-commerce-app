@@ -91,7 +91,7 @@ export const ProductCard = ({
 
   return (
     <div>
-      <div className='w-[290px] relative group'>
+      <div className='w-[300px] relative group'>
         <img className={`${themedBorder} w-full h-[340px] border`}
           src={product.image}
           alt="product image"
@@ -106,15 +106,13 @@ export const ProductCard = ({
       <div className='flex flex-col'>
         <div className='flex flex-row items-center justify-between mt-2'>
           <span className='inline-block my-1'>{product.name}</span>
-          {user ?
+          {user &&
             <div className='flex flex-row gap-2'>
               {product.isAvailable &&
                 <OutlinedButton content={<ShoppingCartOutlined />} height={40} width={40} fontWeight='normal' onClick={handleAddToCart} isDisabled={cartLoading || !product.isAvailable || addLoading} />
               }
               <OutlinedButton onClick={toggleWishlist} content={isWishlisted ? <HeartFilled /> : <HeartOutlined />} height={40} width={40} fontWeight="normal" isDisabled={buttonLoading} />
             </div>
-            :
-            <span className='text-red-500'>{t("auth.you-are-not-signed-in")}</span>
           }
         </div>
         <div className='flex flex-row my-1'>

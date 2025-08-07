@@ -8,16 +8,16 @@ export const Home = () => {
   const { t } = useTranslation();
 
   const images: string[] = [
-    'https://wallpaperswide.com/download/nike_basketball_sneakers-wallpaper-1600x900.jpg',
-    'https://media.architecturaldigest.com/photos/56f1b12edc71add34a9643d5/16:9/w_2560%2Cc_limit/nike-debuts-first-ever-self-lacing-shoe-01.jpg',
-    'https://wallpapercave.com/wp/wp12457413.jpg',
+    'https://images.pexels.com/photos/994234/pexels-photo-994234.jpeg',
+    'https://images.unsplash.com/photo-1519748771451-a94c596fad67?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    'https://images.unsplash.com/photo-1496345875659-11f7dd282d1d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   ];
   return (
     <AppLayout>
       <Carousel images={images} />
       <HeroSection
         image={
-          'https://dunker.qodeinteractive.com/wp-content/uploads/2022/12/h9-img-02.jpg'
+          'https://images.pexels.com/photos/1557843/pexels-photo-1557843.jpeg'
         }
         eyebrowText={t("home.exclusive")}
         titleText={t("home.limited-drops-only")}
@@ -26,7 +26,7 @@ export const Home = () => {
       />
       <HeroSection
         image={
-          'https://dunker.qodeinteractive.com/wp-content/uploads/2023/01/home-7-img-61.jpg'
+          'https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg'
         }
         eyebrowText={t("home.trending")}
         titleText={t("home.this-seasons-must-haves")}
@@ -42,7 +42,7 @@ export const Home = () => {
       />
       <HeroSection
         image={
-          'https://dunker.qodeinteractive.com/wp-content/uploads/2022/12/h9-img-01.jpg'
+          'https://images.pexels.com/photos/1972115/pexels-photo-1972115.jpeg'
         }
         eyebrowText={t("home.just-dropped")}
         titleText={t("home.fresh-looks-every-season")}
