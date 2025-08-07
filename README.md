@@ -4,7 +4,6 @@
 
 A modern and responsive e-commerce web application built with React, TypeScript, Tailwind CSS and Firebase.
 
-
 ## 📦 Features
 
 - ✅ Product listing with filters and sort options
@@ -15,6 +14,23 @@ A modern and responsive e-commerce web application built with React, TypeScript,
 - 🧠 TanStack Query for data fetching & caching
 - 🖼️ Responsive and mobile-friendly UI
 - 📄 FAQ, About & Contact pages
+
+## 📸 Screenshots
+
+### 🏠 Home Page
+![Homepage](screenshots/home.png)
+
+### 🛒 Product List
+![Product List](screenshots/shop.png)
+
+### 👤 FAQ
+![FAQ](screenshots/faq.png)
+
+### 🔐 Sign in
+![Sign in](screenshots/login.png)
+
+### 🔐 Blogs
+![Blogs](screenshots/blogs.png)
 
 ## 🛠️ Tech Stack
 
