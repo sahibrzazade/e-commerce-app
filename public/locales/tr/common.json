@@ -64,5 +64,8 @@
     "reviews": "Yorumlar",
     "your-rating": "Puanınız",
     "submit-review": "Yorumu Gönder",
-    "submitting": "Gönderiliyor..."
+    "submitting": "Gönderiliyor...",
+    "not-found-title": "404 - Sayfa Bulunamadı",
+    "not-found-description": "Üzgünüz, aradığınız sayfa mevcut değil.",
+    "go-back-to-home": "Ana Sayfaya Dön"
 }

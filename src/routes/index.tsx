@@ -1,4 +1,5 @@
 import { Home } from '../pages/Home';
+import NotFound from '../pages/NotFound';
 import { SignIn } from '../pages/SignIn';
 import { Shop } from '../pages/Shop';
 import { SignUp } from '../pages/SignUp';
@@ -31,4 +32,5 @@ export const appRoutes: AppRoute[] = [
   { path: '/about', element: <AboutUs /> },
   { path: '/contact', element: <ContactUs /> },
   { path: '/faq', element: <Faq /> },
+  { path: '*', element: <NotFound /> },
 ];

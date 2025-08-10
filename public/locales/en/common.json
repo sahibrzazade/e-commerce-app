@@ -64,5 +64,8 @@
     "reviews": "Reviews",
     "your-rating": "Your Rating",
     "submit-review": "Submit Review",
-    "submitting": "Submitting..."
+    "submitting": "Submitting...",
+    "not-found-title": "404 - Page Not Found",
+    "not-found-description": "Sorry, the page you are looking for does not exist.",
+    "go-back-to-home": "Go Back to Home"
 }
