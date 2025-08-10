@@ -65,5 +65,7 @@
     "your-rating": "Sizin reytinqiniz",
     "submit-review": "Rəy bildir",
     "submitting": "Göndərilir...",
+    "not-found-title": "404 - Səhifə Tapılmadı",
+    "not-found-description": "Bağışlayın, axtardığınız səhifə mövcud deyil.",
     "go-back-to-home": "Ana səhifəyə qayıt"
 }
